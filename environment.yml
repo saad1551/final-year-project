@@ -1,0 +1,10 @@
+name: fyp-venv
+channels:
+  - defaults
+dependencies:
+  - pip
+  - jupyter
+  - transformers
+  - pillow
+  - lxml
+prefix: /Users/saadashraf/miniconda3/envs/fyp-venv

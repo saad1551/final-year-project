@@ -7,4 +7,7 @@ dependencies:
   - transformers
   - pillow
   - lxml
+  - pip:
+      - playwright
+      - lxml_html_clean
 prefix: /Users/saadashraf/miniconda3/envs/fyp-venv

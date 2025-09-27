@@ -1,4 +1,4 @@
-from insta.markdown.schemas import (
+from markdown.schemas import (
     register_schema,
     remove_newlines,
     DEFAULT_INDENT_VALUE,
@@ -6,15 +6,15 @@ from insta.markdown.schemas import (
     clean_label,
 )
 
-from insta.markdown.build import (
+from markdown.build import (
     MarkdownNode
 )
 
-from insta.markdown.extensions.base import (
+from markdown.extensions.base import (
     InSTABaseSchema
 )
 
-from insta.configs.browser_config import (
+from configs.browser_config import (
     NodeMetadata
 )
 

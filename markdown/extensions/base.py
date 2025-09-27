@@ -1,9 +1,9 @@
-from insta.markdown.schemas import (
+from markdown.schemas import (
     MarkdownSchema,
     ALL_SCHEMA_NAMES
 )
 
-from insta.configs.browser_config import (
+from configs.browser_config import (
     NodeMetadata
 )
 

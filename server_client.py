@@ -81,13 +81,4 @@ class ServerClient:
         self.close_session()
 
 
-# Example usage
-if __name__ == "__main__":
-    # Example: Convert Google to markdown
-    from server_to_markdown import ServerToMarkdown
-    
-    converter = ServerToMarkdown()
-    markdown = converter.url_to_markdown("https://google.com")
-    print("Google homepage as markdown:")
-    print(markdown)
 

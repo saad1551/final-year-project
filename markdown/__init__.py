@@ -4,3 +4,6 @@ from markdown.build import (
 from markdown.render import (
     render_markdown_tree
 )
+
+# Import extensions to register interactive element schemas
+import markdown.extensions

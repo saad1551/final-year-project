@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from typing import Any, Callable
 from enum import Enum
-from server_to_markdown import ServerToMarkdown
 
 import time
 import traceback
@@ -223,51 +222,61 @@ def is_stop_action(action: dict) -> bool:
         return action.function_calls[0].dotpath.startswith("stop")
 
 
-def convert_url_to_markdown(url: str):
-    # Create converter (assumes server is running on localhost:3000)
-    converter = ServerToMarkdown(server_url="http://localhost:3000")
-
-    # Convert URL to markdown
-    markdown_content = converter.url_to_markdown(url, width=1920, height=1080)
-
-    return markdown_content
-
-
-def get_current_page_markdown(session_id: str, server_url: str = "http://localhost:3000") -> str:
-    """
-    Get the markdown of the currently open page in the Playwright server.
-    
-    Args:
-        session_id: The session ID of the active browser session
-        server_url: The URL of the JavaScript server
-        
-    Returns:
-        The markdown content of the current page
-        
-    Raises:
-        Exception: If unable to get observation or convert to markdown
-    """
-    from server_client import ServerClient
-    from server_to_markdown import ServerToMarkdown
-    
-    # Create a server client
-    client = ServerClient(server_url)
-    client.session_id = session_id  # Use existing session
-    
-    try:
-        # Get the current page observation
-        observation = client.get_observation()
-        
-        # Create markdown converter
-        converter = ServerToMarkdown(server_url)
-        
-        # Convert to markdown
-        markdown_content = converter.convert_to_markdown(
-            observation['raw_html'], 
-            observation['metadata']
-        )
-        
-        return markdown_content
-        
-    except Exception as e:
-        raise Exception(f"Failed to get current page markdown: {e}")
+# def convert_url_to_markdown(url: str, session_id: str = None):
+#     # Create converter (assumes server is running on localhost:3000)
+#     converter = ServerToMarkdown(server_url="http://localhost:3000")
+#
+#     if session_id:
+#         # Use existing session
+#         converter.session_id = session_id
+#         converter.navigate_to_url(url)
+#         observation = converter.get_observation()
+#         markdown_content = converter.convert_to_markdown(
+#             observation['raw_html'],
+#             observation['metadata']
+#         )
+#     else:
+#         # Create new session (original behavior)
+#         markdown_content = converter.url_to_markdown(url, width=1920, height=1080)
+#
+#     return markdown_content
+#
+#
+# def get_current_page_markdown(session_id: str, server_url: str = "http://localhost:3000") -> str:
+#     """
+#     Get the markdown of the currently open page in the Playwright server.
+#
+#     Args:
+#         session_id: The session ID of the active browser session
+#         server_url: The URL of the JavaScript server
+#
+#     Returns:
+#         The markdown content of the current page
+#
+#     Raises:
+#         Exception: If unable to get observation or convert to markdown
+#     """
+#     from server_client import ServerClient
+#     from server_to_markdown import ServerToMarkdown
+#
+#     # Create a server client
+#     client = ServerClient(server_url)
+#     client.session_id = session_id  # Use existing session
+#
+#     try:
+#         # Get the current page observation
+#         observation = client.get_observation()
+#
+#         # Create markdown converter
+#         converter = ServerToMarkdown(server_url)
+#
+#         # Convert to markdown
+#         markdown_content = converter.convert_to_markdown(
+#             observation['raw_html'],
+#             observation['metadata']
+#         )
+#
+#         return markdown_content
+#
+#     except Exception as e:
+#         raise Exception(f"Failed to get current page markdown: {e}")

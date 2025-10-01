@@ -58,13 +58,6 @@ def clean_label(
     return label
 
 
-def get_backend_node_id(node) -> str:
-    """Extract backend node ID from a MarkdownNode."""
-    if node.html_element is not None and 'backend_node_id' in node.html_element.attrib:
-        return f"[id:{node.html_element.attrib['backend_node_id']}]"
-    return ""
-
-
 MarkdownNodeType = str
 
 
@@ -582,8 +575,7 @@ class LinkSchema(MarkdownSchema):
                         output_text + "\n"
                 )
 
-        backend_id = get_backend_node_id(node)
-        return output_text + backend_id
+        return output_text
 
 
 @register_schema('bold')
@@ -612,8 +604,7 @@ class BoldSchema(MarkdownSchema):
             " ".join(child_representations)
         )
 
-        backend_id = get_backend_node_id(node)
-        return output_text + backend_id
+        return output_text
 
 
 @register_schema('italic')
@@ -648,8 +639,7 @@ class ItalicSchema(MarkdownSchema):
         if len(output_text) == 2:
             return "(icon)"
 
-        backend_id = get_backend_node_id(node)
-        return output_text + backend_id
+        return output_text
 
 
 @register_schema('underline')
@@ -854,8 +844,7 @@ class TextSchema(MarkdownSchema):
             indent_level: int = 0,
             indent_value: str = DEFAULT_INDENT_VALUE,
     ) -> str:
-        backend_id = get_backend_node_id(node)
-        return node.text_content + backend_id
+        return node.text_content
 
 
 ALL_SCHEMA_NAMES = [

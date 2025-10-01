@@ -109,7 +109,7 @@ class InSTARangeSchema(InSTABaseSchema):
         )
 
         real_value = (
-            node.metadata.get("editable_value") or
+            node.metadata.editable_value or
             node.html_element.attrib.get("aria-valuenow") or 
             node.html_element.attrib.get("value")
         )
@@ -118,9 +118,7 @@ class InSTARangeSchema(InSTABaseSchema):
             node.html_element.attrib.get("aria-valuetext")
         )
 
-        backend_node_id = node.metadata[
-            "backend_node_id"
-        ]
+        backend_node_id = node.metadata.backend_node_id
 
         if display_value is None:
 

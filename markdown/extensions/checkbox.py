@@ -81,12 +81,10 @@ class InSTACheckboxSchema(InSTABaseSchema):
         is_checked = (
             node.html_element.attrib.get("aria-checked") or 
             node.html_element.attrib.get("checked") or 
-            node.metadata.get("editable_value")
+            node.metadata.editable_value
         )
         
-        backend_node_id = node.metadata[
-            "backend_node_id"
-        ]
+        backend_node_id = node.metadata.backend_node_id
 
         return '[id: {id}] "{is_checked}" ({title})'.format(
             id = backend_node_id,

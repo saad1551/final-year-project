@@ -26,7 +26,7 @@ import sys
 import json
 import argparse
 from datetime import datetime
-from server_client import ServerClient
+from client import ServerClient
 from markdown import get_markdown_tree, render_markdown_tree
 from configs.browser_config import BrowserObservation, NodeMetadata
 from utils import safe_call, BrowserStatus

@@ -256,7 +256,7 @@ def is_stop_action(action: dict) -> bool:
 #     Raises:
 #         Exception: If unable to get observation or convert to markdown
 #     """
-#     from server_client import ServerClient
+#     from client import ServerClient
 #     from server_to_markdown import ServerToMarkdown
 #
 #     # Create a server client

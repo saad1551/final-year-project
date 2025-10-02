@@ -165,13 +165,13 @@ def element_is_visible(
         require_frontmost: bool = True
 ) -> bool:
     pass_through = (
-            metadata.computed_style['display']
+            metadata['computed_style']['display']
             == 'contents'
     )
 
     is_visible = (
-            (metadata.is_visible or not require_visible)
-            and (metadata.is_frontmost or not require_frontmost)
+            (metadata['is_visible'] or not require_visible)
+            and (metadata['is_frontmost'] or not require_frontmost)
     )
 
     return pass_through or is_visible
@@ -181,7 +181,9 @@ def element_within_viewport(
         metadata: NodeMetadata,
         restrict_viewport: Tuple[float, float, float, float]
 ) -> bool:
-    bounding_client_rect = metadata.bounding_client_rect
+    bounding_client_rect = metadata[
+        'bounding_client_rect'
+    ]
 
     elem_x0 = bounding_client_rect['x']
     elem_y0 = bounding_client_rect['y']

@@ -1,1 +1,4 @@
 /javascript/server/node_modules
+markdown
+*.json
+*.arrow

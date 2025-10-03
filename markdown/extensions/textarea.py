@@ -49,7 +49,7 @@ class InSTATextareaSchema(InSTABaseSchema):
 
         content = str(
             node.html_element.attrib.get("aria-valuetext") or 
-            node.metadata.get("editable_value") or
+            node.metadata.editable_value or
             node.html_element.attrib.get("value") or 
             node.html_element.attrib.get("placeholder") or ""
         )
@@ -88,9 +88,7 @@ class InSTATextareaSchema(InSTABaseSchema):
             title_outputs
         )
         
-        backend_node_id = node.metadata[
-            "backend_node_id"
-        ]
+        backend_node_id = node.metadata.backend_node_id
 
         return '[id: {id}] """\n{content}\n""" ({title})'.format(
             id = backend_node_id,

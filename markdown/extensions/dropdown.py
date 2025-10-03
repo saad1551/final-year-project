@@ -42,9 +42,7 @@ class InSTADropdownSchema(InSTABaseSchema):
         indent_value: str = DEFAULT_INDENT_VALUE,
     ) -> str:
 
-        backend_node_id = node.metadata[
-            "backend_node_id"
-        ]
+        backend_node_id = node.metadata.backend_node_id
 
         labeled_by = node.html_element.attrib.get(
             "aria-labelledby"

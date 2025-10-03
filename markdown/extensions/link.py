@@ -63,9 +63,7 @@ class InSTALinkSchema(InSTABaseSchema):
             "link" if not has_popup else "dropdown"
         )
         
-        backend_node_id = node.metadata[
-            "backend_node_id"
-        ]
+        backend_node_id = node.metadata.backend_node_id
 
         return "[id: {id}] {title} {link_type}".format(
             id = backend_node_id,

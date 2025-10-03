@@ -45,5 +45,6 @@ class InSTABaseSchema(MarkdownSchema):
 
         return (
             is_match and node_metadata is not None and 
-            'backend_node_id' in node_metadata 
+            hasattr(node_metadata, 'backend_node_id') and
+            node_metadata.backend_node_id is not None
         )

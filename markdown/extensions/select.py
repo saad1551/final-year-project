@@ -50,9 +50,7 @@ class InSTASelectSchema(InSTABaseSchema):
             for option in options
         ]
         
-        editable_value = node.metadata.get(
-            "editable_value"
-        )
+        editable_value = node.metadata.editable_value
 
         selected_label = ""
 
@@ -106,9 +104,7 @@ class InSTASelectSchema(InSTABaseSchema):
             title_outputs
         )
 
-        backend_node_id = node.metadata[
-            "backend_node_id"
-        ]
+        backend_node_id = node.metadata.backend_node_id
 
         return '[id: {id}] "{value}" ({title} from: {options})'.format(
             id = backend_node_id,

@@ -53,9 +53,7 @@ class InSTAButtonSchema(InSTABaseSchema):
             child_representations
         ))
 
-        backend_node_id = node.metadata[
-            "backend_node_id"
-        ]
+        backend_node_id = node.metadata.backend_node_id
 
         button_title = (
             clean_label(node.html_element.attrib.get("name")) or 

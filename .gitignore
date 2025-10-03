@@ -1,4 +1,10 @@
 /javascript/server/node_modules
+<<<<<<< HEAD
 markdown
 *.json
 *.arrow
+=======
+__pycache__/
+*.pyc
+*.pyo
+>>>>>>> e67f10460480183bd96ef6b012bde0b88ff8cb89

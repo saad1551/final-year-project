@@ -77,7 +77,7 @@ class InSTAInputSchema(InSTABaseSchema):
         ))
 
         value = str(
-            node.metadata.get("editable_value") or
+            node.metadata.editable_value or
             node.html_element.attrib.get("value") or 
             node.html_element.attrib.get("placeholder") or ""
         )
@@ -118,9 +118,7 @@ class InSTAInputSchema(InSTABaseSchema):
             title_outputs
         )
     
-        backend_node_id = node.metadata[
-            "backend_node_id"
-        ]
+        backend_node_id = node.metadata.backend_node_id
 
         input_type = node.html_element.attrib.get(
             "type", None

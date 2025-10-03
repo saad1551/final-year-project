@@ -527,9 +527,7 @@ class ImageSchema(MarkdownSchema):
 
         if node.metadata is not None:
 
-            computed_style = node.metadata[
-                "computed_style"
-            ]
+            computed_style = node.metadata.computed_style
 
             if computed_style is not None and \
                     computed_style['display'] == 'block':
@@ -569,9 +567,7 @@ class LinkSchema(MarkdownSchema):
 
         if node.metadata is not None:
 
-            computed_style = node.metadata[
-                "computed_style"
-            ]
+            computed_style = node.metadata.computed_style
 
             if computed_style is not None and \
                     computed_style['display'] == 'block':

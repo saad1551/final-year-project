@@ -1,0 +1,162 @@
+2025-10-02 14:04:23,108 - test_gym_environment - INFO - ============================================================
+2025-10-02 14:04:23,112 - test_gym_environment - INFO - STARTING GYM ENVIRONMENT TEST
+2025-10-02 14:04:23,113 - test_gym_environment - INFO - ============================================================
+2025-10-02 14:04:23,114 - test_gym_environment - INFO - Browser config: BrowserConfig(playwright_url='http://localhost:{port}', playwright_port=3000, screenshot=True, restrict_viewport=(0, 0, 1920, 1080), require_visible=True, require_frontmost=True, remove_pii=False, proxy=None, screen_width=1920, screen_height=1080, catch_errors=True, log_errors=True, max_errors=5, delays={'observation': 0.5})
+2025-10-02 14:04:23,114 - test_gym_environment - INFO - Playwright server URL: http://localhost:3000
+2025-10-02 14:04:23,115 - test_gym_environment - INFO - Initializing InstaEnv...
+2025-10-02 14:04:23,115 - test_gym_environment - INFO - ✓ InstaEnv initialized successfully
+2025-10-02 14:04:23,115 - test_gym_environment - INFO - Environment config: BrowserConfig(playwright_url='http://localhost:{port}', playwright_port=3000, screenshot=True, restrict_viewport=(0, 0, 1920, 1080), require_visible=True, require_frontmost=True, remove_pii=False, proxy=None, screen_width=1920, screen_height=1080, catch_errors=True, log_errors=True, max_errors=5, delays={'observation': 0.5})
+2025-10-02 14:04:23,116 - test_gym_environment - INFO - Observation processor: MarkdownProcessor
+2025-10-02 14:04:23,116 - test_gym_environment - INFO - Resetting environment to URL: https://google.com
+2025-10-02 14:04:23,131 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:3000
+2025-10-02 14:04:23,595 - urllib3.connectionpool - DEBUG - http://localhost:3000 "POST /start?width=1920&height=1080 HTTP/1.1" 200 512
+2025-10-02 14:04:23,597 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:3000
+2025-10-02 14:04:27,717 - urllib3.connectionpool - DEBUG - http://localhost:3000 "POST /goto?url=https://google.com&session_id=ynhUtWp3MZXywHmYkcROB1WyH7sno57qE2hgwW66TMjQ5fHPUMlgKP3wnvtpmijAGke5YfZQ2BAvXEhyjSFXDX5sgel1PyZRItlz0cOZ8zJHLgpIv4E4IblQ77LxDLwrQxFnlt4rVuohuemV7941teNHyczw2HMc4LNzGShY9toDP6G6OvN1LaoK3Aa7bLROB2PR61gv74Fk1sZ2FmMQDaPbIJgQsjcXMK4jrAhUEPwO1GbV4sEb7s7wx8Ivsjz6vQPmiZPveBDTD1YShFwsv0oMJGJHZ1E1otE0oPjdAjFDoMI65tp5YuoD0n9zgEo7pBRQ3dtzyRQKn8O0m53iD82AyssfSPdU0fib5cBMIqU2leiw9El83cWo7jbmDu2hG6Bo2Uq2h1e5ibtSlCOruF6ItoEpRws3S5VzJIToTU5RrcQWnr4O5AqrREY3NUbSAwAhYPD8GvAgiubZU0E4keSdCKy5D6Baw7KNMxA4kY7rxkisyX9zfaOJkX1k9Evk HTTP/1.1" 200 24
+2025-10-02 14:04:28,225 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:3000
+2025-10-02 14:04:29,101 - urllib3.connectionpool - DEBUG - http://localhost:3000 "POST /observation?session_id=ynhUtWp3MZXywHmYkcROB1WyH7sno57qE2hgwW66TMjQ5fHPUMlgKP3wnvtpmijAGke5YfZQ2BAvXEhyjSFXDX5sgel1PyZRItlz0cOZ8zJHLgpIv4E4IblQ77LxDLwrQxFnlt4rVuohuemV7941teNHyczw2HMc4LNzGShY9toDP6G6OvN1LaoK3Aa7bLROB2PR61gv74Fk1sZ2FmMQDaPbIJgQsjcXMK4jrAhUEPwO1GbV4sEb7s7wx8Ivsjz6vQPmiZPveBDTD1YShFwsv0oMJGJHZ1E1otE0oPjdAjFDoMI65tp5YuoD0n9zgEo7pBRQ3dtzyRQKn8O0m53iD82AyssfSPdU0fib5cBMIqU2leiw9El83cWo7jbmDu2hG6Bo2Uq2h1e5ibtSlCOruF6ItoEpRws3S5VzJIToTU5RrcQWnr4O5AqrREY3NUbSAwAhYPD8GvAgiubZU0E4keSdCKy5D6Baw7KNMxA4kY7rxkisyX9zfaOJkX1k9Evk HTTP/1.1" 200 4372896
+2025-10-02 14:04:29,149 - PIL.PngImagePlugin - DEBUG - STREAM b'IHDR' 16 13
+2025-10-02 14:04:29,151 - PIL.PngImagePlugin - DEBUG - STREAM b'sRGB' 41 1
+2025-10-02 14:04:29,151 - PIL.PngImagePlugin - DEBUG - STREAM b'IDAT' 54 8192
+2025-10-02 14:04:30,168 - test_gym_environment - INFO - ✓ Environment reset completed
+2025-10-02 14:04:30,184 - test_gym_environment - INFO - Reset info: {}
+2025-10-02 14:04:30,186 - test_gym_environment - INFO - Initial observation type: <class 'configs.browser_config.BrowserObservation'>
+2025-10-02 14:04:30,186 - test_gym_environment - INFO - Initial observation processed_text length: 161
+2025-10-02 14:04:30,189 - test_gym_environment - INFO - Initial observation preview: The page has failed to parse into markdown. Please check the logs for more information, and file a bug report to: https://github.com/data-for-agents/insta/issues...
+2025-10-02 14:04:30,189 - test_gym_environment - INFO - 
+==================== STEP 1 ====================
+2025-10-02 14:04:30,190 - test_gym_environment - INFO - Creating action...
+2025-10-02 14:04:30,191 - test_gym_environment - INFO - ✓ Action created: BrowserAction(function_calls=[FunctionCall(dotpath='page.click', args={'selector': "input[name='q']"})], response=None, matched_response=None)
+2025-10-02 14:04:30,191 - test_gym_environment - INFO - Action function_calls: [FunctionCall(dotpath='page.click', args={'selector': "input[name='q']"})]
+2025-10-02 14:04:30,192 - test_gym_environment - INFO -   Function call 1: dotpath='page.click', args='{'selector': "input[name='q']"}'
+2025-10-02 14:04:30,192 - test_gym_environment - INFO - Executing step...
+2025-10-02 14:04:30,195 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:3000
+2025-10-02 14:04:30,199 - urllib3.connectionpool - DEBUG - http://localhost:3000 "POST /action?session_id=ynhUtWp3MZXywHmYkcROB1WyH7sno57qE2hgwW66TMjQ5fHPUMlgKP3wnvtpmijAGke5YfZQ2BAvXEhyjSFXDX5sgel1PyZRItlz0cOZ8zJHLgpIv4E4IblQ77LxDLwrQxFnlt4rVuohuemV7941teNHyczw2HMc4LNzGShY9toDP6G6OvN1LaoK3Aa7bLROB2PR61gv74Fk1sZ2FmMQDaPbIJgQsjcXMK4jrAhUEPwO1GbV4sEb7s7wx8Ivsjz6vQPmiZPveBDTD1YShFwsv0oMJGJHZ1E1otE0oPjdAjFDoMI65tp5YuoD0n9zgEo7pBRQ3dtzyRQKn8O0m53iD82AyssfSPdU0fib5cBMIqU2leiw9El83cWo7jbmDu2hG6Bo2Uq2h1e5ibtSlCOruF6ItoEpRws3S5VzJIToTU5RrcQWnr4O5AqrREY3NUbSAwAhYPD8GvAgiubZU0E4keSdCKy5D6Baw7KNMxA4kY7rxkisyX9zfaOJkX1k9Evk HTTP/1.1" 400 21
+2025-10-02 14:04:30,203 - test_gym_environment - INFO - ✓ Step execution completed
+2025-10-02 14:04:30,204 - test_gym_environment - INFO - Step 1 results:
+2025-10-02 14:04:30,205 - test_gym_environment - INFO -   - Reward: 0.0
+2025-10-02 14:04:30,205 - test_gym_environment - INFO -   - Done: False
+2025-10-02 14:04:30,205 - test_gym_environment - INFO -   - Truncated: False
+2025-10-02 14:04:30,206 - test_gym_environment - INFO -   - Info: {}
+2025-10-02 14:04:30,206 - test_gym_environment - INFO -   - Observation type: <class 'configs.browser_config.BrowserObservation'>
+2025-10-02 14:04:30,207 - test_gym_environment - INFO -   - Observation processed_text length: 21
+2025-10-02 14:04:30,208 - test_gym_environment - INFO -   - Observation preview: Args must be a string...
+2025-10-02 14:04:30,208 - test_gym_environment - INFO - 
+==================== STEP 2 ====================
+2025-10-02 14:04:30,209 - test_gym_environment - INFO - Creating action...
+2025-10-02 14:04:30,209 - test_gym_environment - INFO - ✓ Action created: BrowserAction(function_calls=[FunctionCall(dotpath='page.click', args={'selector': "input[name='q']"})], response=None, matched_response=None)
+2025-10-02 14:04:30,210 - test_gym_environment - INFO - Action function_calls: [FunctionCall(dotpath='page.click', args={'selector': "input[name='q']"})]
+2025-10-02 14:04:30,210 - test_gym_environment - INFO -   Function call 1: dotpath='page.click', args='{'selector': "input[name='q']"}'
+2025-10-02 14:04:30,211 - test_gym_environment - INFO - Executing step...
+2025-10-02 14:04:30,213 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:3000
+2025-10-02 14:04:30,217 - urllib3.connectionpool - DEBUG - http://localhost:3000 "POST /action?session_id=ynhUtWp3MZXywHmYkcROB1WyH7sno57qE2hgwW66TMjQ5fHPUMlgKP3wnvtpmijAGke5YfZQ2BAvXEhyjSFXDX5sgel1PyZRItlz0cOZ8zJHLgpIv4E4IblQ77LxDLwrQxFnlt4rVuohuemV7941teNHyczw2HMc4LNzGShY9toDP6G6OvN1LaoK3Aa7bLROB2PR61gv74Fk1sZ2FmMQDaPbIJgQsjcXMK4jrAhUEPwO1GbV4sEb7s7wx8Ivsjz6vQPmiZPveBDTD1YShFwsv0oMJGJHZ1E1otE0oPjdAjFDoMI65tp5YuoD0n9zgEo7pBRQ3dtzyRQKn8O0m53iD82AyssfSPdU0fib5cBMIqU2leiw9El83cWo7jbmDu2hG6Bo2Uq2h1e5ibtSlCOruF6ItoEpRws3S5VzJIToTU5RrcQWnr4O5AqrREY3NUbSAwAhYPD8GvAgiubZU0E4keSdCKy5D6Baw7KNMxA4kY7rxkisyX9zfaOJkX1k9Evk HTTP/1.1" 400 21
+2025-10-02 14:04:30,218 - test_gym_environment - INFO - ✓ Step execution completed
+2025-10-02 14:04:30,219 - test_gym_environment - INFO - Step 2 results:
+2025-10-02 14:04:30,219 - test_gym_environment - INFO -   - Reward: 0.0
+2025-10-02 14:04:30,220 - test_gym_environment - INFO -   - Done: False
+2025-10-02 14:04:30,221 - test_gym_environment - INFO -   - Truncated: False
+2025-10-02 14:04:30,222 - test_gym_environment - INFO -   - Info: {}
+2025-10-02 14:04:30,223 - test_gym_environment - INFO -   - Observation type: <class 'configs.browser_config.BrowserObservation'>
+2025-10-02 14:04:30,224 - test_gym_environment - INFO -   - Observation processed_text length: 21
+2025-10-02 14:04:30,224 - test_gym_environment - INFO -   - Observation preview: Args must be a string...
+2025-10-02 14:04:30,225 - test_gym_environment - INFO - 
+==================== STEP 3 ====================
+2025-10-02 14:04:30,226 - test_gym_environment - INFO - Creating action...
+2025-10-02 14:04:30,227 - test_gym_environment - INFO - ✓ Action created: BrowserAction(function_calls=[FunctionCall(dotpath='page.click', args={'selector': "input[name='q']"})], response=None, matched_response=None)
+2025-10-02 14:04:30,228 - test_gym_environment - INFO - Action function_calls: [FunctionCall(dotpath='page.click', args={'selector': "input[name='q']"})]
+2025-10-02 14:04:30,229 - test_gym_environment - INFO -   Function call 1: dotpath='page.click', args='{'selector': "input[name='q']"}'
+2025-10-02 14:04:30,229 - test_gym_environment - INFO - Executing step...
+2025-10-02 14:04:30,231 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:3000
+2025-10-02 14:04:30,233 - urllib3.connectionpool - DEBUG - http://localhost:3000 "POST /action?session_id=ynhUtWp3MZXywHmYkcROB1WyH7sno57qE2hgwW66TMjQ5fHPUMlgKP3wnvtpmijAGke5YfZQ2BAvXEhyjSFXDX5sgel1PyZRItlz0cOZ8zJHLgpIv4E4IblQ77LxDLwrQxFnlt4rVuohuemV7941teNHyczw2HMc4LNzGShY9toDP6G6OvN1LaoK3Aa7bLROB2PR61gv74Fk1sZ2FmMQDaPbIJgQsjcXMK4jrAhUEPwO1GbV4sEb7s7wx8Ivsjz6vQPmiZPveBDTD1YShFwsv0oMJGJHZ1E1otE0oPjdAjFDoMI65tp5YuoD0n9zgEo7pBRQ3dtzyRQKn8O0m53iD82AyssfSPdU0fib5cBMIqU2leiw9El83cWo7jbmDu2hG6Bo2Uq2h1e5ibtSlCOruF6ItoEpRws3S5VzJIToTU5RrcQWnr4O5AqrREY3NUbSAwAhYPD8GvAgiubZU0E4keSdCKy5D6Baw7KNMxA4kY7rxkisyX9zfaOJkX1k9Evk HTTP/1.1" 400 21
+2025-10-02 14:04:30,234 - test_gym_environment - INFO - ✓ Step execution completed
+2025-10-02 14:04:30,235 - test_gym_environment - INFO - Step 3 results:
+2025-10-02 14:04:30,235 - test_gym_environment - INFO -   - Reward: 0.0
+2025-10-02 14:04:30,236 - test_gym_environment - INFO -   - Done: False
+2025-10-02 14:04:30,237 - test_gym_environment - INFO -   - Truncated: False
+2025-10-02 14:04:30,237 - test_gym_environment - INFO -   - Info: {}
+2025-10-02 14:04:30,238 - test_gym_environment - INFO -   - Observation type: <class 'configs.browser_config.BrowserObservation'>
+2025-10-02 14:04:30,238 - test_gym_environment - INFO -   - Observation processed_text length: 21
+2025-10-02 14:04:30,238 - test_gym_environment - INFO -   - Observation preview: Args must be a string...
+2025-10-02 14:04:30,239 - test_gym_environment - INFO - ============================================================
+2025-10-02 14:04:30,239 - test_gym_environment - INFO - TEST COMPLETED
+2025-10-02 14:04:30,239 - test_gym_environment - INFO - ============================================================
+2025-10-02 14:44:11,814 - test_gym_environment - INFO - ============================================================
+2025-10-02 14:44:11,816 - test_gym_environment - INFO - STARTING GYM ENVIRONMENT TEST
+2025-10-02 14:44:11,816 - test_gym_environment - INFO - ============================================================
+2025-10-02 14:44:11,817 - test_gym_environment - INFO - Browser config: BrowserConfig(playwright_url='http://localhost:{port}', playwright_port=3000, screenshot=True, restrict_viewport=(0, 0, 1920, 1080), require_visible=True, require_frontmost=True, remove_pii=False, proxy=None, screen_width=1920, screen_height=1080, catch_errors=True, log_errors=True, max_errors=5, delays={'observation': 0.5})
+2025-10-02 14:44:11,819 - test_gym_environment - INFO - Playwright server URL: http://localhost:3000
+2025-10-02 14:44:11,819 - test_gym_environment - INFO - Initializing InstaEnv...
+2025-10-02 14:44:11,820 - test_gym_environment - INFO - ✓ InstaEnv initialized successfully
+2025-10-02 14:44:11,821 - test_gym_environment - INFO - Environment config: BrowserConfig(playwright_url='http://localhost:{port}', playwright_port=3000, screenshot=True, restrict_viewport=(0, 0, 1920, 1080), require_visible=True, require_frontmost=True, remove_pii=False, proxy=None, screen_width=1920, screen_height=1080, catch_errors=True, log_errors=True, max_errors=5, delays={'observation': 0.5})
+2025-10-02 14:44:11,823 - test_gym_environment - INFO - Observation processor: MarkdownProcessor
+2025-10-02 14:44:11,824 - test_gym_environment - INFO - Resetting environment to URL: https://google.com
+2025-10-02 14:44:11,834 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:3000
+2025-10-02 14:44:12,426 - urllib3.connectionpool - DEBUG - http://localhost:3000 "POST /start?width=1920&height=1080 HTTP/1.1" 200 512
+2025-10-02 14:44:12,429 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:3000
+2025-10-02 14:44:14,834 - urllib3.connectionpool - DEBUG - http://localhost:3000 "POST /goto?url=https://google.com&session_id=CrIyc8XNgrcI6Ag3cU5778NeLPqgJz5wuF536e3seP2d9zXdEkOM32OAYfr05hHSlrngv0FOpKDcrngYVsQOgjloik3zBWgDd4NvYck0uOYUhkEKDenqJgZKdyXtD9RfDAAj2FWq8A8aYmAZ7asLs4JZAkI7M9NLgYXSRLgnWnP6Jnpwz7X5u0Xh4w4f5TLSA5zmAfHoLNmNj2N5CVcfMbPViJCiIvR09nUUGWBgS9xYHQVR3XvtzKNy9zLFcA6G9tJhQSpkD9l2zN5tnu0AkgBD20CAWig5O6qzsj6e2OetREAhQEz0UpYAgiNHrPYoEYswBDev9kNaVLdTzqgFpGqmIWcnAmjIWEOiAILGW5OzTosHQ8KCeRvd7uvu0dJ6QurDBMVAFF8RGNrUT8m7oZauRi0JNS0USIftIeoAZYSZ3pBDT8ONL2Y5WzwAC7oAZPph0C0DTMNOJ7eYm9fCyEY0he7PLmq5H57VVGqMhAwlL0lIQW1OHgzxdQikfgAM HTTP/1.1" 200 24
+2025-10-02 14:44:15,345 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:3000
+2025-10-02 14:44:17,264 - urllib3.connectionpool - DEBUG - http://localhost:3000 "POST /observation?session_id=CrIyc8XNgrcI6Ag3cU5778NeLPqgJz5wuF536e3seP2d9zXdEkOM32OAYfr05hHSlrngv0FOpKDcrngYVsQOgjloik3zBWgDd4NvYck0uOYUhkEKDenqJgZKdyXtD9RfDAAj2FWq8A8aYmAZ7asLs4JZAkI7M9NLgYXSRLgnWnP6Jnpwz7X5u0Xh4w4f5TLSA5zmAfHoLNmNj2N5CVcfMbPViJCiIvR09nUUGWBgS9xYHQVR3XvtzKNy9zLFcA6G9tJhQSpkD9l2zN5tnu0AkgBD20CAWig5O6qzsj6e2OetREAhQEz0UpYAgiNHrPYoEYswBDev9kNaVLdTzqgFpGqmIWcnAmjIWEOiAILGW5OzTosHQ8KCeRvd7uvu0dJ6QurDBMVAFF8RGNrUT8m7oZauRi0JNS0USIftIeoAZYSZ3pBDT8ONL2Y5WzwAC7oAZPph0C0DTMNOJ7eYm9fCyEY0he7PLmq5H57VVGqMhAwlL0lIQW1OHgzxdQikfgAM HTTP/1.1" 200 4296081
+2025-10-02 14:44:17,332 - PIL.PngImagePlugin - DEBUG - STREAM b'IHDR' 16 13
+2025-10-02 14:44:17,333 - PIL.PngImagePlugin - DEBUG - STREAM b'sRGB' 41 1
+2025-10-02 14:44:17,333 - PIL.PngImagePlugin - DEBUG - STREAM b'IDAT' 54 8192
+2025-10-02 14:44:18,361 - test_gym_environment - INFO - ✓ Environment reset completed
+2025-10-02 14:44:18,363 - test_gym_environment - INFO - Reset info: {}
+2025-10-02 14:44:18,365 - test_gym_environment - INFO - Initial observation type: <class 'configs.browser_config.BrowserObservation'>
+2025-10-02 14:44:18,365 - test_gym_environment - INFO - Initial observation processed_text length: 161
+2025-10-02 14:44:18,367 - test_gym_environment - INFO - Initial observation preview: The page has failed to parse into markdown. Please check the logs for more information, and file a bug report to: https://github.com/data-for-agents/insta/issues...
+2025-10-02 14:44:18,367 - test_gym_environment - INFO - 
+==================== STEP 1 ====================
+2025-10-02 14:44:18,368 - test_gym_environment - INFO - Creating action...
+2025-10-02 14:44:18,370 - test_gym_environment - INFO - ✓ Action created: BrowserAction(function_calls=[FunctionCall(dotpath='page.click', args={'selector': "input[name='q']"})], response=None, matched_response=None)
+2025-10-02 14:44:18,372 - test_gym_environment - INFO - Action function_calls: [FunctionCall(dotpath='page.click', args={'selector': "input[name='q']"})]
+2025-10-02 14:44:18,375 - test_gym_environment - INFO -   Function call 1: dotpath='page.click', args='{'selector': "input[name='q']"}'
+2025-10-02 14:44:18,376 - test_gym_environment - INFO - Executing step...
+2025-10-02 14:44:18,389 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:3000
+2025-10-02 14:44:18,399 - urllib3.connectionpool - DEBUG - http://localhost:3000 "POST /action?session_id=CrIyc8XNgrcI6Ag3cU5778NeLPqgJz5wuF536e3seP2d9zXdEkOM32OAYfr05hHSlrngv0FOpKDcrngYVsQOgjloik3zBWgDd4NvYck0uOYUhkEKDenqJgZKdyXtD9RfDAAj2FWq8A8aYmAZ7asLs4JZAkI7M9NLgYXSRLgnWnP6Jnpwz7X5u0Xh4w4f5TLSA5zmAfHoLNmNj2N5CVcfMbPViJCiIvR09nUUGWBgS9xYHQVR3XvtzKNy9zLFcA6G9tJhQSpkD9l2zN5tnu0AkgBD20CAWig5O6qzsj6e2OetREAhQEz0UpYAgiNHrPYoEYswBDev9kNaVLdTzqgFpGqmIWcnAmjIWEOiAILGW5OzTosHQ8KCeRvd7uvu0dJ6QurDBMVAFF8RGNrUT8m7oZauRi0JNS0USIftIeoAZYSZ3pBDT8ONL2Y5WzwAC7oAZPph0C0DTMNOJ7eYm9fCyEY0he7PLmq5H57VVGqMhAwlL0lIQW1OHgzxdQikfgAM HTTP/1.1" 400 21
+2025-10-02 14:44:18,403 - test_gym_environment - INFO - ✓ Step execution completed
+2025-10-02 14:44:18,404 - test_gym_environment - INFO - Step 1 results:
+2025-10-02 14:44:18,405 - test_gym_environment - INFO -   - Reward: 0.0
+2025-10-02 14:44:18,407 - test_gym_environment - INFO -   - Done: False
+2025-10-02 14:44:18,408 - test_gym_environment - INFO -   - Truncated: False
+2025-10-02 14:44:18,409 - test_gym_environment - INFO -   - Info: {}
+2025-10-02 14:44:18,411 - test_gym_environment - INFO -   - Observation type: <class 'configs.browser_config.BrowserObservation'>
+2025-10-02 14:44:18,412 - test_gym_environment - INFO -   - Observation processed_text length: 21
+2025-10-02 14:44:18,414 - test_gym_environment - INFO -   - Observation preview: Args must be a string...
+2025-10-02 14:44:18,414 - test_gym_environment - INFO - 
+==================== STEP 2 ====================
+2025-10-02 14:44:18,415 - test_gym_environment - INFO - Creating action...
+2025-10-02 14:44:18,416 - test_gym_environment - INFO - ✓ Action created: BrowserAction(function_calls=[FunctionCall(dotpath='page.click', args={'selector': "input[name='q']"})], response=None, matched_response=None)
+2025-10-02 14:44:18,418 - test_gym_environment - INFO - Action function_calls: [FunctionCall(dotpath='page.click', args={'selector': "input[name='q']"})]
+2025-10-02 14:44:18,419 - test_gym_environment - INFO -   Function call 1: dotpath='page.click', args='{'selector': "input[name='q']"}'
+2025-10-02 14:44:18,420 - test_gym_environment - INFO - Executing step...
+2025-10-02 14:44:18,424 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:3000
+2025-10-02 14:44:18,429 - urllib3.connectionpool - DEBUG - http://localhost:3000 "POST /action?session_id=CrIyc8XNgrcI6Ag3cU5778NeLPqgJz5wuF536e3seP2d9zXdEkOM32OAYfr05hHSlrngv0FOpKDcrngYVsQOgjloik3zBWgDd4NvYck0uOYUhkEKDenqJgZKdyXtD9RfDAAj2FWq8A8aYmAZ7asLs4JZAkI7M9NLgYXSRLgnWnP6Jnpwz7X5u0Xh4w4f5TLSA5zmAfHoLNmNj2N5CVcfMbPViJCiIvR09nUUGWBgS9xYHQVR3XvtzKNy9zLFcA6G9tJhQSpkD9l2zN5tnu0AkgBD20CAWig5O6qzsj6e2OetREAhQEz0UpYAgiNHrPYoEYswBDev9kNaVLdTzqgFpGqmIWcnAmjIWEOiAILGW5OzTosHQ8KCeRvd7uvu0dJ6QurDBMVAFF8RGNrUT8m7oZauRi0JNS0USIftIeoAZYSZ3pBDT8ONL2Y5WzwAC7oAZPph0C0DTMNOJ7eYm9fCyEY0he7PLmq5H57VVGqMhAwlL0lIQW1OHgzxdQikfgAM HTTP/1.1" 400 21
+2025-10-02 14:44:18,430 - test_gym_environment - INFO - ✓ Step execution completed
+2025-10-02 14:44:18,431 - test_gym_environment - INFO - Step 2 results:
+2025-10-02 14:44:18,432 - test_gym_environment - INFO -   - Reward: 0.0
+2025-10-02 14:44:18,433 - test_gym_environment - INFO -   - Done: False
+2025-10-02 14:44:18,434 - test_gym_environment - INFO -   - Truncated: False
+2025-10-02 14:44:18,435 - test_gym_environment - INFO -   - Info: {}
+2025-10-02 14:44:18,436 - test_gym_environment - INFO -   - Observation type: <class 'configs.browser_config.BrowserObservation'>
+2025-10-02 14:44:18,437 - test_gym_environment - INFO -   - Observation processed_text length: 21
+2025-10-02 14:44:18,437 - test_gym_environment - INFO -   - Observation preview: Args must be a string...
+2025-10-02 14:44:18,438 - test_gym_environment - INFO - 
+==================== STEP 3 ====================
+2025-10-02 14:44:18,439 - test_gym_environment - INFO - Creating action...
+2025-10-02 14:44:18,440 - test_gym_environment - INFO - ✓ Action created: BrowserAction(function_calls=[FunctionCall(dotpath='page.click', args={'selector': "input[name='q']"})], response=None, matched_response=None)
+2025-10-02 14:44:18,441 - test_gym_environment - INFO - Action function_calls: [FunctionCall(dotpath='page.click', args={'selector': "input[name='q']"})]
+2025-10-02 14:44:18,441 - test_gym_environment - INFO -   Function call 1: dotpath='page.click', args='{'selector': "input[name='q']"}'
+2025-10-02 14:44:18,442 - test_gym_environment - INFO - Executing step...
+2025-10-02 14:44:18,445 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:3000
+2025-10-02 14:44:18,448 - urllib3.connectionpool - DEBUG - http://localhost:3000 "POST /action?session_id=CrIyc8XNgrcI6Ag3cU5778NeLPqgJz5wuF536e3seP2d9zXdEkOM32OAYfr05hHSlrngv0FOpKDcrngYVsQOgjloik3zBWgDd4NvYck0uOYUhkEKDenqJgZKdyXtD9RfDAAj2FWq8A8aYmAZ7asLs4JZAkI7M9NLgYXSRLgnWnP6Jnpwz7X5u0Xh4w4f5TLSA5zmAfHoLNmNj2N5CVcfMbPViJCiIvR09nUUGWBgS9xYHQVR3XvtzKNy9zLFcA6G9tJhQSpkD9l2zN5tnu0AkgBD20CAWig5O6qzsj6e2OetREAhQEz0UpYAgiNHrPYoEYswBDev9kNaVLdTzqgFpGqmIWcnAmjIWEOiAILGW5OzTosHQ8KCeRvd7uvu0dJ6QurDBMVAFF8RGNrUT8m7oZauRi0JNS0USIftIeoAZYSZ3pBDT8ONL2Y5WzwAC7oAZPph0C0DTMNOJ7eYm9fCyEY0he7PLmq5H57VVGqMhAwlL0lIQW1OHgzxdQikfgAM HTTP/1.1" 400 21
+2025-10-02 14:44:18,449 - test_gym_environment - INFO - ✓ Step execution completed
+2025-10-02 14:44:18,449 - test_gym_environment - INFO - Step 3 results:
+2025-10-02 14:44:18,449 - test_gym_environment - INFO -   - Reward: 0.0
+2025-10-02 14:44:18,450 - test_gym_environment - INFO -   - Done: False
+2025-10-02 14:44:18,450 - test_gym_environment - INFO -   - Truncated: False
+2025-10-02 14:44:18,451 - test_gym_environment - INFO -   - Info: {}
+2025-10-02 14:44:18,451 - test_gym_environment - INFO -   - Observation type: <class 'configs.browser_config.BrowserObservation'>
+2025-10-02 14:44:18,452 - test_gym_environment - INFO -   - Observation processed_text length: 21
+2025-10-02 14:44:18,452 - test_gym_environment - INFO -   - Observation preview: Args must be a string...
+2025-10-02 14:44:18,453 - test_gym_environment - INFO - ============================================================
+2025-10-02 14:44:18,454 - test_gym_environment - INFO - TEST COMPLETED
+2025-10-02 14:44:18,454 - test_gym_environment - INFO - ============================================================

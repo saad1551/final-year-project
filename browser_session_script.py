@@ -25,11 +25,41 @@ Examples:
 import sys
 import json
 import argparse
+import base64
+import io
 from datetime import datetime
 from client import BrowserClient
 from markdown import get_markdown_tree, render_markdown_tree
-from configs.browser_config import BrowserObservation, NodeMetadata
+from configs.browser_config import BrowserObservation, NodeMetadata, BrowserConfig
 from utils import safe_call, BrowserStatus
+
+
+def image_to_base64(image):
+    """Convert PIL Image to base64 string for JSON serialization."""
+    if image is None:
+        return None
+    
+    buffer = io.BytesIO()
+    image.save(buffer, format='PNG')
+    img_str = base64.b64encode(buffer.getvalue()).decode()
+    return img_str
+
+
+def convert_metadata_dict_to_objects(metadata_dict):
+    """Convert metadata dict to NodeMetadata objects."""
+    if not metadata_dict:
+        return {}
+    
+    converted = {}
+    for node_id, metadata in metadata_dict.items():
+        if isinstance(metadata, dict):
+            # Convert dict to NodeMetadata object
+            converted[node_id] = NodeMetadata(**metadata)
+        else:
+            # Already a NodeMetadata object
+            converted[node_id] = metadata
+    
+    return converted
 
 
 def convert_to_markdown(observation_data):
@@ -50,13 +80,8 @@ def convert_to_markdown(observation_data):
         if not raw_html:
             return "No HTML content available"
         
-        # Convert metadata format if needed
-        node_metadata = {}
-        for node_id, meta in metadata.items():
-            if isinstance(meta, dict):
-                node_metadata[node_id] = NodeMetadata(**meta)
-            else:
-                node_metadata[node_id] = meta
+        # Convert metadata dict to NodeMetadata objects if needed
+        node_metadata = convert_metadata_dict_to_objects(metadata)
         
         # Get markdown tree
         markdown_nodes = safe_call(
@@ -152,15 +177,26 @@ def main():
         print(f"Server: {args.server_url}")
         print(f"Viewport: {args.width}x{args.height}")
     
-    # Initialize the server client
-    client = ServerClient(args.server_url)
+    # Initialize the server client with proper config
+    config = BrowserConfig(
+        playwright_url=args.server_url,
+        screen_width=args.width,
+        screen_height=args.height
+    )
+    client = BrowserClient(config)
     
     try:
         # Start a new session
         if args.verbose:
             print("Starting new browser session...")
         
-        session_id = client.start_session(width=args.width, height=args.height)
+        start_result = client.start()
+        
+        if start_result != BrowserStatus.SUCCESS:
+            print(f"❌ Failed to start session: {start_result}")
+            sys.exit(1)
+        
+        session_id = client.session_id
         
         if args.verbose:
             print(f"Session started with ID: {session_id}")
@@ -169,7 +205,11 @@ def main():
         if args.verbose:
             print(f"Navigating to: {args.url}")
         
-        client.navigate(args.url)
+        goto_result = client.goto(args.url)
+        
+        if goto_result != BrowserStatus.SUCCESS:
+            print(f"❌ Failed to navigate to URL: {goto_result}")
+            sys.exit(1)
         
         if args.verbose:
             print("Page loaded successfully")
@@ -178,26 +218,41 @@ def main():
         if args.verbose:
             print("Capturing observation...")
         
-        observation = client.get_observation()
+        observation_result = client.observation()
+        
+        if isinstance(observation_result, BrowserStatus) and observation_result != BrowserStatus.SUCCESS:
+            print(f"❌ Failed to capture observation: {observation_result}")
+            sys.exit(1)
+        
+        observation = observation_result
         
         if args.verbose:
             print("Observation captured successfully")
-            print(f"Current URL: {observation.get('current_url', 'Unknown')}")
-            print(f"HTML size: {len(observation.get('raw_html', ''))} characters")
-            print(f"Screenshot size: {len(observation.get('screenshot', ''))} characters (base64)")
-            print(f"Metadata nodes: {len(observation.get('metadata', {}))}")
+            print(f"Current URL: {observation.current_url}")
+            print(f"HTML size: {len(observation.raw_html)} characters")
+            print(f"Screenshot size: {len(observation.screenshot.tobytes())} bytes")
+            print(f"Metadata nodes: {len(observation.metadata)}")
         
         # Convert to markdown
         if args.verbose:
             print("Converting to markdown...")
         
-        markdown_text = convert_to_markdown(observation)
+        # Convert BrowserObservation to dict format for convert_to_markdown
+        observation_dict = {
+            'raw_html': observation.raw_html,
+            'metadata': observation.metadata,
+            'current_url': observation.current_url,
+            'screenshot': image_to_base64(observation.screenshot),
+            'processed_image': image_to_base64(observation.processed_image)
+        }
+        
+        markdown_text = convert_to_markdown(observation_dict)
         
         if args.verbose:
             print(f"Markdown conversion completed ({len(markdown_text)} characters)")
         
         # Add metadata to the observation
-        observation['session_info'] = {
+        observation_dict['session_info'] = {
             'session_id': session_id,
             'target_url': args.url,
             'timestamp': datetime.now().isoformat(),
@@ -209,7 +264,7 @@ def main():
         }
         
         # Add markdown to observation
-        observation['markdown'] = markdown_text
+        observation_dict['markdown'] = markdown_text
         
         # Determine output files
         if args.markdown_only:
@@ -235,7 +290,7 @@ def main():
                 print(f"Saving observation to: {args.output_file}")
             
             with open(args.output_file, 'w', encoding='utf-8') as f:
-                json.dump(observation, f, indent=2, ensure_ascii=False)
+                json.dump(observation_dict, f, indent=2, ensure_ascii=False)
             
             if args.verbose:
                 print("Observation saved successfully!")
@@ -273,7 +328,7 @@ def main():
     finally:
         # Always close the session
         try:
-            client.close_session()
+            client.close()
             if args.verbose:
                 print("Session closed successfully")
         except Exception as e:

@@ -54,7 +54,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--dataset",
         type = str,
-        default = "data-for-agents/insta-150k-v2",
+        default = "data-for-agents/insta-150k-v3",
     )
 
     parser.add_argument(

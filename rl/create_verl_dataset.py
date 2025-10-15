@@ -18,6 +18,7 @@ import json
 import glob
 import os
 
+
 def select_valid_samples(
     example_dict: dict = None,
     data_dirs: List[str] = None,
@@ -304,7 +305,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--dataset_name",
         type = str,
-        default="data-for-agents/insta-150k-v3"
+        default="data-for-agents/insta-150k-v2"
     )
 
     parser.add_argument(
@@ -341,7 +342,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--dataset_output_file",
         type = str,
-        default="./rl/insta-150k-v3-grpo-n0.parquet"
+        default="./rl/insta-150k-v2-grpo-n0.parquet"
     )
 
     parser.add_argument(

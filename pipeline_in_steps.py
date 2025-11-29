@@ -9,7 +9,7 @@ from client import BrowserClient
 from markdown import get_markdown_tree, render_markdown_tree
 from insta.agent_prompts.base_agent_prompt import BaseAgentPrompt, AGENT_PATTERN
 from configs.browser_config import BrowserObservation, NodeMetadata, BrowserConfig
-from configs.agent_config import BrowserAction
+from insta.configs.agent_config import BrowserAction
 from utils import safe_call, BrowserStatus
 import time
 

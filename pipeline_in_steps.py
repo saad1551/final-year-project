@@ -4,7 +4,6 @@ import argparse
 import base64
 import io
 import pandas as pd
-import hashlib
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from client import BrowserClient
 from markdown import get_markdown_tree, render_markdown_tree
@@ -290,8 +289,6 @@ def run_trajectory(task_data: dict):
     trajectory_observations = []
     trajectory_actions = []
     history = []
-    recent_actions = []  # Track recent actions to detect loops
-    markdown_hashes = []  # Track markdown content hashes to detect state changes
 
     try:
         # Start a new session
@@ -330,14 +327,6 @@ def run_trajectory(task_data: dict):
             # Debug: Print first 200 chars to verify it's changing
             if step > 0:
                 print(f"Markdown preview (first 200 chars): {markdown_content[:200]}...")
-            
-            # Check if we're in a loop (same markdown content)
-            markdown_hash = hashlib.md5(markdown_content.encode()).hexdigest()
-            if markdown_hash in markdown_hashes:
-                print(f"WARNING: Detected loop - same markdown content seen before (hash: {markdown_hash[:8]}...)")
-                print("This suggests the page state hasn't changed. Consider trying a different action.")
-            markdown_hashes.append(markdown_hash)
-            
             trajectory_observations.append(current_observation)
 
             # --- Predict Action with LLM ---
@@ -353,23 +342,8 @@ def run_trajectory(task_data: dict):
                     history_str += f"Observation:\n{obs}\n"
                     history_str += f"Action:\n```json\n{act}\n```\n"
                 history_str += "--- Current Step ---\n"
-            
-            # Check for loops and add warning to prompt
-            loop_warning = ""
-            if len(recent_actions) >= 2:
-                last_action = recent_actions[-1]
-                if recent_actions.count(last_action) >= 2:
-                    loop_warning = "\n\n⚠️ IMPORTANT: You have been repeating the same action. The page state may not be changing. "
-                    loop_warning += "Please try a DIFFERENT action or element. If you clicked a dropdown, try clicking on one of its child items instead. "
-                    loop_warning += "If the page hasn't changed, try scrolling, clicking a different element, or navigating differently.\n\n"
-            
-            # Check if markdown content is the same as previous
-            if len(markdown_hashes) >= 2 and markdown_hashes[-1] == markdown_hashes[-2]:
-                if not loop_warning:
-                    loop_warning = "\n\n⚠️ WARNING: The page content appears to be the same as the previous step. "
-                    loop_warning += "Your previous action may not have changed the page state. Try a different approach.\n\n"
 
-            prompt_with_history = f"{history_str}{loop_warning}You are at {current_observation.current_url} observing the viewport:\n\n{markdown_content}"
+            prompt_with_history = f"{history_str}You are at {current_observation.current_url} observing the viewport:\n\n{markdown_content}"
 
             user_prompt = agent_prompt.user_prompt_template.format(
                 instruction=task_data['instruction'],
@@ -407,29 +381,6 @@ def run_trajectory(task_data: dict):
             json_text = json_text.strip()
             print(f"LLM generated action (JSON):\n{json_text}")
             
-            # Check for action loops - same action repeated
-            try:
-                action_dict = json.loads(json_text)
-                action_key = action_dict.get("action_key")
-                target_element_id = action_dict.get("target_element_id")
-                action_signature = (action_key, target_element_id)
-                
-                # Check if this exact action was taken recently (last 3 steps)
-                if len(recent_actions) >= 2 and action_signature in recent_actions[-2:]:
-                    print(f"WARNING: Detected action loop - same action {action_signature} repeated!")
-                    print("This action was recently taken. The page state may not be changing.")
-                    print("Consider: 1) The element might be a dropdown that opens/closes")
-                    print("          2) The click might not be working")
-                    print("          3) Try a different element or action")
-                    
-                    # If we're in a loop and markdown hasn't changed, skip this action
-                    if len(markdown_hashes) >= 2 and markdown_hashes[-1] == markdown_hashes[-2]:
-                        print("ERROR: Stuck in infinite loop - same state and same action!")
-                        print("Breaking to prevent infinite loop.")
-                        break
-            except json.JSONDecodeError:
-                pass  # Will be caught by parse_action below
-            
             predicted_action = agent_prompt.parse_action(f"```json\n{json_text}\n```")
             trajectory_actions.append(predicted_action)
 
@@ -439,30 +390,15 @@ def run_trajectory(task_data: dict):
 
             # Update history with the observation and the action taken
             history.append((markdown_content, json_text))
-            
-            # Track recent actions for loop detection
-            try:
-                action_dict = json.loads(predicted_action.matched_response)
-                action_key = action_dict.get("action_key")
-                target_element_id = action_dict.get("target_element_id")
-                recent_actions.append((action_key, target_element_id))
-                # Keep only last 5 actions
-                if len(recent_actions) > 5:
-                    recent_actions.pop(0)
-            except (json.JSONDecodeError, AttributeError) as e:
-                print(f"Warning: Could not extract action_key from parsed action: {e}")
-                action_key = None
-                recent_actions.append((None, None))
 
             # --- Check for Stop Action ---
             # Use the matched_response from the parsed action, which is guaranteed to be valid JSON
-            if action_key is None:
-                try:
-                    action_dict = json.loads(predicted_action.matched_response)
-                    action_key = action_dict.get("action_key")
-                except (json.JSONDecodeError, AttributeError) as e:
-                    print(f"Warning: Could not extract action_key from parsed action: {e}")
-                    action_key = None
+            try:
+                action_dict = json.loads(predicted_action.matched_response)
+                action_key = action_dict.get("action_key")
+            except (json.JSONDecodeError, AttributeError) as e:
+                print(f"Warning: Could not extract action_key from parsed action: {e}")
+                action_key = None
             
             if action_key and action_key in ["stop", "exit"]:
                 print("Stop action received. Ending trajectory.")

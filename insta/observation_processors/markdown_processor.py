@@ -15,7 +15,7 @@ from insta.configs.browser_config import (
     BrowserObservation
 )
 
-from insta.markdown import (
+from markdown import (
     get_markdown_tree,
     render_markdown_tree,
     extensions

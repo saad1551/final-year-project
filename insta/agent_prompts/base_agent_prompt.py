@@ -205,6 +205,48 @@ class BaseAgentPrompt(object):
     system_prompt = SYSTEM_PROMPT
     user_prompt_template = USER_PROMPT_TEMPLATE
 
+    def _extract_first_json_object(self, json_text: str) -> dict:
+        """
+        Safely extract the first complete JSON object from a string.
+        Handles cases where there might be extra content after the JSON.
+        """
+        json_text = json_text.strip()
+        
+        # Try to parse the entire string first
+        try:
+            return json.loads(json_text)
+        except json.JSONDecodeError as e:
+            # If there's extra data after valid JSON, the error will have a 'pos' attribute
+            # indicating where the valid JSON ended
+            if hasattr(e, 'pos') and e.pos > 0:
+                # Try parsing up to the position where the error occurred
+                # This should give us the first complete JSON object
+                try:
+                    return json.loads(json_text[:e.pos])
+                except json.JSONDecodeError:
+                    pass
+            
+            # If that doesn't work, try to find the first '{' and last '}' 
+            # and extract everything in between (simple heuristic)
+            first_brace = json_text.find('{')
+            if first_brace != -1:
+                # Find the matching closing brace by counting
+                brace_count = 0
+                for i in range(first_brace, len(json_text)):
+                    if json_text[i] == '{':
+                        brace_count += 1
+                    elif json_text[i] == '}':
+                        brace_count -= 1
+                        if brace_count == 0:
+                            # Found matching closing brace
+                            try:
+                                return json.loads(json_text[first_brace:i+1])
+                            except json.JSONDecodeError:
+                                break
+            
+            # If all else fails, re-raise the original error
+            raise
+
     def parse_action(self, response: str) -> BrowserAction | BrowserStatus:
         """Parse an action string produced by an LLM, and return a
         BrowserAction object that contains a sequence of function calls
@@ -241,9 +283,8 @@ class BaseAgentPrompt(object):
 
         matched_response = match.group("json")
 
-        response_dict = json.loads(
-            matched_response
-        )
+        # Extract the first complete JSON object, handling cases where there might be extra content
+        response_dict = self._extract_first_json_object(matched_response)
 
         function_calls = get_function_calls(
             response_dict

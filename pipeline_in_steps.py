@@ -12,6 +12,7 @@ from configs.browser_config import BrowserObservation, NodeMetadata, BrowserConf
 from insta.configs.agent_config import BrowserAction
 from utils import safe_call, BrowserStatus
 import time
+import torch
 
 
 def extract_first_json_object(json_text: str) -> dict:
@@ -234,7 +235,7 @@ def setup_and_convert_initial_state(task_data: dict):
         
         prompt_text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
         
-        inputs = tokenizer(prompt_text, return_tensors="pt")
+        inputs = tokenizer(prompt_text, return_tensors="pt").to(device)
 
         # Generate action
         outputs = model.generate(**inputs, max_new_tokens=512, pad_token_id=tokenizer.eos_token_id)
@@ -390,7 +391,7 @@ def run_trajectory(task_data: dict):
             ]
             
             prompt_text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-            inputs = tokenizer(prompt_text, return_tensors="pt")
+            inputs = tokenizer(prompt_text, return_tensors="pt").to(device)
 
             outputs = model.generate(**inputs, max_new_tokens=512, pad_token_id=tokenizer.eos_token_id)
             response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
@@ -457,6 +458,8 @@ def run_trajectory(task_data: dict):
 
 
 if __name__ == "__main__":
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+
     trajectory_result = run_trajectory(first_row)
     
     if trajectory_result:

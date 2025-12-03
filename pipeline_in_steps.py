@@ -15,6 +15,8 @@ import time
 
 MAX_STEPS = 30
 
+CACHE_DIR = "/media/tukl/ee279b7d-bb8a-4a20-8bf9-90b2c542efcc/Saad/final-year-project/hf_cache"
+
 def image_to_base64(image):
     """Convert PIL Image to base64 string for JSON serialization."""
     if image is None:
@@ -122,8 +124,8 @@ def setup_and_convert_initial_state(task_data: dict):
     print("--- Initialization: Policy Setup ---")
     try:
         # Load tokenizer and model from Hugging Face
-        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-        model = AutoModelForCausalLM.from_pretrained(MODEL_NAME)
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR)
+        model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR)
         print("Policy and tokenizer loaded successfully.")
     except Exception as e:
         print(f"Error loading policy/tokenizer: {e}")
@@ -262,8 +264,8 @@ def run_trajectory(task_data: dict):
     print("--- Initialization: Policy Setup ---")
     try:
         # Load tokenizer and model from Hugging Face
-        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-        model = AutoModelForCausalLM.from_pretrained(MODEL_NAME)
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR)
+        model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR)
         print("Policy and tokenizer loaded successfully.")
     except Exception as e:
         print(f"Error loading policy/tokenizer: {e}")

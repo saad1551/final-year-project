@@ -167,7 +167,7 @@ def get_function_calls(
 
 
 AGENT_PATTERN = re.compile(
-    r"```json\n(?P<json>.*?)\n```",
+    r"```json\n(?P<json>.*)\n```",
     re.DOTALL
 )
 

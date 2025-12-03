@@ -13,9 +13,50 @@ from insta.configs.agent_config import BrowserAction
 from utils import safe_call, BrowserStatus
 import time
 
-MAX_STEPS = 30
 
-CACHE_DIR = "/media/tukl/ee279b7d-bb8a-4a20-8bf9-90b2c542efcc/Saad/final-year-project/hf_cache"
+def extract_first_json_object(json_text: str) -> dict:
+    """
+    Safely extract the first complete JSON object from a string.
+    Handles cases where there might be extra content after the JSON.
+    """
+    json_text = json_text.strip()
+    
+    # Try to parse the entire string first
+    try:
+        return json.loads(json_text)
+    except json.JSONDecodeError as e:
+        # If there's extra data after valid JSON, the error will have a 'pos' attribute
+        # indicating where the valid JSON ended
+        if hasattr(e, 'pos') and e.pos > 0:
+            # Try parsing up to the position where the error occurred
+            # This should give us the first complete JSON object
+            try:
+                return json.loads(json_text[:e.pos])
+            except json.JSONDecodeError:
+                pass
+        
+        # If that doesn't work, try to find the first '{' and last '}' 
+        # and extract everything in between (simple heuristic)
+        first_brace = json_text.find('{')
+        if first_brace != -1:
+            # Find the matching closing brace by counting
+            brace_count = 0
+            for i in range(first_brace, len(json_text)):
+                if json_text[i] == '{':
+                    brace_count += 1
+                elif json_text[i] == '}':
+                    brace_count -= 1
+                    if brace_count == 0:
+                        # Found matching closing brace
+                        try:
+                            return json.loads(json_text[first_brace:i+1])
+                        except json.JSONDecodeError:
+                            break
+        
+        # If all else fails, re-raise the original error
+        raise
+
+MAX_STEPS = 30
 
 def image_to_base64(image):
     """Convert PIL Image to base64 string for JSON serialization."""
@@ -124,8 +165,8 @@ def setup_and_convert_initial_state(task_data: dict):
     print("--- Initialization: Policy Setup ---")
     try:
         # Load tokenizer and model from Hugging Face
-        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR)
-        model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR)
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+        model = AutoModelForCausalLM.from_pretrained(MODEL_NAME)
         print("Policy and tokenizer loaded successfully.")
     except Exception as e:
         print(f"Error loading policy/tokenizer: {e}")
@@ -264,8 +305,8 @@ def run_trajectory(task_data: dict):
     print("--- Initialization: Policy Setup ---")
     try:
         # Load tokenizer and model from Hugging Face
-        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR)
-        model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR)
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+        model = AutoModelForCausalLM.from_pretrained(MODEL_NAME)
         print("Policy and tokenizer loaded successfully.")
     except Exception as e:
         print(f"Error loading policy/tokenizer: {e}")
@@ -283,7 +324,6 @@ def run_trajectory(task_data: dict):
     
     trajectory_observations = []
     trajectory_actions = []
-    trajectory_markdowns = []
     history = []
 
     try:
@@ -320,17 +360,7 @@ def run_trajectory(task_data: dict):
                 print("Markdown conversion failed. Stopping.")
                 break
             print("Markdown content generated.")
-            
-            # Print the markdown state
-            print(f"\n{'='*80}")
-            print(f"STATE {step + 1} MARKDOWN (Step {step + 2}):")
-            print(f"URL: {current_observation.current_url}")
-            print(f"{'='*80}")
-            print(markdown_content)
-            print(f"{'='*80}\n")
-            
             trajectory_observations.append(current_observation)
-            trajectory_markdowns.append(markdown_content)
 
             # --- Predict Action with LLM ---
             print("Predicting Action from State...")
@@ -385,10 +415,15 @@ def run_trajectory(task_data: dict):
             history.append((markdown_content, json_text))
 
             # --- Check for Stop Action ---
-            action_key = json.loads(json_text).get("action_key")
-            if action_key in ["stop", "exit"]:
-                print("Stop action received. Ending trajectory.")
-                break
+            try:
+                action_dict = extract_first_json_object(json_text)
+                action_key = action_dict.get("action_key")
+                if action_key in ["stop", "exit"]:
+                    print("Stop action received. Ending trajectory.")
+                    break
+            except (json.JSONDecodeError, ValueError) as e:
+                print(f"Warning: Could not parse action_key from JSON: {e}")
+                # Continue with execution if we can't parse the action_key
 
             # --- Execute Action ---
             print("Executing Action...")
@@ -408,8 +443,7 @@ def run_trajectory(task_data: dict):
         return {
             "task_instruction": task_data['instruction'],
             "trajectory_observations": trajectory_observations,
-            "trajectory_actions": trajectory_actions,
-            "trajectory_markdowns": trajectory_markdowns
+            "trajectory_actions": trajectory_actions
         }
         
     except Exception as e:

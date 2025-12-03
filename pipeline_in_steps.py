@@ -359,6 +359,8 @@ def run_trajectory(task_data: dict):
                 break
 
             json_text = match.group("json")
+            # Strip whitespace and handle potential extra content
+            json_text = json_text.strip()
             print(f"LLM generated action (JSON):\n{json_text}")
             
             predicted_action = agent_prompt.parse_action(f"```json\n{json_text}\n```")
@@ -372,8 +374,15 @@ def run_trajectory(task_data: dict):
             history.append((markdown_content, json_text))
 
             # --- Check for Stop Action ---
-            action_key = json.loads(json_text).get("action_key")
-            if action_key in ["stop", "exit"]:
+            # Use the matched_response from the parsed action, which is guaranteed to be valid JSON
+            try:
+                action_dict = json.loads(predicted_action.matched_response)
+                action_key = action_dict.get("action_key")
+            except (json.JSONDecodeError, AttributeError) as e:
+                print(f"Warning: Could not extract action_key from parsed action: {e}")
+                action_key = None
+            
+            if action_key and action_key in ["stop", "exit"]:
                 print("Stop action received. Ending trajectory.")
                 break
 

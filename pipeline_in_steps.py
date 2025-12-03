@@ -193,15 +193,8 @@ def setup_and_convert_initial_state(task_data: dict):
         
         inputs = tokenizer(prompt_text, return_tensors="pt")
 
-        # Generate action with sampling for diversity
-        outputs = model.generate(
-            **inputs, 
-            max_new_tokens=512, 
-            pad_token_id=tokenizer.eos_token_id,
-            do_sample=True,
-            temperature=0.7,
-            top_p=0.9
-        )
+        # Generate action
+        outputs = model.generate(**inputs, max_new_tokens=512, pad_token_id=tokenizer.eos_token_id)
         response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
         
         # Extract the json part from the response
@@ -323,10 +316,7 @@ def run_trajectory(task_data: dict):
             if not markdown_content:
                 print("Markdown conversion failed. Stopping.")
                 break
-            print(f"Markdown content generated. Length: {len(markdown_content)} characters")
-            # Debug: Print first 200 chars to verify it's changing
-            if step > 0:
-                print(f"Markdown preview (first 200 chars): {markdown_content[:200]}...")
+            print("Markdown content generated.")
             trajectory_observations.append(current_observation)
 
             # --- Predict Action with LLM ---
@@ -359,15 +349,7 @@ def run_trajectory(task_data: dict):
             prompt_text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
             inputs = tokenizer(prompt_text, return_tensors="pt")
 
-            # Add sampling parameters for diversity in generation
-            outputs = model.generate(
-                **inputs, 
-                max_new_tokens=512, 
-                pad_token_id=tokenizer.eos_token_id,
-                do_sample=True,
-                temperature=0.7,
-                top_p=0.9
-            )
+            outputs = model.generate(**inputs, max_new_tokens=512, pad_token_id=tokenizer.eos_token_id)
             response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
             
             match = AGENT_PATTERN.search(response_text)
@@ -412,23 +394,12 @@ def run_trajectory(task_data: dict):
                 break
             print("Action executed successfully.")
             
-            # Wait for page to load after action
-            print("Waiting for page to load...")
-            time.sleep(2)
-            
             # Get the new observation for the next loop iteration
             current_observation = client.observation()
             if not isinstance(current_observation, BrowserObservation):
                 print(f"Failed to get next observation: {current_observation}. Stopping.")
                 break
-            print(f"Received next observation. URL: {current_observation.current_url}")
-            
-            # Debug: Check if observation changed
-            if step > 0:
-                prev_obs = trajectory_observations[-1] if trajectory_observations else None
-                if prev_obs:
-                    url_changed = prev_obs.current_url != current_observation.current_url
-                    print(f"URL changed: {url_changed} (prev: {prev_obs.current_url}, current: {current_observation.current_url})")
+            print("Received next observation.")
 
         return {
             "task_instruction": task_data['instruction'],

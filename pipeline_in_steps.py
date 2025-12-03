@@ -281,6 +281,7 @@ def run_trajectory(task_data: dict):
     
     trajectory_observations = []
     trajectory_actions = []
+    trajectory_markdowns = []
     history = []
 
     try:
@@ -317,7 +318,17 @@ def run_trajectory(task_data: dict):
                 print("Markdown conversion failed. Stopping.")
                 break
             print("Markdown content generated.")
+            
+            # Print the markdown state
+            print(f"\n{'='*80}")
+            print(f"STATE {step + 1} MARKDOWN (Step {step + 2}):")
+            print(f"URL: {current_observation.current_url}")
+            print(f"{'='*80}")
+            print(markdown_content)
+            print(f"{'='*80}\n")
+            
             trajectory_observations.append(current_observation)
+            trajectory_markdowns.append(markdown_content)
 
             # --- Predict Action with LLM ---
             print("Predicting Action from State...")
@@ -395,7 +406,8 @@ def run_trajectory(task_data: dict):
         return {
             "task_instruction": task_data['instruction'],
             "trajectory_observations": trajectory_observations,
-            "trajectory_actions": trajectory_actions
+            "trajectory_actions": trajectory_actions,
+            "trajectory_markdowns": trajectory_markdowns
         }
         
     except Exception as e:

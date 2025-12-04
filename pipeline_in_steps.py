@@ -280,8 +280,9 @@ def setup_and_convert_initial_state(task_data: dict):
         outputs = model.generate(**inputs, max_new_tokens=512, pad_token_id=tokenizer.eos_token_id)
         response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
         
-        # Extract the json part from the response
-        match = AGENT_PATTERN.search(response_text)
+        # Extract the last json block from the response
+        matches = list(AGENT_PATTERN.finditer(response_text))
+        match = matches[-1] if matches else None
         if match:
             json_text = match.group("json")
             print("LLM generated action (JSON):")
@@ -451,7 +452,9 @@ def run_trajectory(task_data: dict):
             outputs = model.generate(**inputs, max_new_tokens=512, pad_token_id=tokenizer.eos_token_id)
             response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
             
-            match = AGENT_PATTERN.search(response_text)
+            # Extract the last json block from the response
+            matches = list(AGENT_PATTERN.finditer(response_text))
+            match = matches[-1] if matches else None
             if not match:
                 print("LLM response did not contain a valid JSON block. Stopping.")
                 print("Full response:", response_text)

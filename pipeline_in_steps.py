@@ -4,7 +4,7 @@ import argparse
 import base64
 import io
 import pandas as pd
-from transformers import AutoTokenizer, AutoModelForCausalLM
+from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 from client import BrowserClient
 from markdown import get_markdown_tree, render_markdown_tree
 from insta.agent_prompts.base_agent_prompt import BaseAgentPrompt, AGENT_PATTERN
@@ -160,7 +160,7 @@ BROWSER_SERVER_URL = "http://localhost:3000"
 
 df = pd.read_csv("data/insta-150k-test.csv")
 
-first_row = df.iloc[3].to_dict()
+first_row = df.iloc[9].to_dict()
 
 
 def setup_and_convert_initial_state(task_data: dict):
@@ -170,11 +170,11 @@ def setup_and_convert_initial_state(task_data: dict):
     print("--- Initialization: Policy Setup ---")
     try:
         # Load tokenizer and model from Hugging Face
-        # tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-        # model = AutoModelForCausalLM.from_pretrained(MODEL_NAME).to(device)
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+        model = AutoModelForCausalLM.from_pretrained(MODEL_NAME).to(device)
         
-        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR)
-        model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR).to(device)
+        # tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR)
+        # model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR).to(device)
 
         print("Policy and tokenizer loaded successfully.")
     except Exception as e:
@@ -314,11 +314,17 @@ def run_trajectory(task_data: dict):
     print("--- Initialization: Policy Setup ---")
     try:
         # Load tokenizer and model from Hugging Face
-        # tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-        # model = AutoModelForCausalLM.from_pretrained(MODEL_NAME).to(device)
+        quantization_config = BitsAndBytesConfig(load_in_8bit=True)
         
-        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR)
-        model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR).to(device)
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+        model = AutoModelForCausalLM.from_pretrained(
+            MODEL_NAME,
+            quantization_config=quantization_config,
+            device_map="auto"
+        )
+        
+        # tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR)
+        # model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR).to(device)
 
         print("Policy and tokenizer loaded successfully.")
     except Exception as e:
@@ -365,6 +371,9 @@ def run_trajectory(task_data: dict):
         
         for step in range(MAX_STEPS):
             print(f"\n--- Step {step + 2} ---")
+            
+            if device == "cuda":
+                torch.cuda.empty_cache()
 
             # --- Convert HTML observation to Markdown ---
             print("Converting HTML to Markdown...")

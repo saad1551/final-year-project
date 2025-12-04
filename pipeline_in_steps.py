@@ -280,25 +280,32 @@ def setup_and_convert_initial_state(task_data: dict):
         outputs = model.generate(**inputs, max_new_tokens=512, pad_token_id=tokenizer.eos_token_id)
         response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
         
-        # Extract the last json block from the response
+        # Extract all json blocks and parse them, keeping only the last successfully parsed action
         matches = list(AGENT_PATTERN.finditer(response_text))
-        match = matches[-1] if matches else None
-        if match:
-            json_text = match.group("json")
+        predicted_action = None
+        json_text = None
+        
+        if matches:
+            # Try parsing each JSON block from last to first, use the last one that successfully parses
+            for match in reversed(matches):
+                try:
+                    candidate_json = match.group("json")
+                    candidate_action = agent_prompt.parse_action(f"```json\n{candidate_json}\n```")
+                    if isinstance(candidate_action, BrowserAction):
+                        predicted_action = candidate_action
+                        json_text = candidate_json
+                        break
+                except (ValueError, json.JSONDecodeError) as e:
+                    continue
+        
+        if predicted_action:
             print("LLM generated action (JSON):")
             print(json_text)
-            
-            # Parse the action
-            predicted_action = agent_prompt.parse_action(f"```json\n{json_text}\n```")
-            if isinstance(predicted_action, BrowserAction):
-                print("\nParsed Function Calls:")
-                for func_call in predicted_action.function_calls:
-                    print(f"- {func_call.dotpath}({func_call.args})")
-            else:
-                print("Failed to parse LLM response.")
-                predicted_action = None
+            print("\nParsed Function Calls:")
+            for func_call in predicted_action.function_calls:
+                print(f"- {func_call.dotpath}({func_call.args})")
         else:
-            print("LLM response did not contain a valid JSON block.")
+            print("LLM response did not contain a valid JSON block that could be parsed.")
             print("Full response:", response_text)
             predicted_action = None
 
@@ -452,24 +459,32 @@ def run_trajectory(task_data: dict):
             outputs = model.generate(**inputs, max_new_tokens=512, pad_token_id=tokenizer.eos_token_id)
             response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
             
-            # Extract the last json block from the response
+            # Extract all json blocks and parse them, keeping only the last successfully parsed action
             matches = list(AGENT_PATTERN.finditer(response_text))
-            match = matches[-1] if matches else None
-            if not match:
-                print("LLM response did not contain a valid JSON block. Stopping.")
+            predicted_action = None
+            json_text = None
+            
+            if matches:
+                # Try parsing each JSON block from last to first, use the last one that successfully parses
+                for match in reversed(matches):
+                    try:
+                        candidate_json = match.group("json")
+                        candidate_action = agent_prompt.parse_action(f"```json\n{candidate_json}\n```")
+                        if isinstance(candidate_action, BrowserAction):
+                            predicted_action = candidate_action
+                            json_text = candidate_json
+                            break
+                    except (ValueError, json.JSONDecodeError) as e:
+                        continue
+            
+            if not predicted_action:
+                print("LLM response did not contain a valid JSON block that could be parsed. Stopping.")
                 print("Full response:", response_text)
                 break
 
-            json_text = match.group("json")
             print(f"LLM generated action (JSON):\n{json_text}")
-            
-            predicted_action = agent_prompt.parse_action(f"```json\n{json_text}\n```")
             print(f"Parsed Action: {predicted_action}")
             trajectory_actions.append(predicted_action)
-
-            if not isinstance(predicted_action, BrowserAction):
-                print("Failed to parse LLM response into a valid action. Stopping.")
-                break
 
             # Update history with the observation and the action taken
             history.append((markdown_content, json_text))

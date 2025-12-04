@@ -190,7 +190,7 @@ BROWSER_SERVER_URL = "http://localhost:3000"
 
 df = pd.read_csv("data/insta-150k-test.csv")
 
-first_row = df.iloc[9].to_dict()
+first_row = df.iloc[22].to_dict()
 
 
 def setup_and_convert_initial_state(task_data: dict):
@@ -461,6 +461,7 @@ def run_trajectory(task_data: dict):
             print(f"LLM generated action (JSON):\n{json_text}")
             
             predicted_action = agent_prompt.parse_action(f"```json\n{json_text}\n```")
+            print(f"Parsed Action: {predicted_action}")
             trajectory_actions.append(predicted_action)
 
             if not isinstance(predicted_action, BrowserAction):
@@ -477,6 +478,7 @@ def run_trajectory(task_data: dict):
             try:
                 action_dict = extract_first_json_object(json_text)
                 action_key = action_dict.get("action_key")
+                print(f"Extracted action_key: {action_key}")
                 if action_key in ["stop", "exit"]:
                     print("Stop action received. Ending trajectory.")
                     break

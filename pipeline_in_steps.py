@@ -168,8 +168,11 @@ def setup_and_convert_initial_state(task_data: dict):
     print("--- Initialization: Policy Setup ---")
     try:
         # Load tokenizer and model from Hugging Face
-        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR)
-        model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR).to(device)
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+        model = AutoModelForCausalLM.from_pretrained(MODEL_NAME).to(device)
+        
+        # tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR)
+        # model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR).to(device)
 
         print("Policy and tokenizer loaded successfully.")
     except Exception as e:
@@ -309,8 +312,11 @@ def run_trajectory(task_data: dict):
     print("--- Initialization: Policy Setup ---")
     try:
         # Load tokenizer and model from Hugging Face
-        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR)
-        model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR).to(device)
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+        model = AutoModelForCausalLM.from_pretrained(MODEL_NAME).to(device)
+        
+        # tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR)
+        # model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR).to(device)
 
         print("Policy and tokenizer loaded successfully.")
     except Exception as e:

@@ -51,47 +51,43 @@ def save_screenshot(observation: BrowserObservation, step: int, prefix: str = "s
     except Exception as e:
         print(f"Failed to save screenshot: {e}")
 
-def extract_first_json_object(json_text: str) -> dict:
+def extract_last_json_object(json_text: str) -> dict:
     """
-    Safely extract the first complete JSON object from a string.
-    Handles cases where there might be extra content after the JSON.
+    Safely extract the LAST complete JSON object from a string.
+    Handles:
+    - Multiple JSON objects
+    - Extra text before/after JSON
+    - Nested objects
+    - LLM log-style outputs
     """
     json_text = json_text.strip()
-    
-    # Try to parse the entire string first
-    try:
-        return json.loads(json_text)
-    except json.JSONDecodeError as e:
-        # If there's extra data after valid JSON, the error will have a 'pos' attribute
-        # indicating where the valid JSON ended
-        if hasattr(e, 'pos') and e.pos > 0:
-            # Try parsing up to the position where the error occurred
-            # This should give us the first complete JSON object
-            try:
-                return json.loads(json_text[:e.pos])
-            except json.JSONDecodeError:
-                pass
-        
-        # If that doesn't work, try to find the first '{' and last '}' 
-        # and extract everything in between (simple heuristic)
-        first_brace = json_text.find('{')
-        if first_brace != -1:
-            # Find the matching closing brace by counting
-            brace_count = 0
-            for i in range(first_brace, len(json_text)):
-                if json_text[i] == '{':
-                    brace_count += 1
-                elif json_text[i] == '}':
-                    brace_count -= 1
-                    if brace_count == 0:
-                        # Found matching closing brace
-                        try:
-                            return json.loads(json_text[first_brace:i+1])
-                        except json.JSONDecodeError:
-                            break
-        
-        # If all else fails, re-raise the original error
-        raise
+
+    last_json_str = None
+    brace_count = 0
+    start_idx = None
+
+    for i in range(len(json_text)):
+        if json_text[i] == '{':
+            if brace_count == 0:
+                start_idx = i  # potential new JSON start
+            brace_count += 1
+
+        elif json_text[i] == '}':
+            brace_count -= 1
+
+            if brace_count == 0 and start_idx is not None:
+                # Found a complete JSON object
+                candidate = json_text[start_idx:i + 1]
+                try:
+                    json.loads(candidate)  # validate it
+                    last_json_str = candidate  # ✅ keep overwriting → LAST one wins
+                except json.JSONDecodeError:
+                    pass  # ignore invalid JSON blocks
+
+    if last_json_str is not None:
+        return json.loads(last_json_str)
+
+    raise ValueError("No valid JSON object found in the input.")
 
 def image_to_base64(image):
     """Convert PIL Image to base64 string for JSON serialization."""
@@ -314,20 +310,31 @@ def setup_and_convert_initial_state(task_data: dict):
             print("\n--- Step 4: Execute Action a_1 and get State s_2 ---")
             status = client.action(predicted_action.function_calls)
             if status == BrowserStatus.ERROR:
-                print("Failed to execute action.")
-            else:
-                print("Action executed successfully.")
-                
-                # Get the new observation
-                next_observation = client.observation()
-                if not isinstance(next_observation, BrowserObservation):
-                    print(f"Failed to get next observation: {next_observation}")
-                else:
-                    print("Received next observation.")
-                    save_screenshot(next_observation, 1, "after_action")
-                    # You could now convert this to markdown and loop
-                    # next_markdown = convert_to_markdown(next_observation.__dict__)
-                    # print("Next state (markdown) generated.")
+                print("Action execution failed.")
+                exit()
+            
+            print("Action executed successfully.")
+
+            # Wait for potential navigation to start
+            time.sleep(2)
+
+            # Get next observation with retry logic to handle page transitions
+            try:
+                retries = 3
+                for i in range(retries):
+                    try:
+                        current_observation = client.observation()
+                        break
+                    except Exception as e:
+                        # Handle specific DOM errors during navigation
+                        if "Cannot read properties of null" in str(e) and i < retries - 1:
+                            print(f"Page is loading/navigating, retrying observation ({i+1}/{retries})...")
+                            time.sleep(2)
+                            continue
+                        raise e
+            except Exception as e:
+                print(f"Failed to get next observation: {e}. Stopping.")
+                exit()
 
         return {
             "task_instruction": task_data['instruction'],
@@ -494,7 +501,7 @@ def run_trajectory(task_data: dict):
 
             # --- Check for Stop Action ---
             try:
-                action_dict = extract_first_json_object(json_text)
+                action_dict = extract_last_json_object(json_text)
                 action_key = action_dict.get("action_key")
                 print(f"Extracted action_key: {action_key}")
                 if action_key in ["stop", "exit"]:

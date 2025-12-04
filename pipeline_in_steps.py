@@ -186,172 +186,7 @@ BROWSER_SERVER_URL = "http://localhost:3000"
 
 df = pd.read_csv("data/insta-150k-test.csv")
 
-first_row = df.iloc[22].to_dict()
-
-
-def setup_and_convert_initial_state(task_data: dict):
-    """
-    Performs Initialization, Step 1, and Step 2 of the RL process.
-    """
-    print("--- Initialization: Policy Setup ---")
-    try:
-        # Load tokenizer and model from Hugging Face
-        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-        model = AutoModelForCausalLM.from_pretrained(MODEL_NAME).to(device)
-        
-        # tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR)
-        # model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR).to(device)
-
-        print("Policy and tokenizer loaded successfully.")
-    except Exception as e:
-        print(f"Error loading policy/tokenizer: {e}")
-        return None
-        
-    print("\n--- Step 1: Start Environment and Retrieve Initial State (s_1) ---")
-    
-    start_url = 'https://' + task_data['website']
-    
-    # Initialize the browser client
-    browser_config = BrowserConfig(playwright_url=BROWSER_SERVER_URL, screen_width=1920, screen_height=1080)
-    client = BrowserClient(browser_config)
-    
-    try:
-        # Start a new session
-        status = client.start()
-        if status == BrowserStatus.ERROR:
-            raise Exception("Failed to start browser session.")
-        print(f"Browser session started with ID: {client.session_id}")
-        
-        # Navigate to the URL
-        status = client.goto(start_url)
-        if status == BrowserStatus.ERROR:
-            raise Exception(f"Failed to navigate to {start_url}.")
-        print(f"Navigated to {start_url}")
-        
-        # Give the page time to load
-        print("Waiting for page to load...")
-        time.sleep(5)
-        
-        # Get initial observation
-        initial_observation = client.observation()
-        if not isinstance(initial_observation, BrowserObservation):
-            raise Exception(f"Failed to get observation: {initial_observation}")
-        
-        print("Initial observation received.")
-        save_screenshot(initial_observation, 0, "initial")
-        
-        # --- Step 2: Convert HTML observation to Markdown ---
-        print("\n--- Step 2: Convert HTML to Markdown (s_1 -> m_1) ---")
-        
-        markdown_content = convert_to_markdown(initial_observation.__dict__)
-        
-        if not markdown_content:
-            raise Exception("Markdown conversion failed.")
-        
-        print("Markdown content generated successfully.")
-
-        # --- Step 3: Predict Action with LLM ---
-        print("\n--- Step 3: Predict Action a_1 from State m_1 ---")
-
-        agent_prompt = BaseAgentPrompt()
-
-        # Prepare prompt for LLM
-        user_prompt = agent_prompt.user_prompt_template.format(
-            instruction=task_data['instruction'],
-            current_url=initial_observation.current_url,
-            observation=markdown_content
-        )
-        
-        # Following the chat template of the model
-        messages = [
-            {"role": "system", "content": agent_prompt.system_prompt},
-            {"role": "user", "content": user_prompt}
-        ]
-        
-        prompt_text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-        
-        inputs = tokenizer(prompt_text, return_tensors="pt").to(device)
-
-        # Generate action
-        outputs = model.generate(**inputs, max_new_tokens=512, pad_token_id=tokenizer.eos_token_id)
-        response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
-        
-        # Extract all json blocks and parse them, keeping only the last successfully parsed action
-        matches = list(AGENT_PATTERN.finditer(response_text))
-        predicted_action = None
-        json_text = None
-        
-        if matches:
-            # Try parsing each JSON block from last to first, use the last one that successfully parses
-            for match in reversed(matches):
-                try:
-                    candidate_json = match.group("json")
-                    candidate_action = agent_prompt.parse_action(f"```json\n{candidate_json}\n```")
-                    if isinstance(candidate_action, BrowserAction):
-                        predicted_action = candidate_action
-                        json_text = candidate_json
-                        break
-                except (ValueError, json.JSONDecodeError) as e:
-                    continue
-        
-        if predicted_action:
-            print("LLM generated action (JSON):")
-            print(json_text)
-            print("\nParsed Function Calls:")
-            for func_call in predicted_action.function_calls:
-                print(f"- {func_call.dotpath}({func_call.args})")
-        else:
-            print("LLM response did not contain a valid JSON block that could be parsed.")
-            print("Full response:", response_text)
-            predicted_action = None
-
-        # --- Step 4: Execute Action ---
-        if predicted_action:
-            print("\n--- Step 4: Execute Action a_1 and get State s_2 ---")
-            status = client.action(predicted_action.function_calls)
-            if status == BrowserStatus.ERROR:
-                print("Action execution failed.")
-                exit()
-            
-            print("Action executed successfully.")
-
-            # Wait for potential navigation to start
-            time.sleep(2)
-
-            # Get next observation with retry logic to handle page transitions
-            try:
-                retries = 3
-                for i in range(retries):
-                    try:
-                        current_observation = client.observation()
-                        break
-                    except Exception as e:
-                        # Handle specific DOM errors during navigation
-                        if "Cannot read properties of null" in str(e) and i < retries - 1:
-                            print(f"Page is loading/navigating, retrying observation ({i+1}/{retries})...")
-                            time.sleep(2)
-                            continue
-                        raise e
-            except Exception as e:
-                print(f"Failed to get next observation: {e}. Stopping.")
-                exit()
-
-        return {
-            "task_instruction": task_data['instruction'],
-            "initial_markdown": markdown_content,
-            "predicted_action": predicted_action,
-            "model": model,
-            "tokenizer": tokenizer
-        }
-        
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return None
-    finally:
-        # Clean up the session
-        if client.session_id:
-            client.close()
-            print("\nBrowser session closed.")
+first_row = df.iloc[13].to_dict()
 
 
 def run_trajectory(task_data: dict):
@@ -412,7 +247,12 @@ def run_trajectory(task_data: dict):
         # Get initial observation
         current_observation = client.observation()
         if not isinstance(current_observation, BrowserObservation):
-            raise Exception(f"Failed to get observation: {current_observation}")
+            # raise Exception(f"Failed to get observation: {current_observation}")
+            for i in range(5):
+                time.sleep(3)
+                current_observation = client.observation()
+                if isinstance(current_observation, BrowserObservation):
+                    break
         
         print("Initial observation received.")
         save_screenshot(current_observation, 0, "initial")
@@ -490,7 +330,7 @@ def run_trajectory(task_data: dict):
                 break
 
             print(f"LLM generated action (JSON):\n{json_text}")
-            print(f"Parsed Action: {predicted_action}")
+            print(f"Parsed Action function calls: {predicted_action.function_calls}")
             trajectory_actions.append(predicted_action)
 
             # Update history with the observation and the action taken
@@ -522,8 +362,11 @@ def run_trajectory(task_data: dict):
             # Get the new observation for the next loop iteration
             current_observation = client.observation()
             if not isinstance(current_observation, BrowserObservation):
-                print(f"Failed to get next observation: {current_observation}. Stopping.")
-                break
+                for i in range(5):
+                    time.sleep(3)
+                    current_observation = client.observation()
+                    if isinstance(current_observation, BrowserObservation):
+                        break
             print("Received next observation.")
             save_screenshot(current_observation, step + 2, "after_action")
 

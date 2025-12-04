@@ -3,7 +3,9 @@ import json
 import argparse
 import base64
 import io
+import os
 import pandas as pd
+from datetime import datetime
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 from client import BrowserClient
 from markdown import get_markdown_tree, render_markdown_tree
@@ -20,6 +22,34 @@ MAX_STEPS = 30
 MAX_HISTORY_STEPS = 2
 
 CACHE_DIR = "/media/tukl/ee279b7d-bb8a-4a20-8bf9-90b2c542efcc/Saad/final-year-project/hf_cache"
+
+VISUALIZATION_DIR = "visualization_output"
+
+def save_screenshot(observation: BrowserObservation, step: int, prefix: str = "step"):
+    """
+    Save a screenshot from the browser observation for visualization.
+    
+    Args:
+        observation: BrowserObservation containing the screenshot
+        step: Step number in the trajectory
+        prefix: Prefix for the filename
+    """
+    if observation is None or observation.screenshot is None:
+        return
+    
+    # Create visualization directory if it doesn't exist
+    os.makedirs(VISUALIZATION_DIR, exist_ok=True)
+    
+    # Generate filename with timestamp and step number
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"{prefix}_{step:03d}_{timestamp}.png"
+    filepath = os.path.join(VISUALIZATION_DIR, filename)
+    
+    try:
+        observation.screenshot.save(filepath)
+        print(f"Screenshot saved: {filepath}")
+    except Exception as e:
+        print(f"Failed to save screenshot: {e}")
 
 def extract_first_json_object(json_text: str) -> dict:
     """
@@ -212,6 +242,7 @@ def setup_and_convert_initial_state(task_data: dict):
             raise Exception(f"Failed to get observation: {initial_observation}")
         
         print("Initial observation received.")
+        save_screenshot(initial_observation, 0, "initial")
         
         # --- Step 2: Convert HTML observation to Markdown ---
         print("\n--- Step 2: Convert HTML to Markdown (s_1 -> m_1) ---")
@@ -285,6 +316,7 @@ def setup_and_convert_initial_state(task_data: dict):
                     print(f"Failed to get next observation: {next_observation}")
                 else:
                     print("Received next observation.")
+                    save_screenshot(next_observation, 1, "after_action")
                     # You could now convert this to markdown and loop
                     # next_markdown = convert_to_markdown(next_observation.__dict__)
                     # print("Next state (markdown) generated.")
@@ -368,6 +400,7 @@ def run_trajectory(task_data: dict):
             raise Exception(f"Failed to get observation: {current_observation}")
         
         print("Initial observation received.")
+        save_screenshot(current_observation, 0, "initial")
         
         for step in range(MAX_STEPS):
             print(f"\n--- Step {step + 2} ---")
@@ -383,6 +416,7 @@ def run_trajectory(task_data: dict):
                 break
             print("Markdown content generated.")
             trajectory_observations.append(current_observation)
+            save_screenshot(current_observation, step + 1, "observation")
 
             # --- Predict Action with LLM ---
             print("Predicting Action from State...")
@@ -464,6 +498,7 @@ def run_trajectory(task_data: dict):
                 print(f"Failed to get next observation: {current_observation}. Stopping.")
                 break
             print("Received next observation.")
+            save_screenshot(current_observation, step + 2, "after_action")
 
         return {
             "task_instruction": task_data['instruction'],

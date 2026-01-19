@@ -304,7 +304,8 @@ def run_trajectory(task_data: dict):
             inputs = tokenizer(prompt_text, return_tensors="pt").to(device)
 
             outputs = model.generate(**inputs, max_new_tokens=512, pad_token_id=tokenizer.eos_token_id)
-            response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+            generated_tokens = outputs[0][inputs["input_ids"].shape[-1]:]
+            response_text = tokenizer.decode(generated_tokens, skip_special_tokens=True)
             
             # Extract all json blocks and parse them, keeping only the last successfully parsed action
             matches = list(AGENT_PATTERN.finditer(response_text))

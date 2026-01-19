@@ -314,7 +314,7 @@ def run_trajectory(task_data: dict):
             
             if matches:
                 # Try parsing each JSON block from last to first, use the last one that successfully parses
-                for match in reversed(matches):
+                for match in matches:
                     try:
                         candidate_json = match.group("json")
                         candidate_action = agent_prompt.parse_action(f"```json\n{candidate_json}\n```")

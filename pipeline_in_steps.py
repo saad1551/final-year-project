@@ -51,9 +51,9 @@ def save_screenshot(observation: BrowserObservation, step: int, prefix: str = "s
     except Exception as e:
         print(f"Failed to save screenshot: {e}")
 
-def extract_last_json_object(json_text: str) -> dict:
+def extract_first_json_object(json_text: str) -> dict:
     """
-    Safely extract the LAST complete JSON object from a string.
+    Safely extract the FIRST complete JSON object from a string.
     Handles:
     - Multiple JSON objects
     - Extra text before/after JSON
@@ -62,7 +62,6 @@ def extract_last_json_object(json_text: str) -> dict:
     """
     json_text = json_text.strip()
 
-    last_json_str = None
     brace_count = 0
     start_idx = None
 
@@ -80,12 +79,9 @@ def extract_last_json_object(json_text: str) -> dict:
                 candidate = json_text[start_idx:i + 1]
                 try:
                     json.loads(candidate)  # validate it
-                    last_json_str = candidate  # ✅ keep overwriting → LAST one wins
+                    return json.loads(candidate)  # ✅ return immediately → FIRST one wins
                 except json.JSONDecodeError:
-                    pass  # ignore invalid JSON blocks
-
-    if last_json_str is not None:
-        return json.loads(last_json_str)
+                    start_idx = None  # reset and continue looking
 
     raise ValueError("No valid JSON object found in the input.")
 
@@ -186,7 +182,7 @@ BROWSER_SERVER_URL = "http://localhost:3000"
 
 df = pd.read_csv("data/insta-150k-test.csv")
 
-first_row = df.iloc[13].to_dict()
+first_row = df.iloc[14].to_dict()
 
 
 def run_trajectory(task_data: dict):
@@ -342,7 +338,7 @@ def run_trajectory(task_data: dict):
 
             # --- Check for Stop Action ---
             try:
-                action_dict = extract_last_json_object(json_text)
+                action_dict = extract_first_json_object(json_text)
                 action_key = action_dict.get("action_key")
                 print(f"Extracted action_key: {action_key}")
                 if action_key in ["stop", "exit"]:

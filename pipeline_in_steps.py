@@ -301,7 +301,7 @@ def run_trajectory(task_data: dict):
             ]
             
             prompt_text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-            inputs = tokenizer(prompt_text, return_tensors="pt").to(device)
+            inputs = tokenizer(prompt_text, return_tensors="pt").to(model.device)
 
             outputs = model.generate(**inputs, max_new_tokens=512, pad_token_id=tokenizer.eos_token_id)
             generated_tokens = outputs[0][inputs["input_ids"].shape[-1]:]

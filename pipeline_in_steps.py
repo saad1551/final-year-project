@@ -13,6 +13,7 @@ from insta.agent_prompts.base_agent_prompt import BaseAgentPrompt, AGENT_PATTERN
 from configs.browser_config import BrowserObservation, NodeMetadata, BrowserConfig
 from insta.configs.agent_config import BrowserAction
 from utils import safe_call, BrowserStatus
+from judge_integration import judge_trajectory, print_judgment
 
 
 MODEL_NAME = "btrabucco/Insta-Qwen3-1.7B-SFT"
@@ -247,6 +248,8 @@ def run_trajectory(task_data: dict):
     
     trajectory_observations = []
     trajectory_actions = []
+    trajectory_markdown_observations = []
+    trajectory_action_jsons = []
     history = []
     client = None
 
@@ -270,6 +273,7 @@ def run_trajectory(task_data: dict):
             print("Markdown content generated.")
             
             trajectory_observations.append(current_observation)
+            trajectory_markdown_observations.append(markdown_content)
             save_screenshot(current_observation, step + 1, "observation")
 
             print("Predicting Action from State...")
@@ -288,6 +292,7 @@ def run_trajectory(task_data: dict):
             print(f"LLM generated action (JSON):\n{json_text}")
             print(f"Parsed Action function calls: {predicted_action.function_calls}")
             trajectory_actions.append(predicted_action)
+            trajectory_action_jsons.append(json_text)
 
             history.append((markdown_content, json_text))
             if len(history) > MAX_HISTORY_STEPS:
@@ -308,10 +313,20 @@ def run_trajectory(task_data: dict):
             print("Received next observation.")
             save_screenshot(current_observation, step + 2, "after_action")
 
+        print("\n--- Judging Trajectory ---")
+        judgment = judge_trajectory(
+            instruction=task_data['instruction'],
+            observations=trajectory_markdown_observations,
+            actions=trajectory_action_jsons
+        )
+        print("Judgment received:")
+        print_judgment(judgment)
+
         return {
             "task_instruction": task_data['instruction'],
             "trajectory_observations": trajectory_observations,
-            "trajectory_actions": trajectory_actions
+            "trajectory_actions": trajectory_actions,
+            "judgment": judgment
         }
         
     except Exception as e:

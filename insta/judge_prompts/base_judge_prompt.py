@@ -74,12 +74,26 @@ class BaseJudgePrompt(object):
         )
 
         if not has_required_field:
-    
-            raise ValueError(
-                "Failed to parse judgment"
-            )
-
-        matched_response = match.group("json")
+            # Try to find JSON without code blocks (for Gemini compatibility)
+            try:
+                # Try to find any JSON object in the response (multi-line compatible)
+                json_match = re.search(r'\{[^{}]*"success"[^{}]*\}', response, re.DOTALL)
+                if not json_match:
+                    # Try finding nested braces
+                    json_match = re.search(r'\{\s*"success"[^}]*"efficiency"[^}]*"self_correction"[^}]*\}', response, re.DOTALL)
+                
+                if json_match:
+                    print(f"[JUDGE] Found JSON without code blocks, parsing...")
+                    matched_response = json_match.group(0)
+                else:
+                    print(f"[JUDGE ERROR] Could not find JSON pattern in response")
+                    print(f"[JUDGE ERROR] Response: {response[:500]}...")
+                    raise ValueError("Failed to parse judgment")
+            except Exception as e:
+                print(f"[JUDGE ERROR] Fallback parsing failed: {e}")
+                raise ValueError("Failed to parse judgment")
+        else:
+            matched_response = match.group("json")
 
         response_dict = json.loads(
             matched_response

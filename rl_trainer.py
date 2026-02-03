@@ -42,7 +42,7 @@ class RLConfig:
     """Configuration for RL training."""
     
     # Algorithm selection
-    algorithm: str = "reinforce"  # "reinforce", "ppo", or "grpo"
+    algorithm: str = "ppo"  # "reinforce", "ppo", or "grpo"
     
     # Common hyperparameters
     learning_rate: float = 1e-5
@@ -142,7 +142,7 @@ class BaseRLAlgorithm(ABC):
         log_probs_list = []
         entropies_list = []
         
-        for prompt, response in zip(prompt_texts, response_texts):
+        for idx, (prompt, response) in enumerate(zip(prompt_texts, response_texts)):
             full_text = prompt + response
             inputs = self.tokenizer(
                 full_text,
@@ -180,9 +180,20 @@ class BaseRLAlgorithm(ABC):
             probs = F.softmax(response_logits, dim=-1)
             entropy = -(probs * log_probs).sum(dim=-1).mean()
             entropies_list.append(entropy)
+            
+            # Clear intermediate tensors to free GPU memory
+            del outputs, logits, response_logits, log_probs, token_log_probs, probs
+            
+            # Periodically clear cache during long trajectories
+            if (idx + 1) % 5 == 0 and torch.cuda.is_available():
+                torch.cuda.empty_cache()
         
         stacked_log_probs = torch.stack(log_probs_list)
         stacked_entropies = torch.stack(entropies_list)
+        
+        # Clear intermediate lists to free memory
+        log_probs_list.clear()
+        entropies_list.clear()
         
         debug_log(f"Log Probs: shape={stacked_log_probs.shape}, "
                   f"values=[{', '.join([f'{x:.2f}' for x in stacked_log_probs.flatten()[:5].tolist()])}...]")
@@ -297,6 +308,10 @@ class REINFORCEAlgorithm(BaseRLAlgorithm):
         )
         debug_log(f"Step 5 - Log Probs computed: shape={log_probs.shape}")
         
+        # Clear cache after forward passes
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        
         # Step 6: Compute losses
         policy_loss = -(log_probs * advantages).mean()
         entropy_bonus = entropies.mean()
@@ -337,6 +352,11 @@ class REINFORCEAlgorithm(BaseRLAlgorithm):
         debug_log("Step 8 - Applying optimizer step...")
         self.optimizer.step()
         debug_log("Step 8 - Optimizer step completed ✓")
+        
+        # Clear gradients and cache after update
+        self.optimizer.zero_grad(set_to_none=True)
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
         
         # Step 9: Update baseline
         old_baseline = self.baseline

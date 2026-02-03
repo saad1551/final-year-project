@@ -11,3 +11,4 @@ node_modules
 *.csv
 playwright.log
 configs/__pycache__/__init__.cpython-313.pyc
+visualization_output

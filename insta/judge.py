@@ -161,6 +161,9 @@ class BrowserJudge(Callable):
                 messages = messages,
                 **self.config.generation_kwargs
             ).choices[0].message.content
+        
+        # Debug: Print raw response to diagnose parsing issues
+        print(f"\n[JUDGE DEBUG] Raw LLM Response:\n{response}\n")
 
         return self.judge_prompt.parse_judgment(
             response = response

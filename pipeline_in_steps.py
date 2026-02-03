@@ -127,14 +127,37 @@ def convert_html_to_markdown(observation_data):
         return f"Error in markdown conversion: {e}"
 
 
+# def load_language_model():
+#     quantization_config = BitsAndBytesConfig(load_in_8bit=True)
+#     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+#     model = AutoModelForCausalLM.from_pretrained(
+#         MODEL_NAME,
+#         quantization_config=quantization_config,
+#         device_map="auto"
+#     )
+#     return tokenizer, model
+
 def load_language_model():
-    quantization_config = BitsAndBytesConfig(load_in_8bit=True)
+    # Switch to 4-bit for 8GB GPU headroom
+    quantization_config = BitsAndBytesConfig(
+        load_in_4bit=True,
+        bnb_4bit_compute_dtype=torch.float16,
+        bnb_4bit_quant_type="nf4",
+        bnb_4bit_use_double_quant=True
+    )
+    
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_NAME,
         quantization_config=quantization_config,
-        device_map="auto"
+        device_map="auto",
+        torch_dtype=torch.float16,
     )
+    
+    # CRITICAL: Enable gradient checkpointing to save memory during RL update
+    model.gradient_checkpointing_enable()
+    model.config.use_cache = False # Must be False for gradient checkpointing
+    
     return tokenizer, model
 
 
@@ -259,7 +282,6 @@ def run_trajectory(task_data: dict, trainer: OnPolicyTrainer = None, enable_rl_u
     """
     print("--- Initialization: Policy Setup ---")
     try:
-        tokenizer, model = load_language_model()
         print("Policy and tokenizer loaded successfully.")
     except Exception as e:
         print(f"Error loading policy/tokenizer: {e}")
@@ -363,9 +385,16 @@ def run_trajectory(task_data: dict, trainer: OnPolicyTrainer = None, enable_rl_u
         print("Judgment received:")
         print_judgment(judgment)
         
+        # Clear GPU cache before RL update to free memory from trajectory generation
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            print(f"GPU memory cleared. Allocated: {torch.cuda.memory_allocated()/1024**3:.2f} GB")
+        
         rl_update_stats = None
         if enable_rl_update and trainer is not None and len(trajectory_prompts) > 0:
             print("\n--- Performing On-Policy RL Update ---")
+
+            torch.cuda.empty_cache()
             
             pipeline_debug("="*50)
             pipeline_debug("RL Update Input Summary:")
@@ -378,6 +407,12 @@ def run_trajectory(task_data: dict, trainer: OnPolicyTrainer = None, enable_rl_u
             
             reward = compute_reward_from_judgment(judgment)
             print(f"Computed reward from judgment: {reward:.4f}")
+            
+            import gc
+
+            # ... inside run_trajectory before trainer.update_policy ...
+            torch.cuda.empty_cache()
+            gc.collect() 
             
             rl_update_stats = trainer.update_policy(
                 trajectory_prompts=trajectory_prompts,
@@ -418,7 +453,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run browser navigation with on-policy RL training")
     parser.add_argument("--num_trajectories", type=int, default=1, 
                         help="Number of trajectories to run for training")
-    parser.add_argument("--algorithm", type=str, default="reinforce",
+    parser.add_argument("--algorithm", type=str, default="ppo",
                         choices=["reinforce", "ppo", "grpo"],
                         help="RL algorithm to use (reinforce, ppo, or grpo)")
     parser.add_argument("--enable_rl", action="store_true", default=True,
@@ -453,6 +488,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     enable_rl_update = args.enable_rl and not args.disable_rl
+    
+    tokenizer, model = load_language_model()
     
     # Set debug flag in rl_trainer module
     rl_trainer.DEBUG_RL = args.debug

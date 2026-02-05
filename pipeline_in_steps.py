@@ -22,7 +22,7 @@ from rl_trainer import OnPolicyTrainer, RLConfig, compute_reward_from_judgment
 
 MODEL_NAME = "btrabucco/Insta-Qwen3-1.7B-SFT"
 BROWSER_SERVER_URL = "http://localhost:3000"
-MAX_TRAJECTORY_STEPS = 30
+MAX_TRAJECTORY_STEPS = 15  # Reduced from 30 to fit in 8GB VRAM with PPO
 MAX_HISTORY_STEPS = 2
 SCREENSHOT_OUTPUT_DIR = "visualization_output"
 PAGE_LOAD_WAIT_SECONDS = 5
@@ -138,6 +138,8 @@ def convert_html_to_markdown(observation_data):
 #     return tokenizer, model
 
 def load_language_model():
+    from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+    
     # Switch to 4-bit for 8GB GPU headroom
     quantization_config = BitsAndBytesConfig(
         load_in_4bit=True,
@@ -151,12 +153,35 @@ def load_language_model():
         MODEL_NAME,
         quantization_config=quantization_config,
         device_map="auto",
-        torch_dtype=torch.float16,
+        dtype=torch.float16,
     )
     
-    # CRITICAL: Enable gradient checkpointing to save memory during RL update
+    # Prepare model for k-bit training (required for LoRA with quantization)
+    model = prepare_model_for_kbit_training(model)
+    model.enable_input_require_grads() 
+
+    
+    # Configure LoRA for efficient fine-tuning
+    lora_config = LoraConfig(
+        r=16,  # LoRA rank
+        lora_alpha=32,  # LoRA alpha scaling
+        target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
+        lora_dropout=0.05,
+        bias="none",
+        task_type="CAUSAL_LM"
+    )
+    
+    # Apply LoRA adapters
+    model = get_peft_model(model, lora_config)
+    
+    # Print trainable parameters info
+    trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    total_params = sum(p.numel() for p in model.parameters())
+    print(f"Trainable parameters: {trainable_params:,} / {total_params:,} ({100 * trainable_params / total_params:.2f}%)")
+    
+    # Enable gradient checkpointing to save memory during RL update
     model.gradient_checkpointing_enable()
-    model.config.use_cache = False # Must be False for gradient checkpointing
+    model.config.use_cache = False  # Must be False for gradient checkpointing
     
     return tokenizer, model
 
@@ -185,18 +210,30 @@ def initialize_browser_session(start_url):
     return client
 
 
-def get_observation_with_retry(client):
+def get_observation_with_retry(client, max_wait_seconds=60):
+    """Get observation with retry logic and timeout."""
     observation = client.observation()
     if isinstance(observation, BrowserObservation):
         return observation
     
-    for _ in range(OBSERVATION_RETRY_ATTEMPTS):
+    total_wait = 0
+    for attempt in range(OBSERVATION_RETRY_ATTEMPTS):
+        print(f"  Observation attempt {attempt + 1}/{OBSERVATION_RETRY_ATTEMPTS}...")
         time.sleep(OBSERVATION_RETRY_DELAY_SECONDS)
+        total_wait += OBSERVATION_RETRY_DELAY_SECONDS
+        
+        if total_wait > max_wait_seconds:
+            print(f"  Timeout: Waited {total_wait}s for observation, giving up.")
+            raise TimeoutError(f"Failed to get observation after {total_wait}s")
+        
         observation = client.observation()
         if isinstance(observation, BrowserObservation):
             return observation
+        
+        print(f"  Observation failed, status: {observation}")
     
-    return observation
+    # If we get here, all retries failed
+    raise Exception(f"Failed to get observation after {OBSERVATION_RETRY_ATTEMPTS} attempts")
 
 
 def format_history_for_prompt(history):
@@ -214,6 +251,8 @@ def format_history_for_prompt(history):
 
 
 def generate_action_from_observation(tokenizer, model, task_instruction, current_observation, markdown_content, history):
+    import gc
+    
     agent_prompt = BaseAgentPrompt()
     history_str = format_history_for_prompt(history)
     
@@ -231,11 +270,46 @@ def generate_action_from_observation(tokenizer, model, task_instruction, current
     ]
     
     prompt_text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-    inputs = tokenizer(prompt_text, return_tensors="pt").to(model.device)
     
-    outputs = model.generate(**inputs, max_new_tokens=512, pad_token_id=tokenizer.eos_token_id)
-    generated_tokens = outputs[0][inputs["input_ids"].shape[-1]:]
-    response_text = tokenizer.decode(generated_tokens, skip_special_tokens=True)
+    # Clear GPU cache before generation
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+        gc.collect()
+    
+    # Switch to eval mode for generation (critical for stable output)
+    was_training = model.training
+    model.eval()
+    
+    # Temporarily disable gradient checkpointing for inference
+    try:
+        # Generate with explicit settings for stability
+        inputs = tokenizer(prompt_text, return_tensors="pt", truncation=True, max_length=8192).to(model.device)
+        
+        with torch.no_grad():
+            outputs = model.generate(
+                **inputs,
+                max_new_tokens=512,
+                pad_token_id=tokenizer.eos_token_id,
+                do_sample=True,
+                temperature=0.7,
+                top_p=0.9,
+                repetition_penalty=1.1,
+            )
+        
+        generated_tokens = outputs[0][inputs["input_ids"].shape[-1]:]
+        response_text = tokenizer.decode(generated_tokens, skip_special_tokens=True)
+        
+        # Cleanup
+        del inputs, outputs, generated_tokens
+        
+    finally:
+        # Restore training mode if it was previously training
+        if was_training:
+            model.train()
+    
+    # Clear cache after generation
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
     
     return response_text, agent_prompt, prompt_text
 
@@ -266,7 +340,7 @@ def is_stop_action(json_text):
         return False
 
 
-def run_trajectory(task_data: dict, trainer: OnPolicyTrainer = None, enable_rl_update: bool = True, rl_config: RLConfig = None):
+def run_trajectory(task_data: dict, model, tokenizer, trainer: OnPolicyTrainer = None, enable_rl_update: bool = True, rl_config: RLConfig = None):
     """
     Run a trajectory for the given task and optionally perform on-policy RL update.
     
@@ -281,11 +355,7 @@ def run_trajectory(task_data: dict, trainer: OnPolicyTrainer = None, enable_rl_u
         Dictionary containing trajectory results, judgment, and RL update stats.
     """
     print("--- Initialization: Policy Setup ---")
-    try:
-        print("Policy and tokenizer loaded successfully.")
-    except Exception as e:
-        print(f"Error loading policy/tokenizer: {e}")
-        return None
+    print(f"Using model and tokenizer for trajectory execution")
     
     if enable_rl_update and trainer is None:
         print("Initializing On-Policy RL Trainer...")
@@ -380,7 +450,9 @@ def run_trajectory(task_data: dict, trainer: OnPolicyTrainer = None, enable_rl_u
         judgment = judge_trajectory(
             instruction=task_data['instruction'],
             observations=trajectory_markdown_observations,
-            actions=trajectory_action_jsons
+            actions=trajectory_action_jsons,
+            criteria=task_data.get('criteria', ''),
+            steps=task_data.get('steps', '')
         )
         print("Judgment received:")
         print_judgment(judgment)
@@ -537,7 +609,9 @@ if __name__ == "__main__":
         print(f"{'='*60}")
         
         trajectory_result = run_trajectory(
-            task_row, 
+            task_row,
+            model,
+            tokenizer,
             trainer=trainer, 
             enable_rl_update=enable_rl_update,
             rl_config=rl_config

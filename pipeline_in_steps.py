@@ -18,6 +18,8 @@ from insta.configs.agent_config import BrowserAction
 from utils import safe_call, BrowserStatus
 from judge_integration import judge_trajectory, print_judgment
 from rl_trainer import OnPolicyTrainer, RLConfig, compute_reward_from_judgment
+from rl_sb3_ppo import SB3PPOTrainer
+from rl_sb3_config_examples import get_config as get_sb3_config
 
 
 MODEL_NAME = "btrabucco/Insta-Qwen3-1.7B-SFT"
@@ -361,8 +363,20 @@ def run_trajectory(task_data: dict, model, tokenizer, trainer: OnPolicyTrainer =
         print("Initializing On-Policy RL Trainer...")
         if rl_config is None:
             rl_config = RLConfig()
-        trainer = OnPolicyTrainer(model, tokenizer, rl_config)
-        print(f"RL Trainer initialized with {rl_config.algorithm.upper()} algorithm.")
+        
+        # Check if using SB3 PPO
+        if rl_config.algorithm == "sb3_ppo":
+            # Use SB3 PPO trainer
+            sb3_preset = getattr(rl_config, 'sb3_preset', 'default')
+            sb3_config = get_sb3_config(sb3_preset)
+            # Override with learning_rate if specified
+            sb3_config.learning_rate = rl_config.learning_rate
+            trainer = SB3PPOTrainer(model, tokenizer, sb3_config)
+            print(f"RL Trainer initialized with SB3 PPO ({sb3_preset} preset).")
+        else:
+            # Use custom algorithms
+            trainer = OnPolicyTrainer(model, tokenizer, rl_config)
+            print(f"RL Trainer initialized with {rl_config.algorithm.upper()} algorithm.")
     
     print("\n--- Step 1: Start Environment and Retrieve Initial State ---")
     
@@ -526,8 +540,8 @@ if __name__ == "__main__":
     parser.add_argument("--num_trajectories", type=int, default=1, 
                         help="Number of trajectories to run for training")
     parser.add_argument("--algorithm", type=str, default="ppo",
-                        choices=["reinforce", "ppo", "grpo"],
-                        help="RL algorithm to use (reinforce, ppo, or grpo)")
+                        choices=["reinforce", "ppo", "grpo", "sb3_ppo"],
+                        help="RL algorithm to use (reinforce, ppo, grpo, or sb3_ppo)")
     parser.add_argument("--enable_rl", action="store_true", default=True,
                         help="Enable on-policy RL updates")
     parser.add_argument("--disable_rl", action="store_true", default=False,
@@ -552,6 +566,11 @@ if __name__ == "__main__":
                         help="GRPO group size for comparison")
     parser.add_argument("--grpo_beta", type=float, default=0.1,
                         help="GRPO KL divergence coefficient")
+    
+    # SB3 PPO-specific arguments
+    parser.add_argument("--sb3_preset", type=str, default="default",
+                        choices=["default", "low_memory", "aggressive", "conservative", "exploration"],
+                        help="SB3 PPO configuration preset (only used with sb3_ppo)")
     
     # Debug options
     parser.add_argument("--debug", action="store_true", default=False,
@@ -582,6 +601,10 @@ if __name__ == "__main__":
         grpo_group_size=args.grpo_group_size,
         grpo_beta=args.grpo_beta,
     )
+    
+    # Add SB3 preset if using sb3_ppo
+    if args.algorithm == "sb3_ppo":
+        rl_config.sb3_preset = args.sb3_preset
     
     df = pd.read_csv("data/insta-150k-test.csv")
     

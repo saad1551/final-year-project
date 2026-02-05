@@ -260,13 +260,11 @@ class SB3PPOTrainer:
         self.vec_env = DummyVecEnv([lambda: self.env])
         
         # Set up policy kwargs
+        # NOTE: We don't use CustomLMFeatureExtractor because:
+        # 1. The dummy environment doesn't need it
+        # 2. It conflicts with quantized models (BitsAndBytes)
+        # 3. Training happens via update_policy() with pre-collected trajectories
         policy_kwargs = self.config.policy_kwargs or {}
-        if 'features_extractor_class' not in policy_kwargs:
-            policy_kwargs['features_extractor_class'] = CustomLMFeatureExtractor
-            policy_kwargs['features_extractor_kwargs'] = {
-                'model': self.model,
-                'features_dim': self.config.hidden_dim
-            }
         
         # Initialize PPO agent
         self.ppo_agent = PPO(

@@ -193,16 +193,18 @@ def run_mock_rl_training(
     algorithm: str = "reinforce",
     num_trajectories: int = 5,
     steps_per_trajectory: int = 3,
-    debug: bool = True
+    debug: bool = True,
+    sb3_preset: str = "default"
 ):
     """
     Run mock RL training to demonstrate the training loop.
     
     Args:
-        algorithm: "reinforce", "ppo", or "grpo"
+        algorithm: "reinforce", "ppo", "grpo", or "sb3_ppo"
         num_trajectories: Number of trajectories to simulate
         steps_per_trajectory: Steps per trajectory
         debug: Enable debug logging
+        sb3_preset: SB3 PPO configuration preset (only used with sb3_ppo)
     """
     
     # Import and configure RL trainer
@@ -232,14 +234,32 @@ def run_mock_rl_training(
     
     # Create RL config and trainer
     print(f"\n[SETUP] Initializing {algorithm.upper()} trainer...")
-    config = RLConfig(
-        algorithm=algorithm,
-        learning_rate=1e-4,  # Higher LR for mock testing
-        entropy_coef=0.01,
-        gamma=0.99,
-    )
     
-    trainer = OnPolicyTrainer(model, tokenizer, config)
+    if algorithm == "sb3_ppo":
+        # Use SB3 PPO trainer
+        try:
+            from rl_sb3_ppo import SB3PPOTrainer
+            from rl_sb3_config_examples import get_config as get_sb3_config
+            
+            config = get_sb3_config(sb3_preset)
+            config.learning_rate = 1e-4  # Override for mock testing
+            trainer = SB3PPOTrainer(model, tokenizer, config)
+            print(f"[SETUP] SB3 PPO trainer initialized ({sb3_preset} preset)")
+        except ImportError as e:
+            print(f"[ERROR] Could not import SB3 PPO: {e}")
+            print("[ERROR] Install with: pip install stable-baselines3 gymnasium")
+            return None, [], []
+    else:
+        # Use custom RL algorithms
+        config = RLConfig(
+            algorithm=algorithm,
+            learning_rate=1e-4,  # Higher LR for mock testing
+            entropy_coef=0.01,
+            gamma=0.99,
+        )
+        
+        trainer = OnPolicyTrainer(model, tokenizer, config)
+        print(f"[SETUP] Custom {algorithm.upper()} trainer initialized")
     
     # Track metrics
     all_rewards = []
@@ -278,17 +298,33 @@ def run_mock_rl_training(
         
         # Record metrics
         all_rewards.append(stats["trajectory_reward"])
-        all_losses.append(stats["total_loss"])
+        # SB3 uses "avg_loss", custom uses "total_loss"
+        loss_value = stats.get("total_loss", stats.get("avg_loss", 0.0))
+        all_losses.append(loss_value)
         
-        # Print summary
+        # Print summary (handle both custom and SB3 stats)
         print(f"\n[RESULT] Trajectory {i + 1} complete:")
         print(f"  • Reward: {stats['trajectory_reward']:.4f}")
-        print(f"  • Policy Loss: {stats['policy_loss']:.4f}")
-        print(f"  • Total Loss: {stats['total_loss']:.4f}")
+        
+        # Custom algorithms have policy_loss and total_loss
+        if "policy_loss" in stats:
+            print(f"  • Policy Loss: {stats['policy_loss']:.4f}")
+        if "total_loss" in stats:
+            print(f"  • Total Loss: {stats['total_loss']:.4f}")
+        
+        # SB3 has avg_loss and avg_reward
+        if "avg_loss" in stats:
+            print(f"  • Avg Loss: {stats['avg_loss']:.4f}")
+        if "avg_reward" in stats:
+            print(f"  • Avg Reward: {stats['avg_reward']:.4f}")
+        
+        # Common optional stats
         if "baseline" in stats:
             print(f"  • Baseline: {stats['baseline']:.4f}")
         if "grad_norm" in stats:
             print(f"  • Gradient Norm: {stats['grad_norm']:.4f}")
+        if "total_updates" in stats:
+            print(f"  • Total Updates: {stats['total_updates']}")
     
     # Final summary
     print("\n" + "=" * 60)
@@ -317,7 +353,7 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(description="Test RL training with mock data")
     parser.add_argument("--algorithm", type=str, default="reinforce",
-                        choices=["reinforce", "ppo", "grpo"],
+                        choices=["reinforce", "ppo", "grpo", "sb3_ppo"],
                         help="RL algorithm to test")
     parser.add_argument("--num_trajectories", type=int, default=5,
                         help="Number of mock trajectories")
@@ -327,6 +363,9 @@ if __name__ == "__main__":
                         help="Enable debug logging")
     parser.add_argument("--no-debug", action="store_true",
                         help="Disable debug logging")
+    parser.add_argument("--sb3_preset", type=str, default="default",
+                        choices=["default", "low_memory", "aggressive", "conservative", "exploration"],
+                        help="SB3 PPO preset (only used with sb3_ppo)")
     
     args = parser.parse_args()
     
@@ -336,5 +375,6 @@ if __name__ == "__main__":
         algorithm=args.algorithm,
         num_trajectories=args.num_trajectories,
         steps_per_trajectory=args.steps,
-        debug=debug
+        debug=debug,
+        sb3_preset=args.sb3_preset
     )

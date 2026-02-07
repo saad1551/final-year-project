@@ -6,6 +6,7 @@ import sys
 from datetime import datetime
 
 import pandas as pd
+import numpy as np
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 
@@ -20,6 +21,7 @@ from judge_integration import judge_trajectory, print_judgment
 from rl_trainer import OnPolicyTrainer, RLConfig, compute_reward_from_judgment
 from rl_sb3_ppo import SB3PPOTrainer
 from rl_sb3_config_examples import get_config as get_sb3_config
+from rl_trl_grpo import TRLGRPOTrainer, get_grpo_preset
 
 
 MODEL_NAME = "btrabucco/Insta-Qwen3-1.7B-SFT"
@@ -364,7 +366,7 @@ def run_trajectory(task_data: dict, model, tokenizer, trainer: OnPolicyTrainer =
         if rl_config is None:
             rl_config = RLConfig()
         
-        # Check if using SB3 PPO
+        # Check algorithm type and initialize appropriate trainer
         if rl_config.algorithm == "sb3_ppo":
             # Use SB3 PPO trainer
             sb3_preset = getattr(rl_config, 'sb3_preset', 'default')
@@ -373,6 +375,17 @@ def run_trajectory(task_data: dict, model, tokenizer, trainer: OnPolicyTrainer =
             sb3_config.learning_rate = rl_config.learning_rate
             trainer = SB3PPOTrainer(model, tokenizer, sb3_config)
             print(f"RL Trainer initialized with SB3 PPO ({sb3_preset} preset).")
+        elif rl_config.algorithm == "trl_grpo":
+            # Use TRL GRPO trainer
+            trl_preset = getattr(rl_config, 'trl_grpo_preset', 'default')
+            trl_config = get_grpo_preset(trl_preset)
+            # Override with learning_rate if specified
+            trl_config.learning_rate = rl_config.learning_rate
+            # Set num_generations from config
+            if hasattr(rl_config, 'trl_grpo_num_generations'):
+                trl_config.num_generations = rl_config.trl_grpo_num_generations
+            trainer = TRLGRPOTrainer(model, tokenizer, trl_config)
+            print(f"RL Trainer initialized with TRL GRPO ({trl_preset} preset, {trl_config.num_generations} generations).")
         else:
             # Use custom algorithms
             trainer = OnPolicyTrainer(model, tokenizer, rl_config)
@@ -540,8 +553,8 @@ if __name__ == "__main__":
     parser.add_argument("--num_trajectories", type=int, default=1, 
                         help="Number of trajectories to run for training")
     parser.add_argument("--algorithm", type=str, default="ppo",
-                        choices=["reinforce", "ppo", "grpo", "sb3_ppo"],
-                        help="RL algorithm to use (reinforce, ppo, grpo, or sb3_ppo)")
+                        choices=["reinforce", "ppo", "grpo", "sb3_ppo", "trl_grpo"],
+                        help="RL algorithm to use (reinforce, ppo, grpo, sb3_ppo, or trl_grpo)")
     parser.add_argument("--enable_rl", action="store_true", default=True,
                         help="Enable on-policy RL updates")
     parser.add_argument("--disable_rl", action="store_true", default=False,
@@ -571,6 +584,13 @@ if __name__ == "__main__":
     parser.add_argument("--sb3_preset", type=str, default="default",
                         choices=["default", "low_memory", "aggressive", "conservative", "exploration"],
                         help="SB3 PPO configuration preset (only used with sb3_ppo)")
+    
+    # TRL GRPO-specific arguments
+    parser.add_argument("--trl_grpo_preset", type=str, default="default",
+                        choices=["default", "fast", "quality", "memory_efficient"],
+                        help="TRL GRPO configuration preset (only used with trl_grpo)")
+    parser.add_argument("--trl_grpo_num_generations", type=int, default=4,
+                        help="Number of attempts per task for TRL GRPO (browser executions per prompt)")
     
     # Debug options
     parser.add_argument("--debug", action="store_true", default=False,
@@ -606,6 +626,11 @@ if __name__ == "__main__":
     if args.algorithm == "sb3_ppo":
         rl_config.sb3_preset = args.sb3_preset
     
+    # Add TRL GRPO config if using trl_grpo
+    if args.algorithm == "trl_grpo":
+        rl_config.trl_grpo_preset = args.trl_grpo_preset
+        rl_config.trl_grpo_num_generations = args.trl_grpo_num_generations
+    
     df = pd.read_csv("data/insta-150k-test.csv")
     
     trainer = None
@@ -631,21 +656,99 @@ if __name__ == "__main__":
         print(f"TRAJECTORY {i+1}/{args.num_trajectories} (Dataset Index: {task_idx})")
         print(f"{'='*60}")
         
-        trajectory_result = run_trajectory(
-            task_row,
-            model,
-            tokenizer,
-            trainer=trainer, 
-            enable_rl_update=enable_rl_update,
-            rl_config=rl_config
+        # TRL GRPO Multi-Execution: Run trajectory multiple times if needed
+        needs_multi_execution = (
+            args.algorithm == "trl_grpo" and 
+            enable_rl_update and 
+            args.trl_grpo_num_generations > 1
         )
+        
+        num_attempts = args.trl_grpo_num_generations if needs_multi_execution else 1
+        
+        if needs_multi_execution:
+            print(f"\n[TRL GRPO Multi-Execution] Running {num_attempts} attempts for this task...")
+        
+        # Collect results from all attempts
+        all_results = []
+        all_judgments = []
+        
+        for attempt_num in range(num_attempts):
+            if needs_multi_execution:
+                print(f"\n--- Attempt {attempt_num + 1}/{num_attempts} ---")
+            
+            traj_result = run_trajectory(
+                task_row,
+                model,
+                tokenizer,
+                trainer=trainer, 
+                enable_rl_update=False,  # Don't update inside - we'll do it after all attempts
+                rl_config=rl_config
+            )
+            
+            if traj_result:
+                all_results.append(traj_result)
+                all_judgments.append(traj_result['judgment'])
+                
+                if needs_multi_execution:
+                    judgment = traj_result['judgment']
+                    reward = compute_reward_from_judgment(judgment)
+                    print(f"Attempt {attempt_num + 1} completed: reward={reward:.4f}, success={judgment.success:.2f}")
+            else:
+                print(f"Warning: Attempt {attempt_num + 1} failed")
+        
+        if not all_results:
+            print(f"ERROR: All attempts failed for trajectory {i+1}, skipping...")
+            continue
+        
+        # Use first result as primary
+        trajectory_result = all_results[0]
+        
+        # Perform RL update with all judgments
+        if enable_rl_update and trainer and len(trajectory_result['trajectory_prompts']) > 0:
+            if needs_multi_execution:
+                # TRL GRPO: Pass all judgments
+                print(f"\n--- Performing TRL GRPO Update ({len(all_judgments)} attempts) ---")
+                
+                rl_update_stats = trainer.update_policy(
+                    trajectory_prompts=trajectory_result['trajectory_prompts'],
+                    trajectory_responses=trajectory_result['trajectory_responses'],
+                    judgments=all_judgments  # Multiple judgments
+                )
+                
+                print(f"Average Reward: {rl_update_stats['trajectory_reward']:.4f}")
+                print(f"Min Reward: {rl_update_stats.get('min_reward', 0):.4f}")
+                print(f"Max Reward: {rl_update_stats.get('max_reward', 0):.4f}")
+                print(f"Reward Std: {rl_update_stats.get('reward_std', 0):.4f}")
+                print(f"Total Updates: {rl_update_stats.get('total_updates', 0)}")
+            else:
+                # Other algorithms: Single judgment (backward compatible)
+                print(f"\n--- Performing RL Update ---")
+                
+                rl_update_stats = trainer.update_policy(
+                    trajectory_prompts=trajectory_result['trajectory_prompts'],
+                    trajectory_responses=trajectory_result['trajectory_responses'],
+                    judgment=trajectory_result['judgment']  # Single judgment
+                )
+                
+                if 'policy_loss' in rl_update_stats:
+                    print(f"Policy Loss: {rl_update_stats['policy_loss']:.4f}")
+                if 'entropy' in rl_update_stats:
+                    print(f"Entropy: {rl_update_stats['entropy']:.4f}")
+                if 'total_loss' in rl_update_stats:
+                    print(f"Total Loss: {rl_update_stats['total_loss']:.4f}")
+                if 'baseline' in rl_update_stats:
+                    print(f"Baseline: {rl_update_stats['baseline']:.4f}")
+                print(f"Total Updates: {trainer.training_stats.get('total_updates', 0)}")
+            
+            trajectory_result['rl_update_stats'] = rl_update_stats
+            trainer = trajectory_result.get('trainer') or trainer
         
         if trajectory_result:
             print(f"\n--- Trajectory {i+1} Finished ---")
             print(f"Instruction: {trajectory_result['task_instruction']}")
             print(f"Total Steps: {len(trajectory_result['trajectory_actions'])}")
             
-            trainer = trajectory_result.get('trainer')
+            trainer = trajectory_result.get('trainer') or trainer
             
             if trajectory_result.get('rl_update_stats'):
                 reward = trajectory_result['rl_update_stats']['trajectory_reward']

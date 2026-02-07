@@ -42,7 +42,7 @@ class RLConfig:
     """Configuration for RL training."""
     
     # Algorithm selection
-    algorithm: str = "reinforce"  # "reinforce", "ppo", or "grpo"
+    algorithm: str = "ppo"  # "reinforce", "ppo", or "grpo"
     
     # Common hyperparameters
     learning_rate: float = 1e-5
@@ -138,51 +138,82 @@ class BaseRLAlgorithm(ABC):
         prompt_texts: List[str],
         response_texts: List[str]
     ) -> Tuple[torch.Tensor, torch.Tensor]:
-        """Compute log probabilities and entropy of responses given prompts."""
+        """Compute log probabilities and entropy of responses given prompts with micro-batching."""
+        import gc
+        
         log_probs_list = []
         entropies_list = []
         
-        for prompt, response in zip(prompt_texts, response_texts):
-            full_text = prompt + response
-            inputs = self.tokenizer(
-                full_text,
-                return_tensors="pt",
-                truncation=True,
-                max_length=8192
-            ).to(self.model.device)
+        # Process in micro-batches to avoid OOM on long trajectories
+        micro_batch_size = 3  # Process 3 steps at a time
+        
+        for batch_start in range(0, len(prompt_texts), micro_batch_size):
+            batch_end = min(batch_start + micro_batch_size, len(prompt_texts))
             
-            prompt_inputs = self.tokenizer(
-                prompt,
-                return_tensors="pt",
-                truncation=True,
-                max_length=8192
-            ).to(self.model.device)
-            prompt_length = prompt_inputs["input_ids"].shape[-1]
+            # Clear cache before each micro-batch
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+                gc.collect()
             
-            self.model.train()
-            outputs = self.model(**inputs)
-            logits = outputs.logits
-            
-            response_logits = logits[:, prompt_length-1:-1, :]
-            response_targets = inputs["input_ids"][:, prompt_length:]
-            
-            log_probs = F.log_softmax(response_logits, dim=-1)
-            
-            token_log_probs = torch.gather(
-                log_probs,
-                dim=-1,
-                index=response_targets.unsqueeze(-1)
-            ).squeeze(-1)
-            
-            sequence_log_prob = token_log_probs.sum(dim=-1)
-            log_probs_list.append(sequence_log_prob)
-            
-            probs = F.softmax(response_logits, dim=-1)
-            entropy = -(probs * log_probs).sum(dim=-1).mean()
-            entropies_list.append(entropy)
+            for idx in range(batch_start, batch_end):
+                prompt = prompt_texts[idx]
+                response = response_texts[idx]
+                
+                full_text = prompt + response
+                inputs = self.tokenizer(
+                    full_text,
+                    return_tensors="pt",
+                    truncation=True,
+                    max_length=4096  # Reduced from 8192 to save memory
+                ).to(self.model.device)
+                
+                prompt_inputs = self.tokenizer(
+                    prompt,
+                    return_tensors="pt",
+                    truncation=True,
+                    max_length=4096
+                ).to(self.model.device)
+                prompt_length = prompt_inputs["input_ids"].shape[-1]
+                
+                # Delete prompt_inputs immediately
+                del prompt_inputs
+                
+                self.model.train()
+                outputs = self.model(**inputs)
+                logits = outputs.logits
+                
+                response_logits = logits[:, prompt_length-1:-1, :]
+                response_targets = inputs["input_ids"][:, prompt_length:]
+                
+                log_probs = F.log_softmax(response_logits, dim=-1)
+                
+                token_log_probs = torch.gather(
+                    log_probs,
+                    dim=-1,
+                    index=response_targets.unsqueeze(-1)
+                ).squeeze(-1)
+                
+                sequence_log_prob = token_log_probs.sum(dim=-1)
+                log_probs_list.append(sequence_log_prob)
+                
+                probs = F.softmax(response_logits, dim=-1)
+                entropy = -(probs * log_probs).sum(dim=-1).mean()
+                entropies_list.append(entropy)
+                
+                # Aggressive cleanup after each step
+                del inputs, outputs, logits, response_logits, response_targets
+                del log_probs, token_log_probs, probs
+                
+            # Clear cache after each micro-batch
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
         
         stacked_log_probs = torch.stack(log_probs_list)
         stacked_entropies = torch.stack(entropies_list)
+        
+        # Clear intermediate lists to free memory
+        log_probs_list.clear()
+        entropies_list.clear()
         
         debug_log(f"Log Probs: shape={stacked_log_probs.shape}, "
                   f"values=[{', '.join([f'{x:.2f}' for x in stacked_log_probs.flatten()[:5].tolist()])}...]")
@@ -297,6 +328,10 @@ class REINFORCEAlgorithm(BaseRLAlgorithm):
         )
         debug_log(f"Step 5 - Log Probs computed: shape={log_probs.shape}")
         
+        # Clear cache after forward passes
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        
         # Step 6: Compute losses
         policy_loss = -(log_probs * advantages).mean()
         entropy_bonus = entropies.mean()
@@ -337,6 +372,11 @@ class REINFORCEAlgorithm(BaseRLAlgorithm):
         debug_log("Step 8 - Applying optimizer step...")
         self.optimizer.step()
         debug_log("Step 8 - Optimizer step completed ✓")
+        
+        # Clear gradients and cache after update
+        self.optimizer.zero_grad(set_to_none=True)
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
         
         # Step 9: Update baseline
         old_baseline = self.baseline
@@ -398,13 +438,35 @@ class PPOAlgorithm(BaseRLAlgorithm):
         trajectory_responses: List[str],
         judgment: BrowserJudgment
     ) -> Dict[str, float]:
-        """Perform PPO update with clipped objective."""
-        trajectory_reward = self.reward_calculator.compute_reward(judgment)
+        """Perform PPO update with clipped objective and memory optimizations."""
+        import gc
         
+        trajectory_reward = self.reward_calculator.compute_reward(judgment)
         num_steps = len(trajectory_prompts)
+        
+        # Handle empty trajectories gracefully
+        if num_steps == 0:
+            print("[PPO] Warning: Empty trajectory, skipping update")
+            return {
+                "algorithm": "ppo",
+                "policy_loss": 0.0,
+                "entropy": 0.0,
+                "kl_divergence": 0.0,
+                "total_loss": 0.0,
+                "trajectory_reward": trajectory_reward,
+                "baseline": self.baseline,
+                "num_steps": 0,
+                "ppo_epochs_run": 0,
+            }
+        
         step_rewards = [trajectory_reward / num_steps] * num_steps
         discounted_rewards = self.compute_discounted_rewards(step_rewards)
         advantages = discounted_rewards - self.baseline
+        
+        # Clear cache before computing old log probs
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            gc.collect()
         
         # Compute old log probs before any updates
         old_log_probs = self.compute_old_log_probs(
@@ -415,9 +477,18 @@ class PPOAlgorithm(BaseRLAlgorithm):
         total_policy_loss = 0.0
         total_entropy = 0.0
         total_kl = 0.0
+        num_epochs_run = 0
+        
+        # Reduce PPO epochs for memory efficiency (process one step at a time for long trajectories)
+        effective_ppo_epochs = 1 if num_steps > 10 else min(2, self.config.ppo_epochs)
         
         # Multiple PPO epochs
-        for epoch in range(self.config.ppo_epochs):
+        for epoch in range(effective_ppo_epochs):
+            # Aggressive memory cleanup before each epoch
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+                gc.collect()
+            
             new_log_probs, entropies = self.compute_log_probs_and_entropy(
                 trajectory_prompts,
                 trajectory_responses
@@ -442,7 +513,9 @@ class PPOAlgorithm(BaseRLAlgorithm):
             approx_kl = ((ratio - 1) - log_ratio).mean()
             
             if approx_kl > self.config.target_kl:
-                print(f"Early stopping at epoch {epoch} due to reaching target KL")
+                print(f"[PPO] Early stopping at epoch {epoch} due to reaching target KL")
+                # Clean up before breaking
+                del new_log_probs, entropies, log_ratio, ratio, surr1, surr2
                 break
             
             total_loss = (
@@ -451,8 +524,16 @@ class PPOAlgorithm(BaseRLAlgorithm):
                 + self.config.kl_penalty_coef * approx_kl
             )
             
-            self.optimizer.zero_grad()
+            # Check for NaN
+            if torch.isnan(total_loss) or torch.isinf(total_loss):
+                print(f"[PPO] Warning: NaN/Inf loss detected at epoch {epoch}, skipping")
+                del new_log_probs, entropies, log_ratio, ratio, surr1, surr2
+                continue
+            
+            self.optimizer.zero_grad(set_to_none=True)
             total_loss.backward()
+            
+            # Gradient clipping
             torch.nn.utils.clip_grad_norm_(
                 self.model.parameters(),
                 self.config.max_grad_norm
@@ -462,6 +543,19 @@ class PPOAlgorithm(BaseRLAlgorithm):
             total_policy_loss += policy_loss.item()
             total_entropy += entropy_bonus.item()
             total_kl += approx_kl.item()
+            num_epochs_run += 1
+            
+            # Free memory immediately after each epoch
+            del new_log_probs, entropies, log_ratio, ratio, surr1, surr2, policy_loss, entropy_bonus, approx_kl, total_loss
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+        
+        # Final cleanup
+        del old_log_probs, advantages, discounted_rewards
+        self.optimizer.zero_grad(set_to_none=True)
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            gc.collect()
         
         # Update baseline
         self.baseline = (
@@ -469,7 +563,8 @@ class PPOAlgorithm(BaseRLAlgorithm):
             (1 - self.config.baseline_momentum) * trajectory_reward
         )
         
-        num_epochs_run = min(epoch + 1, self.config.ppo_epochs)
+        if num_epochs_run == 0:
+            num_epochs_run = 1  # Avoid division by zero
         avg_policy_loss = total_policy_loss / num_epochs_run
         self._update_stats(avg_policy_loss, trajectory_reward)
         

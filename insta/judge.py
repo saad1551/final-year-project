@@ -106,6 +106,8 @@ class BrowserJudge(Callable):
         self, observations: List[str], 
         actions: List[str],
         instruction: str,
+        criteria: str = "",
+        steps: str = "",
         last_actions: int = 5,
         last_obs: int = 5
     ) -> BrowserJudgment | BrowserStatus:
@@ -126,6 +128,12 @@ class BrowserJudge(Callable):
             The instruction to provide to the agent, such as a question
             or a command to execute on the web.
 
+        criteria: str
+            Success criteria for evaluating task completion.
+
+        steps: str
+            Expected steps to complete the task.
+
         last_actions: int
             The number of actions to include in the context.
 
@@ -144,6 +152,8 @@ class BrowserJudge(Callable):
             instruction = instruction,
             observations = observations,
             actions = actions,
+            criteria = criteria,
+            steps = steps,
             last_actions = last_actions,
             last_obs = last_obs
         )
@@ -161,6 +171,9 @@ class BrowserJudge(Callable):
                 messages = messages,
                 **self.config.generation_kwargs
             ).choices[0].message.content
+        
+        # Debug: Print raw response to diagnose parsing issues
+        print(f"\n[JUDGE DEBUG] Raw LLM Response:\n{response}\n")
 
         return self.judge_prompt.parse_judgment(
             response = response
@@ -170,6 +183,8 @@ class BrowserJudge(Callable):
         self, observations: List[str], 
         actions: List[str],
         instruction: str,
+        criteria: str = "",
+        steps: str = ""
     ) -> BrowserJudgment | None:
         """Queries the LLM a judgment that estimates the agent's performance
         given the instruction, observations, and actions.
@@ -188,6 +203,12 @@ class BrowserJudge(Callable):
             The instruction to provide to the agent, such as a question
             or a command to execute on the web.
 
+        criteria: str
+            Success criteria for evaluating task completion.
+
+        steps: str
+            Expected steps to complete the task.
+
         Returns:
 
         BrowserJudgment | None
@@ -201,6 +222,8 @@ class BrowserJudge(Callable):
             observations = observations,
             actions = actions,
             instruction = instruction,
+            criteria = criteria,
+            steps = steps,
             last_actions = self.config.last_actions,
             last_obs = self.config.last_obs,
             catch_errors = self.config.catch_errors,
@@ -228,6 +251,8 @@ class BrowserJudge(Callable):
         self, observations: List[str], 
         actions: List[str],
         instruction: str,
+        criteria: str = "",
+        steps: str = "",
         last_actions: int = 5,
         last_obs: int = 5
     ) -> List[dict]:
@@ -248,6 +273,12 @@ class BrowserJudge(Callable):
         instruction: str
             The instruction to provide to the agent, such as a question
             or a command to execute on the web.
+
+        criteria: str
+            Success criteria for evaluating task completion.
+
+        steps: str
+            Expected steps to complete the task.
 
         last_actions: int
             The number of actions to include in the context.
@@ -297,15 +328,25 @@ class BrowserJudge(Callable):
 
         summary = "\n\n".join(outputs)
         
-        return self.user_prompt_template.format(
-            summary = summary,
-            instruction = instruction
-        )
+        # Build the prompt with optional criteria and steps
+        prompt_parts = [f"Determine if the agent has completed the task:\n\n{instruction}"]
+        
+        if steps:
+            prompt_parts.append(f"\n\nExpected steps:\n{steps}")
+        
+        if criteria:
+            prompt_parts.append(f"\n\nSuccess criteria:\n{criteria}")
+        
+        prompt_parts.append(f"\n\nHere is the agent's trajectory:\n\n{summary}")
+        
+        return "".join(prompt_parts)
 
     def get_prompts(
         self, observations: List[str], 
         actions: List[str],
         instruction: str,
+        criteria: str = "",
+        steps: str = "",
         last_actions: int = 5,
         last_obs: int = 5
     ) -> List[dict]:
@@ -327,6 +368,12 @@ class BrowserJudge(Callable):
             The instruction to provide to the agent, such as a question
             or a command to execute on the web.
 
+        criteria: str
+            Success criteria for evaluating task completion.
+
+        steps: str
+            Expected steps to complete the task.
+
         last_actions: int
             The number of actions to include in the context.
         
@@ -336,6 +383,8 @@ class BrowserJudge(Callable):
             instruction = instruction,
             observations = observations,
             actions = actions,
+            criteria = criteria,
+            steps = steps,
             last_actions = last_actions,
             last_obs = last_obs
         )

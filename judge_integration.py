@@ -3,16 +3,17 @@ from insta.configs.judge_config import JudgeConfig, BrowserJudgment
 from typing import List
 
 
-JUDGE_API_KEY = "YOUR_API_KEY_HERE"
-JUDGE_BASE_URL = "YOUR_LLM_URL_HERE"
-JUDGE_MODEL = "YOUR_MODEL_NAME_HERE"
+# Gemini API Configuration
+JUDGE_API_KEY = "AIzaSyCpMDhbwWz12rsPGErG2v3oqTQjNg3N8C8"
+JUDGE_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
+JUDGE_MODEL = "gemini-2.5-flash"
 
-JUDGE_MAX_TOKENS = 2048
+JUDGE_MAX_TOKENS = 4096
 JUDGE_TEMPERATURE = 0.5
 JUDGE_TOP_P = 1.0
 
-JUDGE_LAST_ACTIONS = 5
-JUDGE_LAST_OBS = 5
+JUDGE_LAST_ACTIONS = 50
+JUDGE_LAST_OBS = 50
 
 
 def get_judge_config() -> JudgeConfig:
@@ -47,13 +48,17 @@ def get_judge() -> BrowserJudge:
 def judge_trajectory(
     instruction: str,
     observations: List[str],
-    actions: List[str]
+    actions: List[str],
+    criteria: str = "",
+    steps: str = ""
 ) -> BrowserJudgment:
     judge = get_judge()
     judgment = judge(
         observations=observations,
         actions=actions,
-        instruction=instruction
+        instruction=instruction,
+        criteria=criteria,
+        steps=steps
     )
     return judgment
 

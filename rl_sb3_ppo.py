@@ -155,38 +155,6 @@ class DummyBrowserEnv(gym.Env):
         return observation, reward, terminated, truncated, info
 
 
-class CustomLMFeatureExtractor(BaseFeaturesExtractor):
-    """
-    Custom feature extractor for language model based policy.
-    
-    This extracts features from the language model's hidden states.
-    """
-    
-    def __init__(
-        self, 
-        observation_space: spaces.Box,
-        model: PreTrainedModel,
-        features_dim: int = 256
-    ):
-        super().__init__(observation_space, features_dim)
-        
-        self.model = model
-        
-        # Freeze the language model weights (we'll fine-tune separately)
-        for param in self.model.parameters():
-            param.requires_grad = False
-        
-        # Projection layer to map LM hidden states to feature dimension
-        input_dim = observation_space.shape[0]
-        self.projection = torch.nn.Sequential(
-            torch.nn.Linear(input_dim, features_dim),
-            torch.nn.ReLU(),
-            torch.nn.LayerNorm(features_dim)
-        )
-    
-    def forward(self, observations: torch.Tensor) -> torch.Tensor:
-        """Extract features from observations."""
-        return self.projection(observations)
 
 
 class TrainingCallback(BaseCallback):

@@ -550,6 +550,8 @@ if __name__ == "__main__":
                         help="Directory to save model checkpoints")
     parser.add_argument("--save_every", type=int, default=5,
                         help="Save checkpoint every N trajectories")
+    parser.add_argument("--resume_from", type=str, default=None,
+                        help="Path to checkpoint to resume training from")
     parser.add_argument("--learning_rate", type=float, default=1e-5,
                         help="Learning rate for RL updates")
     parser.add_argument("--start_idx", type=int, default=0,
@@ -611,12 +613,36 @@ if __name__ == "__main__":
     trainer = None
     total_rewards = []
     
+    # Initialize trainer from checkpoint if resuming
+    if args.resume_from and enable_rl_update:
+        print(f"\n=== Resuming from Checkpoint ===")
+        print(f"Checkpoint Path: {args.resume_from}")
+        
+        # Check if using SB3 PPO
+        if args.algorithm == "sb3_ppo":
+            sb3_preset = args.sb3_preset
+            sb3_config = get_sb3_config(sb3_preset)
+            sb3_config.learning_rate = args.learning_rate
+            trainer = SB3PPOTrainer(model, tokenizer, sb3_config)
+            print(f"Initialized SB3 PPO Trainer ({sb3_preset} preset)")
+        else:
+            trainer = OnPolicyTrainer(model, tokenizer, rl_config)
+            print(f"Initialized {args.algorithm.upper()} Trainer")
+        
+        # Load checkpoint
+        trainer.load_checkpoint(args.resume_from)
+        print(f"✓ Checkpoint loaded successfully")
+        print(f"  Total updates from checkpoint: {trainer.training_stats.get('total_updates', 0)}")
+        print()
+    
     print(f"=== Starting RL Training Loop ===")
     print(f"Algorithm: {args.algorithm.upper()}")
     print(f"Trajectories: {args.num_trajectories}")
     print(f"RL Updates Enabled: {enable_rl_update}")
     print(f"Learning Rate: {args.learning_rate}")
     print(f"Checkpoint Dir: {args.checkpoint_dir}")
+    if args.resume_from:
+        print(f"Resuming From: {args.resume_from}")
     print()
     
     for i in range(args.num_trajectories):

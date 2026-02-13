@@ -480,7 +480,7 @@ class PPOAlgorithm(BaseRLAlgorithm):
         num_epochs_run = 0
         
         # Reduce PPO epochs for memory efficiency (process one step at a time for long trajectories)
-        effective_ppo_epochs = 1 if num_steps > 10 else min(2, self.config.ppo_epochs)
+        effective_ppo_epochs = 2 if num_steps > 10 else min(4, self.config.ppo_epochs)
         
         # Multiple PPO epochs
         for epoch in range(effective_ppo_epochs):

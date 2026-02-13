@@ -543,7 +543,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run browser navigation with on-policy RL training")
     parser.add_argument("--num_trajectories", type=int, default=1, 
                         help="Number of trajectories to run for training")
-    parser.add_argument("--algorithm", type=str, default="ppo",
+    parser.add_argument("--algorithm", type=str, default="sb3_ppo",
                         choices=["reinforce", "ppo", "grpo", "sb3_ppo"],
                         help="RL algorithm to use (reinforce, ppo, grpo, or sb3_ppo)")
     parser.add_argument("--enable_rl", action="store_true", default=True,
@@ -552,7 +552,7 @@ if __name__ == "__main__":
                         help="Disable on-policy RL updates")
     parser.add_argument("--checkpoint_dir", type=str, default="checkpoints",
                         help="Directory to save model checkpoints")
-    parser.add_argument("--save_every", type=int, default=5,
+    parser.add_argument("--save_every", type=int, default=10,
                         help="Save checkpoint every N trajectories")
     parser.add_argument("--resume_from", type=str, default=None,
                         help="Path to checkpoint to resume training from")
@@ -562,7 +562,7 @@ if __name__ == "__main__":
                         help="Starting index in the dataset")
     
     # PPO-specific arguments
-    parser.add_argument("--ppo_epochs", type=int, default=4,
+    parser.add_argument("--ppo_epochs", type=int, default=6,
                         help="Number of PPO epochs per update")
     parser.add_argument("--ppo_clip_epsilon", type=float, default=0.2,
                         help="PPO clipping epsilon")
@@ -574,7 +574,7 @@ if __name__ == "__main__":
                         help="GRPO KL divergence coefficient")
     
     # SB3 PPO-specific arguments
-    parser.add_argument("--sb3_preset", type=str, default="default",
+    parser.add_argument("--sb3_preset", type=str, default="aggressive",
                         choices=["default", "low_memory", "aggressive", "conservative", "exploration"],
                         help="SB3 PPO configuration preset (only used with sb3_ppo)")
     

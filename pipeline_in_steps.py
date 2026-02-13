@@ -20,6 +20,7 @@ from judge_integration import judge_trajectory, print_judgment
 from rl_trainer import OnPolicyTrainer, RLConfig, compute_reward_from_judgment
 from rl_sb3_ppo import SB3PPOTrainer
 from rl_sb3_config_examples import get_config as get_sb3_config
+from observability import ObservabilityLogger
 
 
 MODEL_NAME = "btrabucco/Insta-Qwen3-1.7B-SFT"
@@ -517,8 +518,11 @@ def run_trajectory(task_data: dict, model, tokenizer, trainer: OnPolicyTrainer =
 
         return {
             "task_instruction": task_data['instruction'],
+            "website": start_url,
             "trajectory_observations": trajectory_observations,
             "trajectory_actions": trajectory_actions,
+            "trajectory_markdown_observations": trajectory_markdown_observations,
+            "trajectory_action_jsons": trajectory_action_jsons,
             "trajectory_prompts": trajectory_prompts,
             "trajectory_responses": trajectory_responses,
             "judgment": judgment,
@@ -645,6 +649,11 @@ if __name__ == "__main__":
         print(f"Resuming From: {args.resume_from}")
     print()
     
+    # Initialize observability logger
+    obs_logger = ObservabilityLogger()
+    print(f"Observability logging enabled: {obs_logger.log_dir}")
+    print()
+    
     for i in range(args.num_trajectories):
         task_idx = args.start_idx + i
         if task_idx >= len(df):
@@ -673,6 +682,21 @@ if __name__ == "__main__":
             
             trainer = trajectory_result.get('trainer')
             
+            # Log trajectory to observability system
+            obs_logger.log_trajectory(
+                trajectory_id=i + 1,
+                dataset_index=task_idx,
+                task_instruction=trajectory_result['task_instruction'],
+                website=trajectory_result['website'],
+                observations=trajectory_result['trajectory_markdown_observations'],
+                action_jsons=trajectory_result['trajectory_action_jsons'],
+                judgment=trajectory_result['judgment'],
+                rl_stats=trajectory_result.get('rl_update_stats'),
+                trainer_stats=trainer.training_stats if trainer else None,
+                algorithm=args.algorithm,
+                learning_rate=args.learning_rate
+            )
+            
             if trajectory_result.get('rl_update_stats'):
                 reward = trajectory_result['rl_update_stats']['trajectory_reward']
                 total_rewards.append(reward)
@@ -699,3 +723,6 @@ if __name__ == "__main__":
         print(f"Average Reward: {sum(total_rewards)/len(total_rewards):.4f}")
         print(f"Max Reward: {max(total_rewards):.4f}")
         print(f"Min Reward: {min(total_rewards):.4f}")
+    
+    # Print observability summary
+    obs_logger.print_summary()

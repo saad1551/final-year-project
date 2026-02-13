@@ -50,9 +50,9 @@ class SB3PPOConfig:
     max_grad_norm: float = 0.5  # Maximum value for gradient clipping
     
     # Reward weights (same as custom RL algorithms)
-    success_weight: float = 0.5
-    efficiency_weight: float = 0.3
-    self_correction_weight: float = 0.2
+    success_weight: float = 0.7
+    efficiency_weight: float = 0.2
+    self_correction_weight: float = 0.1
     
     # Training parameters
     use_sde: bool = False  # Whether to use State Dependent Exploration

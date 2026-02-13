@@ -556,7 +556,7 @@ if __name__ == "__main__":
                         help="Save checkpoint every N trajectories")
     parser.add_argument("--resume_from", type=str, default=None,
                         help="Path to checkpoint to resume training from")
-    parser.add_argument("--learning_rate", type=float, default=1e-5,
+    parser.add_argument("--learning_rate", type=float, default=5e-5,
                         help="Learning rate for RL updates")
     parser.add_argument("--start_idx", type=int, default=0,
                         help="Starting index in the dataset")

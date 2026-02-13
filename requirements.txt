@@ -1,6 +1,63 @@
-accelerate
-bitsandbytes
+# ============================================================================
+# Core Dependencies for RL Browser Navigation Training Pipeline
+# ============================================================================
 
-# Stable Baselines3 PPO dependencies
+# Deep Learning Framework
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+
+# Transformers and Model Training
+transformers>=4.35.0
+accelerate>=0.24.0
+peft>=0.7.0  # For LoRA fine-tuning
+bitsandbytes>=0.41.0  # For 4-bit/8-bit quantization
+sentencepiece>=0.1.99  # For tokenization
+protobuf>=3.20.0
+
+# Reinforcement Learning
 stable-baselines3>=2.0.0
 gymnasium>=0.28.0
+
+# Data Processing
+pandas>=1.5.0
+numpy>=1.24.0
+datasets>=2.14.0  # For huggingface datasets
+
+# Web Interaction (if using browser client)
+playwright>=1.40.0
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+pillow>=10.0.0  # For screenshot handling
+
+# LLM API Clients
+openai>=1.0.0  # For judge LLM (supports Gemini via OpenAI-compatible endpoint)
+anthropic>=0.7.0  # Optional: if using Claude as judge
+
+# Utilities
+tqdm>=4.65.0
+colorama>=0.4.6
+python-dotenv>=1.0.0  # For environment variables
+
+# Development and Testing (optional but recommended)
+pytest>=7.4.0
+black>=23.0.0
+flake8>=6.0.0
+ipython>=8.12.0
+jupyter>=1.0.0
+
+# ============================================================================
+# Installation Instructions:
+# 
+# For pip (standard):
+#   pip install -r requirements.txt
+#
+# For pip with GPU support (ensure CUDA is installed):
+#   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+#   pip install -r requirements.txt
+#
+# For conda (see environment.yml):
+#   conda env create -f environment.yml
+#   conda activate rl-browser-nav
+# ============================================================================

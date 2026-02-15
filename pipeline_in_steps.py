@@ -577,7 +577,7 @@ if __name__ == "__main__":
                         help="Starting index in the dataset")
     
     # PPO-specific arguments
-    parser.add_argument("--ppo_epochs", type=int, default=6,
+    parser.add_argument("--ppo_epochs", type=int, default=8,
                         help="Number of PPO epochs per update")
     parser.add_argument("--ppo_clip_epsilon", type=float, default=0.2,
                         help="PPO clipping epsilon")

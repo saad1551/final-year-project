@@ -59,7 +59,7 @@ class RLConfig:
     entropy_coef: float = 0.01
     
     # PPO specific
-    ppo_epochs: int = 4
+    ppo_epochs: int = 8
     ppo_clip_epsilon: float = 0.2
     ppo_value_clip: float = 0.2
     ppo_mini_batch_size: int = 4
@@ -511,7 +511,11 @@ class PPOAlgorithm(BaseRLAlgorithm):
         num_epochs_run = 0
         
         # Reduce PPO epochs for memory efficiency
-        effective_ppo_epochs = min(2, self.config.ppo_epochs) if num_steps > 10 else min(4, self.config.ppo_epochs)
+        effective_ppo_epochs = (
+            min(3, self.config.ppo_epochs)
+            if num_steps > 15
+            else min(6, self.config.ppo_epochs)
+        )
         
         # Multiple PPO epochs
         for epoch in range(effective_ppo_epochs):

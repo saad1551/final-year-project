@@ -1,0 +1,29 @@
+cd workspace
+git clone https://awaisnazir08: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@github.com/saad1551/final-year-project.git
+cd final-year-project
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+pip install -e .
+cd javascript/server
+npm install
+
+
+
+
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+export NVM_DIR="$HOME/.nvm" [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+nvm install --lts
+nvm use --lts
+cd /workspace/final-year-project/javascript/server
+node -v
+npm install express playwright-extra puppeteer-extra-plugin-stealth
+npx playwright install
+npx playwright install chromium
+npx playwright install-deps
+
+
+
+lsof -i :3000
+screen -S playwright -X quit

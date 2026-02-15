@@ -12,3 +12,9 @@ node_modules
 playwright.log
 configs/__pycache__/__init__.cpython-313.pyc
 visualization_output
+venv/
+insta_env*/
+observability_logs/
+*.pt
+*.safetensors
+*.jinja

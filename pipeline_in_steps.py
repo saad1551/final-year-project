@@ -160,9 +160,9 @@ def load_language_model():
     )
     
     # Prepare model for k-bit training (required for LoRA with quantization)
-    model = prepare_model_for_kbit_training(model)
-    model.enable_input_require_grads() 
-
+    # NOTE: use_gradient_checkpointing=False here — we enable it AFTER PEFT wrapping
+    # to ensure the embedding hook fires inside the PeftModel forward pass
+    model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=False)
     
     # Configure LoRA for efficient fine-tuning
     lora_config = LoraConfig(
@@ -174,7 +174,7 @@ def load_language_model():
         task_type="CAUSAL_LM"
     )
     
-    # Apply LoRA adapters
+    # Apply LoRA adapters FIRST
     model = get_peft_model(model, lora_config)
     
     # Print trainable parameters info
@@ -182,8 +182,13 @@ def load_language_model():
     total_params = sum(p.numel() for p in model.parameters())
     print(f"Trainable parameters: {trainable_params:,} / {total_params:,} ({100 * trainable_params / total_params:.2f}%)")
     
-    # Enable gradient checkpointing to save memory during RL update
-    model.gradient_checkpointing_enable()
+    # Enable gradient checkpointing AFTER PEFT wrapping so the embedding hook
+    # fires inside the PeftModel and hidden states have requires_grad=True.
+    # use_reentrant=False is required for compatibility with quantized LoRA models.
+    model.gradient_checkpointing_enable(
+        gradient_checkpointing_kwargs={"use_reentrant": False}
+    )
+    model.enable_input_require_grads()  # Must be AFTER get_peft_model
     model.config.use_cache = False  # Must be False for gradient checkpointing
     
     return tokenizer, model
@@ -507,10 +512,20 @@ def run_trajectory(task_data: dict, model, tokenizer, trainer: OnPolicyTrainer =
                 judgment=judgment
             )
             
-            print(f"Policy Loss: {rl_update_stats['policy_loss']:.4f}")
-            print(f"Entropy: {rl_update_stats['entropy']:.4f}")
-            print(f"Total Loss: {rl_update_stats['total_loss']:.4f}")
-            print(f"Baseline: {rl_update_stats['baseline']:.4f}")
+            print(f"Algorithm: {rl_update_stats.get('algorithm', 'unknown')}")
+            print(f"Trajectory Reward: {rl_update_stats.get('trajectory_reward', 0):.4f}")
+            if 'policy_loss' in rl_update_stats:
+                print(f"Policy Loss: {rl_update_stats['policy_loss']:.4f}")
+            if 'entropy' in rl_update_stats:
+                print(f"Entropy: {rl_update_stats['entropy']:.4f}")
+            if 'total_loss' in rl_update_stats:
+                print(f"Total Loss: {rl_update_stats['total_loss']:.4f}")
+            if 'kl_divergence' in rl_update_stats:
+                print(f"KL Divergence: {rl_update_stats['kl_divergence']:.4f}")
+            if 'baseline' in rl_update_stats:
+                print(f"Baseline: {rl_update_stats['baseline']:.4f}")
+            if 'ppo_epochs_run' in rl_update_stats:
+                print(f"PPO Epochs Run: {rl_update_stats['ppo_epochs_run']}")
             print(f"Total Updates: {trainer.training_stats['total_updates']}")
             
             if 'grad_norm' in rl_update_stats:
@@ -541,9 +556,9 @@ def run_trajectory(task_data: dict, model, tokenizer, trainer: OnPolicyTrainer =
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run browser navigation with on-policy RL training")
-    parser.add_argument("--num_trajectories", type=int, default=1, 
+    parser.add_argument("--num_trajectories", type=int, default=10, 
                         help="Number of trajectories to run for training")
-    parser.add_argument("--algorithm", type=str, default="sb3_ppo",
+    parser.add_argument("--algorithm", type=str, default="ppo",
                         choices=["reinforce", "ppo", "grpo", "sb3_ppo"],
                         help="RL algorithm to use (reinforce, ppo, grpo, or sb3_ppo)")
     parser.add_argument("--enable_rl", action="store_true", default=True,
@@ -612,7 +627,7 @@ if __name__ == "__main__":
     if args.algorithm == "sb3_ppo":
         rl_config.sb3_preset = args.sb3_preset
     
-    df = pd.read_csv("data/insta-150k-test.csv")
+    df = pd.read_csv("data/insta-150k-train.csv")
     
     trainer = None
     total_rewards = []
@@ -652,6 +667,7 @@ if __name__ == "__main__":
     # Initialize observability logger
     obs_logger = ObservabilityLogger()
     print(f"Observability logging enabled: {obs_logger.log_dir}")
+
     print()
     
     for i in range(args.num_trajectories):

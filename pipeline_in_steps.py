@@ -25,7 +25,7 @@ from observability import ObservabilityLogger
 
 MODEL_NAME = "btrabucco/Insta-Qwen3-1.7B-SFT"
 BROWSER_SERVER_URL = "http://localhost:3000"
-MAX_TRAJECTORY_STEPS = 15  # Reduced from 30 to fit in 8GB VRAM with PPO
+MAX_TRAJECTORY_STEPS = 20  # Balanced: enough steps for complex tasks, fits in 8GB VRAM with 4-bit LoRA
 MAX_HISTORY_STEPS = 2
 SCREENSHOT_OUTPUT_DIR = "visualization_output"
 PAGE_LOAD_WAIT_SECONDS = 5
@@ -372,6 +372,11 @@ def run_trajectory(task_data: dict, model, tokenizer, trainer: OnPolicyTrainer =
         
         # Check if using SB3 PPO
         if rl_config.algorithm == "sb3_ppo":
+            # WARNING: SB3 PPO trains on a dummy env, not real trajectory data.
+            # The custom PPO algorithm (--algorithm ppo) is recommended instead.
+            print("\n⚠️  WARNING: SB3 PPO trains on a dummy environment, NOT your real trajectory data.")
+            print("   The custom PPO algorithm (--algorithm ppo) computes gradients on actual trajectories")
+            print("   and is strongly recommended for meaningful RL learning.\n")
             # Use SB3 PPO trainer
             sb3_preset = getattr(rl_config, 'sb3_preset', 'default')
             sb3_config = get_sb3_config(sb3_preset)
@@ -556,8 +561,8 @@ def run_trajectory(task_data: dict, model, tokenizer, trainer: OnPolicyTrainer =
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run browser navigation with on-policy RL training")
-    parser.add_argument("--num_trajectories", type=int, default=10, 
-                        help="Number of trajectories to run for training")
+    parser.add_argument("--num_trajectories", type=int, default=50, 
+                        help="Number of trajectories to run for training (50+ recommended for meaningful learning)")
     parser.add_argument("--algorithm", type=str, default="ppo",
                         choices=["reinforce", "ppo", "grpo", "sb3_ppo"],
                         help="RL algorithm to use (reinforce, ppo, grpo, or sb3_ppo)")
@@ -567,12 +572,12 @@ if __name__ == "__main__":
                         help="Disable on-policy RL updates")
     parser.add_argument("--checkpoint_dir", type=str, default="checkpoints",
                         help="Directory to save model checkpoints")
-    parser.add_argument("--save_every", type=int, default=10,
+    parser.add_argument("--save_every", type=int, default=5,
                         help="Save checkpoint every N trajectories")
     parser.add_argument("--resume_from", type=str, default=None,
                         help="Path to checkpoint to resume training from")
-    parser.add_argument("--learning_rate", type=float, default=5e-5,
-                        help="Learning rate for RL updates")
+    parser.add_argument("--learning_rate", type=float, default=2e-5,
+                        help="Learning rate for RL updates (2e-5 recommended for PPO+LoRA)")
     parser.add_argument("--start_idx", type=int, default=0,
                         help="Starting index in the dataset")
     
@@ -639,6 +644,8 @@ if __name__ == "__main__":
         
         # Check if using SB3 PPO
         if args.algorithm == "sb3_ppo":
+            print("\n⚠️  WARNING: SB3 PPO trains on a dummy environment, NOT your real trajectory data.")
+            print("   Consider using --algorithm ppo instead for meaningful RL learning.\n")
             sb3_preset = args.sb3_preset
             sb3_config = get_sb3_config(sb3_preset)
             sb3_config.learning_rate = args.learning_rate

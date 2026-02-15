@@ -64,7 +64,7 @@ class RLConfig:
     ppo_value_clip: float = 0.2
     ppo_mini_batch_size: int = 4
     kl_penalty_coef: float = 0.01
-    target_kl: float = 0.01  # Early stopping threshold
+    target_kl: float = 0.03  # Early stopping threshold (0.03 allows more learning per trajectory)
     
     # GRPO specific
     grpo_group_size: int = 4  # Number of responses per prompt for comparison
@@ -164,7 +164,7 @@ class BaseRLAlgorithm(ABC):
                 prompt = prompt_texts[idx]
                 response = response_texts[idx]
                 
-                max_length = 4096  # Total budget for prompt + response
+                max_length = 6144  # Total budget for prompt + response (6K to avoid prompt truncation with history)
                 
                 # Tokenize response first to know its length (no special tokens)
                 response_ids = self.tokenizer(
@@ -510,9 +510,9 @@ class PPOAlgorithm(BaseRLAlgorithm):
         last_grad_norm = 0.0
         num_epochs_run = 0
         
-        # Reduce PPO epochs for memory efficiency
+        # Scale PPO epochs based on trajectory length for memory efficiency
         effective_ppo_epochs = (
-            min(3, self.config.ppo_epochs)
+            min(4, self.config.ppo_epochs)
             if num_steps > 15
             else min(6, self.config.ppo_epochs)
         )

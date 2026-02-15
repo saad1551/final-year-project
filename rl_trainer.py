@@ -150,7 +150,7 @@ class BaseRLAlgorithm(ABC):
         entropies_list = []
         
         # Process in micro-batches to avoid OOM on long trajectories
-        micro_batch_size = 3  # Process 3 steps at a time
+        micro_batch_size = 6  # 6 steps at a time (safe for 20GB VRAM with 4-bit 1.7B model)
         
         for batch_start in range(0, len(prompt_texts), micro_batch_size):
             batch_end = min(batch_start + micro_batch_size, len(prompt_texts))
@@ -164,7 +164,7 @@ class BaseRLAlgorithm(ABC):
                 prompt = prompt_texts[idx]
                 response = response_texts[idx]
                 
-                max_length = 6144  # Total budget for prompt + response (6K to avoid prompt truncation with history)
+                max_length = 8192  # Total budget for prompt + response (8K to avoid prompt truncation with history)
                 
                 # Tokenize response first to know its length (no special tokens)
                 response_ids = self.tokenizer(

@@ -138,7 +138,12 @@ class BaseRLAlgorithm(ABC):
         prompt_texts: List[str],
         response_texts: List[str]
     ) -> Tuple[torch.Tensor, torch.Tensor]:
-        """Compute log probabilities and entropy of responses given prompts with micro-batching."""
+        """Compute log probabilities and entropy of responses given prompts with micro-batching.
+        
+        IMPORTANT: The caller must set model.train() or model.eval() before calling.
+        - train mode: gradient checkpointing active, gradients tracked (for policy update)
+        - eval mode: no gradient checkpointing, faster (for old log probs / reference)
+        """
         import gc
         
         log_probs_list = []
@@ -159,26 +164,44 @@ class BaseRLAlgorithm(ABC):
                 prompt = prompt_texts[idx]
                 response = response_texts[idx]
                 
-                full_text = prompt + response
-                inputs = self.tokenizer(
-                    full_text,
-                    return_tensors="pt",
-                    truncation=True,
-                    max_length=4096  # Reduced from 8192 to save memory
-                ).to(self.model.device)
+                max_length = 4096  # Total budget for prompt + response
                 
-                prompt_inputs = self.tokenizer(
+                # Tokenize response first to know its length (no special tokens)
+                response_ids = self.tokenizer(
+                    response,
+                    return_tensors="pt",
+                    add_special_tokens=False,
+                    truncation=True,
+                    max_length=512  # Cap response at 512 tokens
+                )["input_ids"]
+                response_len = response_ids.shape[-1]
+                
+                # Allocate remaining budget to prompt, truncating prompt if needed
+                max_prompt_len = max(256, max_length - response_len)
+                prompt_ids = self.tokenizer(
                     prompt,
                     return_tensors="pt",
                     truncation=True,
-                    max_length=4096
-                ).to(self.model.device)
-                prompt_length = prompt_inputs["input_ids"].shape[-1]
+                    max_length=max_prompt_len
+                )["input_ids"]
+                prompt_length = prompt_ids.shape[-1]
                 
-                # Delete prompt_inputs immediately
-                del prompt_inputs
+                # Concatenate prompt + response token IDs directly
+                input_ids = torch.cat([prompt_ids, response_ids], dim=-1).to(self.model.device)
+                attention_mask = torch.ones_like(input_ids)
+                inputs = {"input_ids": input_ids, "attention_mask": attention_mask}
                 
-                self.model.train()
+                debug_log(f"Step {idx}: prompt_tokens={prompt_length}, response_tokens={response_len}, "
+                          f"total_tokens={input_ids.shape[-1]}")
+                
+                # Warn if response is empty (would give zero gradient signal)
+                if response_len == 0:
+                    debug_log(f"WARNING: Step {idx} has 0 response tokens! Log prob will be 0.", level="ERROR")
+                
+                # Clean up intermediate tensors
+                del prompt_ids, response_ids
+                
+                # NOTE: caller must set train/eval mode before calling this method
                 outputs = self.model(**inputs)
                 logits = outputs.logits
                 
@@ -322,6 +345,7 @@ class REINFORCEAlgorithm(BaseRLAlgorithm):
         
         # Step 5: Compute log probabilities
         debug_log("Step 5 - Computing log probabilities...")
+        self.model.train()  # Ensure train mode for gradient checkpointing & gradient tracking
         log_probs, entropies = self.compute_log_probs_and_entropy(
             trajectory_prompts,
             trajectory_responses
@@ -427,9 +451,15 @@ class PPOAlgorithm(BaseRLAlgorithm):
         prompt_texts: List[str],
         response_texts: List[str]
     ) -> torch.Tensor:
-        """Compute log probs under the old policy (before update)."""
-        self.model.eval()
+        """Compute log probs under the old policy (before update).
+        
+        Uses eval mode to disable gradient checkpointing (faster, no warnings).
+        """
+        was_training = self.model.training
+        self.model.eval()  # eval mode disables gradient checkpointing
         log_probs, _ = self.compute_log_probs_and_entropy(prompt_texts, response_texts)
+        if was_training:
+            self.model.train()  # restore train mode for subsequent calls
         return log_probs.detach()
     
     def update_policy(
@@ -477,10 +507,11 @@ class PPOAlgorithm(BaseRLAlgorithm):
         total_policy_loss = 0.0
         total_entropy = 0.0
         total_kl = 0.0
+        last_grad_norm = 0.0
         num_epochs_run = 0
         
-        # Reduce PPO epochs for memory efficiency (process one step at a time for long trajectories)
-        effective_ppo_epochs = 2 if num_steps > 10 else min(4, self.config.ppo_epochs)
+        # Reduce PPO epochs for memory efficiency
+        effective_ppo_epochs = min(2, self.config.ppo_epochs) if num_steps > 10 else min(4, self.config.ppo_epochs)
         
         # Multiple PPO epochs
         for epoch in range(effective_ppo_epochs):
@@ -489,6 +520,7 @@ class PPOAlgorithm(BaseRLAlgorithm):
                 torch.cuda.empty_cache()
                 gc.collect()
             
+            self.model.train()  # Ensure train mode for gradient checkpointing & gradient tracking
             new_log_probs, entropies = self.compute_log_probs_and_entropy(
                 trajectory_prompts,
                 trajectory_responses
@@ -533,6 +565,22 @@ class PPOAlgorithm(BaseRLAlgorithm):
             self.optimizer.zero_grad(set_to_none=True)
             total_loss.backward()
             
+            # Verify gradients are flowing through LoRA parameters
+            total_grad_norm = 0.0
+            num_params_with_grad = 0
+            for p in self.model.parameters():
+                if p.requires_grad and p.grad is not None:
+                    total_grad_norm += p.grad.data.norm(2).item() ** 2
+                    num_params_with_grad += 1
+            total_grad_norm = total_grad_norm ** 0.5
+            
+            if num_params_with_grad == 0:
+                print(f"[PPO] WARNING: No parameters received gradients at epoch {epoch}!")
+                print(f"[PPO] This means LoRA weights are NOT being updated.")
+            else:
+                debug_log(f"PPO epoch {epoch}: grad_norm={total_grad_norm:.6f}, "
+                          f"params_with_grad={num_params_with_grad}")
+            
             # Gradient clipping
             torch.nn.utils.clip_grad_norm_(
                 self.model.parameters(),
@@ -543,6 +591,7 @@ class PPOAlgorithm(BaseRLAlgorithm):
             total_policy_loss += policy_loss.item()
             total_entropy += entropy_bonus.item()
             total_kl += approx_kl.item()
+            last_grad_norm = total_grad_norm
             num_epochs_run += 1
             
             # Free memory immediately after each epoch
@@ -578,6 +627,7 @@ class PPOAlgorithm(BaseRLAlgorithm):
             "baseline": self.baseline,
             "num_steps": num_steps,
             "ppo_epochs_run": num_epochs_run,
+            "grad_norm": last_grad_norm if num_epochs_run > 0 else 0.0,
         }
 
 
@@ -632,11 +682,14 @@ class GRPOAlgorithm(BaseRLAlgorithm):
         response_texts: List[str]
     ):
         """Store reference log probs for KL penalty computation."""
-        self.model.eval()
+        was_training = self.model.training
+        self.model.eval()  # eval mode disables gradient checkpointing
         self.reference_log_probs, _ = self.compute_log_probs_and_entropy(
             prompt_texts, response_texts
         )
         self.reference_log_probs = self.reference_log_probs.detach()
+        if was_training:
+            self.model.train()
     
     def update_policy(
         self,
@@ -670,6 +723,7 @@ class GRPOAlgorithm(BaseRLAlgorithm):
             self.store_reference_log_probs(trajectory_prompts, trajectory_responses)
         
         # Compute current log probs
+        self.model.train()  # Ensure train mode for gradient checkpointing & gradient tracking
         log_probs, entropies = self.compute_log_probs_and_entropy(
             trajectory_prompts,
             trajectory_responses

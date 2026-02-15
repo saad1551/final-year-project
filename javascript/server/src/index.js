@@ -342,7 +342,8 @@ APP.post('/start', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     let context;
     let page;
     try {
-        browser = yield playwright_extra_1.chromium.launch(Object.assign({ headless: true }, browser_kwargs));
+        // browser = yield playwright_extra_1.chromium.launch(Object.assign({ headless: true }, browser_kwargs));
+        browser = yield playwright_extra_1.chromium.launch(Object.assign({ headless: true,  args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'] }, browser_kwargs));
         context = yield browser.newContext(Object.assign({}, context_kwargs));
         page = yield browser.newPage();
     }

@@ -56,10 +56,10 @@ class RLConfig:
     
     # REINFORCE specific
     baseline_momentum: float = 0.99
-    entropy_coef: float = 0.01
+    entropy_coef: float = 0.03
     
     # PPO specific
-    ppo_epochs: int = 8
+    ppo_epochs: int = 3
     ppo_clip_epsilon: float = 0.2
     ppo_value_clip: float = 0.2
     ppo_mini_batch_size: int = 4
@@ -216,7 +216,9 @@ class BaseRLAlgorithm(ABC):
                     index=response_targets.unsqueeze(-1)
                 ).squeeze(-1)
                 
-                sequence_log_prob = token_log_probs.sum(dim=-1)
+                # Use mean (not sum) to normalize by response length,
+                # preventing longer responses from dominating the gradient signal
+                sequence_log_prob = token_log_probs.mean(dim=-1)
                 log_probs_list.append(sequence_log_prob)
                 
                 probs = F.softmax(response_logits, dim=-1)
@@ -328,10 +330,10 @@ class REINFORCEAlgorithm(BaseRLAlgorithm):
         trajectory_reward = self.reward_calculator.compute_reward(judgment)
         debug_log(f"Step 1 - Trajectory Reward: {trajectory_reward:.4f}")
         
-        # Step 2: Create per-step rewards
+        # Step 2: Create per-step rewards (sparse terminal reward for proper credit assignment)
         num_steps = len(trajectory_prompts)
-        step_rewards = [trajectory_reward / num_steps] * num_steps
-        debug_log(f"Step 2 - Step Rewards: {[f'{r:.4f}' for r in step_rewards[:3]]}... (per step)")
+        step_rewards = [0.0] * (num_steps - 1) + [trajectory_reward]
+        debug_log(f"Step 2 - Step Rewards: sparse terminal, final step={trajectory_reward:.4f}")
         
         # Step 3: Compute discounted rewards
         discounted_rewards = self.compute_discounted_rewards(step_rewards)
@@ -489,7 +491,8 @@ class PPOAlgorithm(BaseRLAlgorithm):
                 "ppo_epochs_run": 0,
             }
         
-        step_rewards = [trajectory_reward / num_steps] * num_steps
+        # Sparse terminal reward: only the final step gets the reward
+        step_rewards = [0.0] * (num_steps - 1) + [trajectory_reward]
         discounted_rewards = self.compute_discounted_rewards(step_rewards)
         advantages = discounted_rewards - self.baseline
         
@@ -554,10 +557,10 @@ class PPOAlgorithm(BaseRLAlgorithm):
                 del new_log_probs, entropies, log_ratio, ratio, surr1, surr2
                 break
             
+            # Standard PPO: clipping only, no KL penalty (clipping already constrains updates)
             total_loss = (
                 policy_loss 
                 - self.config.entropy_coef * entropy_bonus
-                + self.config.kl_penalty_coef * approx_kl
             )
             
             # Check for NaN
@@ -712,9 +715,9 @@ class GRPOAlgorithm(BaseRLAlgorithm):
         if len(self.reward_history) > max_history:
             self.reward_history = self.reward_history[-max_history:]
         
-        # Compute per-step rewards
+        # Sparse terminal reward: only the final step gets the reward
         num_steps = len(trajectory_prompts)
-        step_rewards = [trajectory_reward / num_steps] * num_steps
+        step_rewards = [0.0] * (num_steps - 1) + [trajectory_reward]
         
         # Use group-relative advantages
         advantages = self.compute_group_advantages(
@@ -886,9 +889,9 @@ class OnPolicyTrainer:
 
 def compute_reward_from_judgment(
     judgment: BrowserJudgment,
-    success_weight: float = 0.5,
-    efficiency_weight: float = 0.3,
-    self_correction_weight: float = 0.2
+    success_weight: float = 0.7,
+    efficiency_weight: float = 0.2,
+    self_correction_weight: float = 0.1
 ) -> float:
     """
     Standalone reward function compatible with rl/reward_func.py interface.

@@ -95,7 +95,8 @@ def convert_html_to_markdown(observation_data):
         metadata = observation_data.get('metadata', {})
         
         if not raw_html:
-            return "No HTML content found."
+            print("Markdown conversion failed: no HTML content.")
+            return None
         
         node_metadata = convert_metadata_to_node_objects(metadata)
         print(f"Node metadata converted, length: {len(node_metadata)}")
@@ -110,7 +111,8 @@ def convert_html_to_markdown(observation_data):
         )
         
         if markdown_nodes is BrowserStatus.ERROR:
-            return "Failed to get markdown tree."
+            print("Markdown conversion failed: could not get markdown tree.")
+            return None
 
         markdown_text = safe_call(
             render_markdown_tree,
@@ -121,13 +123,19 @@ def convert_html_to_markdown(observation_data):
         )
 
         if markdown_text is BrowserStatus.ERROR:
-            return "Failed to render markdown tree."
-            
-        return " ".join(markdown_text)
+            print("Markdown conversion failed: could not render markdown tree.")
+            return None
+
+        result = " ".join(markdown_text)
+        if not result.strip():
+            print("Markdown conversion failed: rendered content is empty.")
+            return None
+
+        return result
         
     except Exception as e:
         print(f"Error in markdown conversion: {e}")
-        return f"Error in markdown conversion: {e}"
+        return None
 
 
 # def load_language_model():
@@ -471,7 +479,33 @@ def run_trajectory(task_data: dict, model, tokenizer, trainer: OnPolicyTrainer =
             print("Received next observation.")
             save_screenshot(current_observation, step + 2, "after_action")
 
+        if len(trajectory_action_jsons) == 0:
+            print("\nNo steps were completed. Skipping judgment and RL update.")
+            return {
+                "task_instruction": task_data['instruction'],
+                "website": start_url,
+                "trajectory_observations": trajectory_observations,
+                "trajectory_actions": trajectory_actions,
+                "trajectory_markdown_observations": trajectory_markdown_observations,
+                "trajectory_action_jsons": trajectory_action_jsons,
+                "trajectory_prompts": trajectory_prompts,
+                "trajectory_responses": trajectory_responses,
+                "judgment": None,
+                "rl_update_stats": None,
+                "trainer": trainer
+            }
+
         print("\n--- Judging Trajectory ---")
+        # Saving everything needed for judgment to the observability logger before calling the judge
+        with open("latest_trajectory_data.json", "w") as f:
+            json.dump({
+                "instruction": task_data['instruction'],
+                "observations": [obs.__dict__ for obs in trajectory_observations],
+                "actions": trajectory_action_jsons,
+                "criteria": task_data.get('criteria', ''),
+                "steps": task_data.get('steps', '')
+            }, f, indent=2)
+            print("Saved trajectory data for judgment to latest_trajectory_data.json")
         judgment = judge_trajectory(
             instruction=task_data['instruction'],
             observations=trajectory_markdown_observations,
@@ -705,20 +739,23 @@ if __name__ == "__main__":
             
             trainer = trajectory_result.get('trainer')
             
-            # Log trajectory to observability system
-            obs_logger.log_trajectory(
-                trajectory_id=i + 1,
-                dataset_index=task_idx,
-                task_instruction=trajectory_result['task_instruction'],
-                website=trajectory_result['website'],
-                observations=trajectory_result['trajectory_markdown_observations'],
-                action_jsons=trajectory_result['trajectory_action_jsons'],
-                judgment=trajectory_result['judgment'],
-                rl_stats=trajectory_result.get('rl_update_stats'),
-                trainer_stats=trainer.training_stats if trainer else None,
-                algorithm=args.algorithm,
-                learning_rate=args.learning_rate
-            )
+            # Log trajectory to observability system (only if judgment was produced)
+            if trajectory_result['judgment'] is not None:
+                obs_logger.log_trajectory(
+                    trajectory_id=i + 1,
+                    dataset_index=task_idx,
+                    task_instruction=trajectory_result['task_instruction'],
+                    website=trajectory_result['website'],
+                    observations=trajectory_result['trajectory_markdown_observations'],
+                    action_jsons=trajectory_result['trajectory_action_jsons'],
+                    judgment=trajectory_result['judgment'],
+                    rl_stats=trajectory_result.get('rl_update_stats'),
+                    trainer_stats=trainer.training_stats if trainer else None,
+                    algorithm=args.algorithm,
+                    learning_rate=args.learning_rate
+                )
+            else:
+                print(f"Trajectory {i+1} produced no steps; skipping observability log.")
             
             if trajectory_result.get('rl_update_stats'):
                 reward = trajectory_result['rl_update_stats']['trajectory_reward']

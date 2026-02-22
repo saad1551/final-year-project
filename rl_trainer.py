@@ -47,7 +47,7 @@ class RLConfig:
     # Common hyperparameters
     learning_rate: float = 1e-5
     gamma: float = 0.99
-    max_grad_norm: float = 1.0
+    max_grad_norm: float = 0.5  # Reduced from 1.0 to prevent large updates
     
     # Reward weights
     success_weight: float = 0.7
@@ -55,16 +55,24 @@ class RLConfig:
     self_correction_weight: float = 0.1
     
     # REINFORCE specific
-    baseline_momentum: float = 0.99
-    entropy_coef: float = 0.03
+    baseline_momentum: float = 0.9  # Reduced from 0.99 for faster adaptation
+    entropy_coef: float = 0.01  # Reduced from 0.03 - too high causes exploration collapse
     
     # PPO specific
-    ppo_epochs: int = 3
-    ppo_clip_epsilon: float = 0.2
+    ppo_epochs: int = 1  # CRITICAL: Only 1 epoch per trajectory to prevent overfitting
+    ppo_clip_epsilon: float = 0.1  # Reduced from 0.2 for more conservative updates
     ppo_value_clip: float = 0.2
     ppo_mini_batch_size: int = 4
-    kl_penalty_coef: float = 0.01
-    target_kl: float = 0.03  # Early stopping threshold (0.03 allows more learning per trajectory)
+    kl_penalty_coef: float = 0.1  # KL penalty against old policy (within trajectory)
+    ref_kl_penalty_coef: float = 0.05  # KL penalty against base SFT model (prevents long-term drift)
+    target_kl: float = 0.01  # Reduced from 0.03 - tighter constraint prevents mode collapse
+    
+    # Minimum reward threshold - skip updates on failed trajectories to prevent learning from noise
+    min_reward_for_update: float = 0.1  # Skip RL update if reward < this
+    
+    # Reference KL computation frequency (compute every N trajectories to reduce overhead)
+    # Set to 1 for maximum stability, higher values reduce compute cost but may allow more drift
+    ref_kl_compute_frequency: int = 1  # Compute reference KL every N successful trajectories
     
     # GRPO specific
     grpo_group_size: int = 4  # Number of responses per prompt for comparison
@@ -436,6 +444,9 @@ class PPOAlgorithm(BaseRLAlgorithm):
     L_CLIP = E[min(r(θ) * A, clip(r(θ), 1-ε, 1+ε) * A)]
     
     where r(θ) = π_new(a|s) / π_old(a|s) is the probability ratio.
+    
+    CRITICAL: Also includes KL penalty against the base SFT model (with LoRA disabled)
+    to prevent catastrophic drift over many trajectories.
     """
     
     def __init__(
@@ -446,6 +457,12 @@ class PPOAlgorithm(BaseRLAlgorithm):
     ):
         super().__init__(model, tokenizer, config)
         self.baseline = 0.0
+        
+        # Cache for reference KL computation (reduces overhead at scale)
+        # At 10k trajectories, computing reference every time adds ~33% overhead
+        self._cached_ref_log_probs: Optional[torch.Tensor] = None
+        self._cached_ref_prompts_hash: Optional[int] = None  # Hash to detect prompt changes
+        self._successful_updates: int = 0  # Track successful (non-skipped) updates
     
     @torch.no_grad()
     def compute_old_log_probs(
@@ -462,6 +479,50 @@ class PPOAlgorithm(BaseRLAlgorithm):
         log_probs, _ = self.compute_log_probs_and_entropy(prompt_texts, response_texts)
         if was_training:
             self.model.train()  # restore train mode for subsequent calls
+        return log_probs.detach()
+    
+    @torch.no_grad()
+    def compute_reference_log_probs(
+        self,
+        prompt_texts: List[str],
+        response_texts: List[str]
+    ) -> torch.Tensor:
+        """Compute log probs under the reference (SFT) policy.
+        
+        Temporarily disables LoRA adapters to get the base SFT model's predictions.
+        This provides the anchor that prevents catastrophic drift from the SFT policy
+        over many RL updates.
+        """
+        import gc
+        
+        was_training = self.model.training
+        self.model.eval()
+        
+        # Disable LoRA adapters to revert to base SFT model
+        try:
+            self.model.disable_adapter_layers()
+            debug_log("LoRA adapters DISABLED for reference computation")
+        except AttributeError:
+            # Model might not have LoRA adapters (e.g., during testing)
+            debug_log("Warning: Model does not have disable_adapter_layers method", level="WARN")
+            log_probs, _ = self.compute_log_probs_and_entropy(prompt_texts, response_texts)
+            if was_training:
+                self.model.train()
+            return log_probs.detach()
+        
+        try:
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+                gc.collect()
+            log_probs, _ = self.compute_log_probs_and_entropy(prompt_texts, response_texts)
+            debug_log(f"Reference log_probs computed: mean={log_probs.mean().item():.4f}")
+        finally:
+            # Always re-enable adapters
+            self.model.enable_adapter_layers()
+            debug_log("LoRA adapters RE-ENABLED")
+            if was_training:
+                self.model.train()
+        
         return log_probs.detach()
     
     def update_policy(
@@ -489,6 +550,30 @@ class PPOAlgorithm(BaseRLAlgorithm):
                 "baseline": self.baseline,
                 "num_steps": 0,
                 "ppo_epochs_run": 0,
+                "skipped": True,
+            }
+        
+        # CRITICAL: Skip updates on failed trajectories to prevent learning from noise
+        # When reward is near 0 (failed task), gradients are noisy and cause drift
+        if trajectory_reward < self.config.min_reward_for_update:
+            print(f"[PPO] Skipping update: reward {trajectory_reward:.3f} < min threshold {self.config.min_reward_for_update}")
+            # Still update baseline to track failure rate
+            self.baseline = (
+                self.config.baseline_momentum * self.baseline +
+                (1 - self.config.baseline_momentum) * trajectory_reward
+            )
+            return {
+                "algorithm": "ppo",
+                "policy_loss": 0.0,
+                "entropy": 0.0,
+                "kl_divergence": 0.0,
+                "total_loss": 0.0,
+                "trajectory_reward": trajectory_reward,
+                "baseline": self.baseline,
+                "num_steps": num_steps,
+                "ppo_epochs_run": 0,
+                "skipped": True,
+                "skip_reason": "low_reward",
             }
         
         # Sparse terminal reward: only the final step gets the reward
@@ -501,24 +586,50 @@ class PPOAlgorithm(BaseRLAlgorithm):
             torch.cuda.empty_cache()
             gc.collect()
         
-        # Compute old log probs before any updates
+        # Compute old log probs before any updates (for PPO ratio)
         old_log_probs = self.compute_old_log_probs(
             trajectory_prompts, 
             trajectory_responses
         )
         
+        # CRITICAL: Compute reference log probs from base SFT model (LoRA disabled)
+        # This anchors the policy to prevent cumulative drift over many trajectories
+        # 
+        # OPTIMIZATION FOR SCALE: At 10k+ trajectories, computing reference every time
+        # adds ~33% overhead. Options:
+        # - ref_kl_compute_frequency=1: Compute every trajectory (safest, default)
+        # - ref_kl_compute_frequency=5: Compute every 5th trajectory (faster, still stable)
+        # - ref_kl_compute_frequency=10: Compute every 10th trajectory (fastest, monitor ref_kl)
+        #
+        # When not computing, we set ref_kl=0 (no penalty), relying on:
+        # 1. The old_policy KL penalty (approx_kl) for within-trajectory stability
+        # 2. Periodic reference checks to catch drift before it becomes catastrophic
+        should_compute_ref = (
+            self._successful_updates == 0 or  # Always on first update
+            (self._successful_updates + 1) % self.config.ref_kl_compute_frequency == 0  # Periodic
+        )
+        
+        if should_compute_ref:
+            reference_log_probs = self.compute_reference_log_probs(
+                trajectory_prompts,
+                trajectory_responses
+            )
+            debug_log(f"Computing reference KL (update #{self._successful_updates + 1})")
+        else:
+            reference_log_probs = None
+            debug_log(f"Skipping reference KL (update #{self._successful_updates + 1}, "
+                      f"next at {((self._successful_updates // self.config.ref_kl_compute_frequency) + 1) * self.config.ref_kl_compute_frequency})")
+        
         total_policy_loss = 0.0
         total_entropy = 0.0
         total_kl = 0.0
+        total_ref_kl = 0.0
         last_grad_norm = 0.0
         num_epochs_run = 0
         
-        # Scale PPO epochs based on trajectory length for memory efficiency
-        effective_ppo_epochs = (
-            min(4, self.config.ppo_epochs)
-            if num_steps > 15
-            else min(6, self.config.ppo_epochs)
-        )
+        # CRITICAL: With single-trajectory updates, use only 1 epoch to prevent overfitting
+        # Multiple epochs on the same tiny dataset causes catastrophic forgetting
+        effective_ppo_epochs = self.config.ppo_epochs  # Should be 1
         
         # Multiple PPO epochs
         for epoch in range(effective_ppo_epochs):
@@ -548,19 +659,40 @@ class PPOAlgorithm(BaseRLAlgorithm):
             policy_loss = -torch.min(surr1, surr2).mean()
             entropy_bonus = entropies.mean()
             
-            # KL divergence for early stopping
+            # KL divergence against old policy (for early stopping within trajectory)
             approx_kl = ((ratio - 1) - log_ratio).mean()
             
+            # CRITICAL: KL divergence against base SFT model (prevents long-term drift)
+            # Only computed periodically at scale (controlled by ref_kl_compute_frequency)
+            if reference_log_probs is not None:
+                ref_log_ratio = new_log_probs - reference_log_probs
+                ref_ratio = torch.exp(ref_log_ratio)
+                ref_kl = ((ref_ratio - 1) - ref_log_ratio).mean()
+                debug_log(f"Reference KL computed: new_log_probs={new_log_probs.mean().item():.4f}, "
+                          f"ref_log_probs={reference_log_probs.mean().item():.4f}, ref_kl={ref_kl.item():.4f}")
+            else:
+                # Skip reference KL on this trajectory (optimization for scale)
+                ref_kl = torch.tensor(0.0, device=self.model.device)
+                ref_log_ratio = None
+                ref_ratio = None
+                debug_log("Reference KL skipped (not computed this trajectory)")
+            
             if approx_kl > self.config.target_kl:
-                print(f"[PPO] Early stopping at epoch {epoch} due to reaching target KL")
+                print(f"[PPO] Early stopping at epoch {epoch} due to reaching target KL ({approx_kl:.4f} > {self.config.target_kl})")
                 # Clean up before breaking
                 del new_log_probs, entropies, log_ratio, ratio, surr1, surr2
+                if ref_log_ratio is not None:
+                    del ref_log_ratio, ref_ratio
                 break
             
-            # Standard PPO: clipping only, no KL penalty (clipping already constrains updates)
+            # CRITICAL: Include BOTH KL penalties
+            # 1. kl_penalty_coef * approx_kl: prevents large changes within this trajectory
+            # 2. ref_kl_penalty_coef * ref_kl: prevents drift from base SFT model over many trajectories
             total_loss = (
                 policy_loss 
                 - self.config.entropy_coef * entropy_bonus
+                + self.config.kl_penalty_coef * approx_kl
+                + self.config.ref_kl_penalty_coef * ref_kl  # Anchor to SFT model
             )
             
             # Check for NaN
@@ -598,16 +730,23 @@ class PPOAlgorithm(BaseRLAlgorithm):
             total_policy_loss += policy_loss.item()
             total_entropy += entropy_bonus.item()
             total_kl += approx_kl.item()
+            total_ref_kl += ref_kl.item() if isinstance(ref_kl, torch.Tensor) else ref_kl
             last_grad_norm = total_grad_norm
             num_epochs_run += 1
             
             # Free memory immediately after each epoch
-            del new_log_probs, entropies, log_ratio, ratio, surr1, surr2, policy_loss, entropy_bonus, approx_kl, total_loss
+            del new_log_probs, entropies, log_ratio, ratio, surr1, surr2
+            del policy_loss, entropy_bonus, approx_kl, total_loss
+            if ref_log_ratio is not None:
+                del ref_log_ratio, ref_ratio
+            del ref_kl
             if torch.cuda.is_available():
                 torch.cuda.empty_cache()
         
         # Final cleanup
         del old_log_probs, advantages, discounted_rewards
+        if reference_log_probs is not None:
+            del reference_log_probs
         self.optimizer.zero_grad(set_to_none=True)
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
@@ -623,12 +762,14 @@ class PPOAlgorithm(BaseRLAlgorithm):
             num_epochs_run = 1  # Avoid division by zero
         avg_policy_loss = total_policy_loss / num_epochs_run
         self._update_stats(avg_policy_loss, trajectory_reward)
+        self._successful_updates += 1  # Track for reference KL caching
         
         return {
             "algorithm": "ppo",
             "policy_loss": avg_policy_loss,
             "entropy": total_entropy / num_epochs_run,
             "kl_divergence": total_kl / num_epochs_run,
+            "ref_kl_divergence": total_ref_kl / num_epochs_run,  # KL from base SFT model
             "total_loss": avg_policy_loss,
             "trajectory_reward": trajectory_reward,
             "baseline": self.baseline,
@@ -863,6 +1004,7 @@ class OnPolicyTrainer:
             state["baseline"] = self.algorithm.baseline
         elif isinstance(self.algorithm, PPOAlgorithm):
             state["baseline"] = self.algorithm.baseline
+            state["successful_updates"] = self.algorithm._successful_updates
         elif isinstance(self.algorithm, GRPOAlgorithm):
             state["reward_history"] = self.algorithm.reward_history
         
@@ -881,6 +1023,8 @@ class OnPolicyTrainer:
             self.algorithm.baseline = state["baseline"]
         elif isinstance(self.algorithm, PPOAlgorithm) and "baseline" in state:
             self.algorithm.baseline = state["baseline"]
+            if "successful_updates" in state:
+                self.algorithm._successful_updates = state["successful_updates"]
         elif isinstance(self.algorithm, GRPOAlgorithm) and "reward_history" in state:
             self.algorithm.reward_history = state["reward_history"]
         

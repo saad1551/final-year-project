@@ -497,15 +497,19 @@ def run_trajectory(task_data: dict, model, tokenizer, trainer: OnPolicyTrainer =
 
         print("\n--- Judging Trajectory ---")
         # Saving everything needed for judgment to the observability logger before calling the judge
-        with open("latest_trajectory_data.json", "w") as f:
-            json.dump({
-                "instruction": task_data['instruction'],
-                "observations": [obs.__dict__ for obs in trajectory_observations],
-                "actions": trajectory_action_jsons,
-                "criteria": task_data.get('criteria', ''),
-                "steps": task_data.get('steps', '')
-            }, f, indent=2)
-            print("Saved trajectory data for judgment to latest_trajectory_data.json")
+        try:
+            with open("latest_trajectory_data.json", "w") as f:
+                json.dump({
+                    "instruction": task_data['instruction'],
+                    "observations": trajectory_markdown_observations,
+                    "actions": trajectory_action_jsons,
+                    "criteria": task_data.get('criteria', ''),
+                    "steps": task_data.get('steps', '')
+                }, f, indent=2)
+                print("Saved trajectory data for judgment to latest_trajectory_data.json")
+        except Exception as e:
+            print(f"Error saving trajectory data: {e}")
+
         judgment = judge_trajectory(
             instruction=task_data['instruction'],
             observations=trajectory_markdown_observations,
@@ -560,7 +564,9 @@ def run_trajectory(task_data: dict, model, tokenizer, trainer: OnPolicyTrainer =
             if 'total_loss' in rl_update_stats:
                 print(f"Total Loss: {rl_update_stats['total_loss']:.4f}")
             if 'kl_divergence' in rl_update_stats:
-                print(f"KL Divergence: {rl_update_stats['kl_divergence']:.4f}")
+                print(f"KL Divergence (vs old policy): {rl_update_stats['kl_divergence']:.4f}")
+            if 'ref_kl_divergence' in rl_update_stats:
+                print(f"KL Divergence (vs SFT model): {rl_update_stats['ref_kl_divergence']:.4f}")
             if 'baseline' in rl_update_stats:
                 print(f"Baseline: {rl_update_stats['baseline']:.4f}")
             if 'ppo_epochs_run' in rl_update_stats:
@@ -616,10 +622,18 @@ if __name__ == "__main__":
                         help="Starting index in the dataset")
     
     # PPO-specific arguments
-    parser.add_argument("--ppo_epochs", type=int, default=3,
-                        help="Number of PPO epochs per update")
-    parser.add_argument("--ppo_clip_epsilon", type=float, default=0.2,
-                        help="PPO clipping epsilon")
+    parser.add_argument("--ppo_epochs", type=int, default=1,
+                        help="Number of PPO epochs per update (1 recommended to prevent overfitting)")
+    parser.add_argument("--ppo_clip_epsilon", type=float, default=0.1,
+                        help="PPO clipping epsilon (0.1 recommended for conservative updates)")
+    parser.add_argument("--kl_penalty", type=float, default=0.1,
+                        help="KL penalty coefficient vs old policy (prevents large updates within trajectory)")
+    parser.add_argument("--ref_kl_penalty", type=float, default=0.05,
+                        help="KL penalty coefficient vs base SFT model (prevents long-term drift)")
+    parser.add_argument("--ref_kl_frequency", type=int, default=1,
+                        help="Compute reference KL every N trajectories (1=every time, 5=every 5th, reduces compute at scale)")
+    parser.add_argument("--min_reward", type=float, default=0.1,
+                        help="Minimum reward threshold to perform update (skip failed trajectories)")
     
     # GRPO-specific arguments
     parser.add_argument("--grpo_group_size", type=int, default=4,
@@ -658,6 +672,10 @@ if __name__ == "__main__":
         learning_rate=args.learning_rate,
         ppo_epochs=args.ppo_epochs,
         ppo_clip_epsilon=args.ppo_clip_epsilon,
+        kl_penalty_coef=args.kl_penalty,
+        ref_kl_penalty_coef=args.ref_kl_penalty,
+        ref_kl_compute_frequency=args.ref_kl_frequency,
+        min_reward_for_update=args.min_reward,
         grpo_group_size=args.grpo_group_size,
         grpo_beta=args.grpo_beta,
     )

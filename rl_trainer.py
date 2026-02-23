@@ -501,7 +501,6 @@ class PPOAlgorithm(BaseRLAlgorithm):
         # Disable LoRA adapters to revert to base SFT model
         try:
             self.model.disable_adapter_layers()
-            debug_log("LoRA adapters DISABLED for reference computation")
         except AttributeError:
             # Model might not have LoRA adapters (e.g., during testing)
             debug_log("Warning: Model does not have disable_adapter_layers method", level="WARN")
@@ -515,11 +514,9 @@ class PPOAlgorithm(BaseRLAlgorithm):
                 torch.cuda.empty_cache()
                 gc.collect()
             log_probs, _ = self.compute_log_probs_and_entropy(prompt_texts, response_texts)
-            debug_log(f"Reference log_probs computed: mean={log_probs.mean().item():.4f}")
         finally:
             # Always re-enable adapters
             self.model.enable_adapter_layers()
-            debug_log("LoRA adapters RE-ENABLED")
             if was_training:
                 self.model.train()
         
@@ -668,14 +665,11 @@ class PPOAlgorithm(BaseRLAlgorithm):
                 ref_log_ratio = new_log_probs - reference_log_probs
                 ref_ratio = torch.exp(ref_log_ratio)
                 ref_kl = ((ref_ratio - 1) - ref_log_ratio).mean()
-                debug_log(f"Reference KL computed: new_log_probs={new_log_probs.mean().item():.4f}, "
-                          f"ref_log_probs={reference_log_probs.mean().item():.4f}, ref_kl={ref_kl.item():.4f}")
             else:
                 # Skip reference KL on this trajectory (optimization for scale)
                 ref_kl = torch.tensor(0.0, device=self.model.device)
                 ref_log_ratio = None
                 ref_ratio = None
-                debug_log("Reference KL skipped (not computed this trajectory)")
             
             if approx_kl > self.config.target_kl:
                 print(f"[PPO] Early stopping at epoch {epoch} due to reaching target KL ({approx_kl:.4f} > {self.config.target_kl})")
@@ -983,8 +977,20 @@ class OnPolicyTrainer:
             judgment
         )
     
-    def save_checkpoint(self, path: str):
-        """Save model checkpoint."""
+    def save_checkpoint(
+        self, 
+        path: str, 
+        trajectory_id: Optional[int] = None,
+        dataset_index: Optional[int] = None
+    ):
+        """
+        Save model checkpoint with optional trajectory tracking metadata.
+        
+        Args:
+            path: Directory path to save checkpoint
+            trajectory_id: Current trajectory number (1-indexed loop counter)
+            dataset_index: Current dataset row index being processed
+        """
         import os
         os.makedirs(path, exist_ok=True)
         
@@ -997,6 +1003,12 @@ class OnPolicyTrainer:
             "training_stats": self.algorithm.training_stats,
             "config": self.config,
             "algorithm_type": self.config.algorithm,
+            # Checkpoint metadata for resume
+            "checkpoint_metadata": {
+                "trajectory_id": trajectory_id,
+                "dataset_index": dataset_index,
+                "total_updates": self.algorithm.training_stats.get("total_updates", 0),
+            }
         }
         
         # Add algorithm-specific attributes
@@ -1010,10 +1022,25 @@ class OnPolicyTrainer:
         
         torch.save(state, f"{path}/trainer_state.pt")
         print(f"Checkpoint saved to {path}")
+        if trajectory_id is not None:
+            print(f"  Trajectory ID: {trajectory_id}, Dataset Index: {dataset_index}")
     
-    def load_checkpoint(self, path: str):
-        """Load trainer state from checkpoint."""
-        state = torch.load(f"{path}/trainer_state.pt")
+    def load_checkpoint(self, path: str) -> Optional[Dict]:
+        """
+        Load trainer state from checkpoint.
+        
+        Args:
+            path: Directory path containing checkpoint files
+            
+        Returns:
+            Dictionary with checkpoint metadata:
+            - trajectory_id: Last completed trajectory number
+            - dataset_index: Last processed dataset index
+            - total_updates: Total RL updates performed
+            Returns None if no metadata was saved (old checkpoint format)
+        """
+        # Use weights_only=False since we're loading our own checkpoints with custom classes (RLConfig)
+        state = torch.load(f"{path}/trainer_state.pt", weights_only=False)
         
         self.algorithm.optimizer.load_state_dict(state["optimizer_state_dict"])
         self.algorithm.training_stats = state["training_stats"]
@@ -1021,14 +1048,23 @@ class OnPolicyTrainer:
         # Load algorithm-specific attributes
         if isinstance(self.algorithm, REINFORCEAlgorithm) and "baseline" in state:
             self.algorithm.baseline = state["baseline"]
-        elif isinstance(self.algorithm, PPOAlgorithm) and "baseline" in state:
-            self.algorithm.baseline = state["baseline"]
+        elif isinstance(self.algorithm, PPOAlgorithm):
+            if "baseline" in state:
+                self.algorithm.baseline = state["baseline"]
             if "successful_updates" in state:
                 self.algorithm._successful_updates = state["successful_updates"]
         elif isinstance(self.algorithm, GRPOAlgorithm) and "reward_history" in state:
             self.algorithm.reward_history = state["reward_history"]
         
         print(f"Trainer state loaded from {path}")
+        
+        # Return checkpoint metadata if available
+        metadata = state.get("checkpoint_metadata")
+        if metadata:
+            print(f"  Checkpoint metadata: trajectory_id={metadata.get('trajectory_id')}, "
+                  f"dataset_index={metadata.get('dataset_index')}, "
+                  f"total_updates={metadata.get('total_updates')}")
+        return metadata
 
 
 def compute_reward_from_judgment(

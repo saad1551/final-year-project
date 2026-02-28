@@ -497,15 +497,19 @@ def run_trajectory(task_data: dict, model, tokenizer, trainer: OnPolicyTrainer =
 
         print("\n--- Judging Trajectory ---")
         # Saving everything needed for judgment to the observability logger before calling the judge
-        with open("latest_trajectory_data.json", "w") as f:
-            json.dump({
-                "instruction": task_data['instruction'],
-                "observations": [obs.__dict__ for obs in trajectory_observations],
-                "actions": trajectory_action_jsons,
-                "criteria": task_data.get('criteria', ''),
-                "steps": task_data.get('steps', '')
-            }, f, indent=2)
-            print("Saved trajectory data for judgment to latest_trajectory_data.json")
+        try:
+            with open("latest_trajectory_data.json", "w") as f:
+                json.dump({
+                    "instruction": task_data['instruction'],
+                    "observations": trajectory_markdown_observations,
+                    "actions": trajectory_action_jsons,
+                    "criteria": task_data.get('criteria', ''),
+                    "steps": task_data.get('steps', '')
+                }, f, indent=2)
+                print("Saved trajectory data for judgment to latest_trajectory_data.json")
+        except Exception as e:
+            print(f"Error saving trajectory data: {e}")
+
         judgment = judge_trajectory(
             instruction=task_data['instruction'],
             observations=trajectory_markdown_observations,
@@ -560,7 +564,9 @@ def run_trajectory(task_data: dict, model, tokenizer, trainer: OnPolicyTrainer =
             if 'total_loss' in rl_update_stats:
                 print(f"Total Loss: {rl_update_stats['total_loss']:.4f}")
             if 'kl_divergence' in rl_update_stats:
-                print(f"KL Divergence: {rl_update_stats['kl_divergence']:.4f}")
+                print(f"KL Divergence (vs old policy): {rl_update_stats['kl_divergence']:.4f}")
+            if 'ref_kl_divergence' in rl_update_stats:
+                print(f"KL Divergence (vs SFT model): {rl_update_stats['ref_kl_divergence']:.4f}")
             if 'baseline' in rl_update_stats:
                 print(f"Baseline: {rl_update_stats['baseline']:.4f}")
             if 'ppo_epochs_run' in rl_update_stats:
@@ -610,16 +616,28 @@ if __name__ == "__main__":
                         help="Save checkpoint every N trajectories")
     parser.add_argument("--resume_from", type=str, default=None,
                         help="Path to checkpoint to resume training from")
+    parser.add_argument("--resume_trajectory", type=int, default=None,
+                        help="Manually override which trajectory number to resume from (overrides checkpoint metadata)")
+    parser.add_argument("--resume_dataset_idx", type=int, default=None,
+                        help="Manually override which dataset index to resume from (overrides checkpoint metadata)")
     parser.add_argument("--learning_rate", type=float, default=2e-5,
                         help="Learning rate for RL updates (2e-5 recommended for PPO+LoRA)")
     parser.add_argument("--start_idx", type=int, default=0,
                         help="Starting index in the dataset")
     
     # PPO-specific arguments
-    parser.add_argument("--ppo_epochs", type=int, default=8,
-                        help="Number of PPO epochs per update")
-    parser.add_argument("--ppo_clip_epsilon", type=float, default=0.2,
-                        help="PPO clipping epsilon")
+    parser.add_argument("--ppo_epochs", type=int, default=1,
+                        help="Number of PPO epochs per update (1 recommended to prevent overfitting)")
+    parser.add_argument("--ppo_clip_epsilon", type=float, default=0.1,
+                        help="PPO clipping epsilon (0.1 recommended for conservative updates)")
+    parser.add_argument("--kl_penalty", type=float, default=0.1,
+                        help="KL penalty coefficient vs old policy (prevents large updates within trajectory)")
+    parser.add_argument("--ref_kl_penalty", type=float, default=0.05,
+                        help="KL penalty coefficient vs base SFT model (prevents long-term drift)")
+    parser.add_argument("--ref_kl_frequency", type=int, default=1,
+                        help="Compute reference KL every N trajectories (1=every time, 5=every 5th, reduces compute at scale)")
+    parser.add_argument("--min_reward", type=float, default=0.1,
+                        help="Minimum reward threshold to perform update (skip failed trajectories)")
     
     # GRPO-specific arguments
     parser.add_argument("--grpo_group_size", type=int, default=4,
@@ -658,6 +676,10 @@ if __name__ == "__main__":
         learning_rate=args.learning_rate,
         ppo_epochs=args.ppo_epochs,
         ppo_clip_epsilon=args.ppo_clip_epsilon,
+        kl_penalty_coef=args.kl_penalty,
+        ref_kl_penalty_coef=args.ref_kl_penalty,
+        ref_kl_compute_frequency=args.ref_kl_frequency,
+        min_reward_for_update=args.min_reward,
         grpo_group_size=args.grpo_group_size,
         grpo_beta=args.grpo_beta,
     )
@@ -670,6 +692,7 @@ if __name__ == "__main__":
     
     trainer = None
     total_rewards = []
+    checkpoint_metadata = None  # Will store resume info if loading from checkpoint
     
     # Initialize trainer from checkpoint if resuming
     if args.resume_from and enable_rl_update:
@@ -685,15 +708,50 @@ if __name__ == "__main__":
             sb3_config.learning_rate = args.learning_rate
             trainer = SB3PPOTrainer(model, tokenizer, sb3_config)
             print(f"Initialized SB3 PPO Trainer ({sb3_preset} preset)")
+            trainer.load_checkpoint(args.resume_from)
         else:
             trainer = OnPolicyTrainer(model, tokenizer, rl_config)
             print(f"Initialized {args.algorithm.upper()} Trainer")
+            # Load checkpoint and get metadata for resuming
+            checkpoint_metadata = trainer.load_checkpoint(args.resume_from)
         
-        # Load checkpoint
-        trainer.load_checkpoint(args.resume_from)
         print(f"✓ Checkpoint loaded successfully")
         print(f"  Total updates from checkpoint: {trainer.training_stats.get('total_updates', 0)}")
         print()
+    
+    # Determine starting point - manual overrides take precedence over checkpoint metadata
+    resume_trajectory_offset = 0
+    resume_start_idx = args.start_idx
+    
+    # Check for manual overrides first
+    if args.resume_trajectory is not None:
+        # Manual override for trajectory number
+        resume_trajectory_offset = args.resume_trajectory
+        print(f"=== Manual override: trajectory ===")
+        print(f"  Starting from trajectory: {args.resume_trajectory + 1}")
+        
+    if args.resume_dataset_idx is not None:
+        # Manual override for dataset index
+        resume_start_idx = args.resume_dataset_idx
+        print(f"=== Manual override: dataset index ===")
+        print(f"  Starting from dataset index: {args.resume_dataset_idx}")
+    
+    # If no manual overrides, fall back to checkpoint metadata
+    if args.resume_trajectory is None and args.resume_dataset_idx is None:
+        if checkpoint_metadata and checkpoint_metadata.get("trajectory_id") is not None:
+            # Resume from the NEXT trajectory after the one that was checkpointed
+            last_trajectory_id = checkpoint_metadata["trajectory_id"]
+            last_dataset_index = checkpoint_metadata.get("dataset_index", args.start_idx + last_trajectory_id - 1)
+            
+            # Calculate offset: we want to start at the next trajectory
+            resume_trajectory_offset = last_trajectory_id
+            resume_start_idx = last_dataset_index + 1
+            
+            print(f"=== Resuming from checkpoint metadata ===")
+            print(f"Last completed trajectory: {last_trajectory_id}")
+            print(f"Last dataset index: {last_dataset_index}")
+            print(f"Resuming from trajectory {resume_trajectory_offset + 1}, dataset index {resume_start_idx}")
+            print()
     
     print(f"=== Starting RL Training Loop ===")
     print(f"Algorithm: {args.algorithm.upper()}")
@@ -703,6 +761,10 @@ if __name__ == "__main__":
     print(f"Checkpoint Dir: {args.checkpoint_dir}")
     if args.resume_from:
         print(f"Resuming From: {args.resume_from}")
+    if resume_trajectory_offset > 0:
+        print(f"Starting at trajectory: {resume_trajectory_offset + 1}")
+    if resume_start_idx > 0:
+        print(f"Starting at dataset index: {resume_start_idx}")
     print()
     
     # Initialize observability logger
@@ -711,16 +773,33 @@ if __name__ == "__main__":
 
     print()
     
-    for i in range(args.num_trajectories):
-        task_idx = args.start_idx + i
+    # Calculate how many trajectories remaining
+    remaining_trajectories = args.num_trajectories - resume_trajectory_offset
+    if remaining_trajectories <= 0:
+        print(f"All {args.num_trajectories} trajectories already completed in checkpoint.")
+        print(f"\n=== Training Complete ===")
+        sys.exit(0)
+    
+    # Track last completed trajectory for final checkpoint
+    last_trajectory_num = resume_trajectory_offset
+    last_task_idx = resume_start_idx - 1 if resume_start_idx > 0 else 0
+    
+    for i in range(remaining_trajectories):
+        # Trajectory number continues from checkpoint
+        trajectory_num = resume_trajectory_offset + i + 1
+        task_idx = resume_start_idx + i
         if task_idx >= len(df):
             print(f"Reached end of dataset at index {task_idx}")
             break
+        
+        # Update tracking variables at start of each iteration
+        last_trajectory_num = trajectory_num
+        last_task_idx = task_idx
             
         task_row = df.iloc[task_idx].to_dict()
         
         print(f"\n{'='*60}")
-        print(f"TRAJECTORY {i+1}/{args.num_trajectories} (Dataset Index: {task_idx})")
+        print(f"TRAJECTORY {trajectory_num}/{args.num_trajectories} (Dataset Index: {task_idx})")
         print(f"{'='*60}")
         
         trajectory_result = run_trajectory(
@@ -733,7 +812,7 @@ if __name__ == "__main__":
         )
         
         if trajectory_result:
-            print(f"\n--- Trajectory {i+1} Finished ---")
+            print(f"\n--- Trajectory {trajectory_num} Finished ---")
             print(f"Instruction: {trajectory_result['task_instruction']}")
             print(f"Total Steps: {len(trajectory_result['trajectory_actions'])}")
             
@@ -742,7 +821,7 @@ if __name__ == "__main__":
             # Log trajectory to observability system (only if judgment was produced)
             if trajectory_result['judgment'] is not None:
                 obs_logger.log_trajectory(
-                    trajectory_id=i + 1,
+                    trajectory_id=trajectory_num,
                     dataset_index=task_idx,
                     task_instruction=trajectory_result['task_instruction'],
                     website=trajectory_result['website'],
@@ -755,7 +834,7 @@ if __name__ == "__main__":
                     learning_rate=args.learning_rate
                 )
             else:
-                print(f"Trajectory {i+1} produced no steps; skipping observability log.")
+                print(f"Trajectory {trajectory_num} produced no steps; skipping observability log.")
             
             if trajectory_result.get('rl_update_stats'):
                 reward = trajectory_result['rl_update_stats']['trajectory_reward']
@@ -763,18 +842,28 @@ if __name__ == "__main__":
                 print(f"Trajectory Reward: {reward:.4f}")
                 print(f"Average Reward (last 10): {sum(total_rewards[-10:])/len(total_rewards[-10:]):.4f}")
             
-            if trainer and (i + 1) % args.save_every == 0:
+            # Save checkpoint periodically (using trajectory_num for consistent naming)
+            if trainer and trajectory_num % args.save_every == 0:
                 os.makedirs(args.checkpoint_dir, exist_ok=True)
-                checkpoint_path = f"{args.checkpoint_dir}/checkpoint_trajectory_{i+1}"
-                trainer.save_checkpoint(checkpoint_path)
-                print(f"Checkpoint saved at trajectory {i+1}")
+                checkpoint_path = f"{args.checkpoint_dir}/checkpoint_trajectory_{trajectory_num}"
+                trainer.save_checkpoint(
+                    checkpoint_path,
+                    trajectory_id=trajectory_num,
+                    dataset_index=task_idx
+                )
+                print(f"Checkpoint saved at trajectory {trajectory_num}")
         else:
-            print(f"Trajectory {i+1} generation failed.")
+            print(f"Trajectory {trajectory_num} generation failed.")
     
+    # Save final checkpoint with the last trajectory info
     if trainer:
         os.makedirs(args.checkpoint_dir, exist_ok=True)
         final_checkpoint = f"{args.checkpoint_dir}/final_checkpoint"
-        trainer.save_checkpoint(final_checkpoint)
+        trainer.save_checkpoint(
+            final_checkpoint,
+            trajectory_id=last_trajectory_num,
+            dataset_index=last_task_idx
+        )
         print(f"\nFinal checkpoint saved to {final_checkpoint}")
     
     print(f"\n=== Training Complete ===")

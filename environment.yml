@@ -1,4 +1,4 @@
-name: fyp-venv
+name: insta
 channels:
   - pytorch
   - nvidia
@@ -6,31 +6,36 @@ channels:
   - defaults
 
 dependencies:
-  # Python version
   - python=3.10
 
   # Core deep learning (install from conda for better compatibility)
   - pytorch>=2.0.0
   - torchvision>=0.15.0
   - torchaudio>=2.0.0
-  - pytorch-cuda=12.1  # Change to your CUDA version (11.8, 12.1, etc.)
-  
-  # Scientific computing
+  # If you have CUDA, set the appropriate cudatoolkit/pytorch-cuda package (example below)
+  - pytorch-cuda=12.1
+
+  # System / scientific packages
   - numpy>=1.24.0
   - pandas>=1.5.0
   - scipy>=1.10.0
-  
-  # Existing dependencies
+  - ffmpeg
+  - datasets
+
+  # Utilities and tooling
   - jupyter
+  - ipykernel
+  - ipython
   - pillow
   - lxml
-  
-  # Development tools (optional)
-  - ipython
-  - pytest
-  
-  # Pip packages (installed via pip within conda env)
+  - scikit-learn
+  - setuptools
   - pip
+
+  # Dev/test
+  - pytest
+
+  # Install remaining Python packages via pip to preserve versions not available on conda
   - pip:
       # Transformers ecosystem
       - transformers>=4.35.0
@@ -39,50 +44,49 @@ dependencies:
       - bitsandbytes>=0.41.0
       - sentencepiece>=0.1.99
       - protobuf>=3.20.0
-      
+      - huggingface-hub>=0.16.4
+
       # Reinforcement Learning
       - stable-baselines3>=2.0.0
       - gymnasium>=0.28.0
-      
-      # Data processing
+
+      # Data processing / tabulation
       - datasets>=2.14.0
-      - tqdm>=4.65.0
-      
-      # Web interaction (existing)
+      - tabulate>=0.9.0
+
+      # Web interaction and HTML cleaning
       - playwright>=1.40.0
-      - lxml_html_clean
       - requests>=2.31.0
       - beautifulsoup4>=4.12.0
-      
-      # LLM API clients
+      - lxml-html-clean>=0.1.0
+
+      # Video and multimedia
+      - scikit-video>=1.1.10
+
+      # LLM tooling
       - openai>=1.0.0
       - anthropic>=0.7.0
-      
-      # Utilities
+      - vllm>=0.4.0
+
+      # Additional utilities
+      - tqdm>=4.65.0
       - colorama>=0.4.6
       - python-dotenv>=1.0.0
+      - gradio-client>=0.3.0
 
-prefix: /Users/saadashraf/miniconda3/envs/fyp-venv
+      # Dev & formatting
+      - black>=23.0.0
+      - flake8>=6.0.0
 
-# ============================================================================
-# Installation/Update Instructions:
-#
-# 1. Update your existing environment:
-#    conda env update -f environment.yml --prune
-#
-# 2. Activate the environment:
-#    conda activate fyp-venv
-#
-# 3. Install playwright browsers (one-time setup if not done):
-#    playwright install
-#
-# 4. Verify installation:
-#    python -c "import torch; print(f'PyTorch: {torch.__version__}'); print(f'CUDA: {torch.cuda.is_available()}')"
-#    python -c "import transformers, peft, stable_baselines3; print('✓ All imports successful!')"
-#
-# ============================================================================
+      # Optional: other recommended tools
+      - ipython>=8.12.0
+      - jupyter>=1.0.0
+
+
 # Notes:
-# - If you don't have a GPU or CUDA, remove the pytorch-cuda=12.1 line
-# - Check your CUDA version with: nvidia-smi
-# - Common CUDA versions: 11.8, 12.1
-# ============================================================================
+# - Create the environment with: conda env create -f environment.yml
+# - To update an existing env: conda env update -f environment.yml --prune
+# - If you prefer a different CUDA version, change/remove 'pytorch-cuda=12.1'
+# - After creating the environment, activate it and install Playwright browsers:
+#     conda activate fyp-venv
+#     playwright install

@@ -38,10 +38,10 @@ class TrajectoryLog:
     total_steps: int
     step_summaries: List[StepSummary]
     
-    # Judge scores
-    judge_success: float
-    judge_efficiency: float
-    judge_self_correction: float
+    # Judge scores (can be None if judge parsing failed)
+    judge_success: Optional[float]
+    judge_efficiency: Optional[float]
+    judge_self_correction: Optional[float]
     
     # RL metrics (if available)
     trajectory_reward: Optional[float] = None
@@ -218,9 +218,13 @@ class ObservabilityLogger:
             f.write("-" * 80 + "\n")
             f.write("JUDGE SCORES\n")
             f.write("-" * 80 + "\n")
-            f.write(f"Success:         {traj_log.judge_success:.4f}\n")
-            f.write(f"Efficiency:      {traj_log.judge_efficiency:.4f}\n")
-            f.write(f"Self-correction: {traj_log.judge_self_correction:.4f}\n\n")
+            # Handle None values from failed judge parsing
+            success_str = f"{traj_log.judge_success:.4f}" if traj_log.judge_success is not None else "N/A (parse failed)"
+            efficiency_str = f"{traj_log.judge_efficiency:.4f}" if traj_log.judge_efficiency is not None else "N/A (parse failed)"
+            self_corr_str = f"{traj_log.judge_self_correction:.4f}" if traj_log.judge_self_correction is not None else "N/A (parse failed)"
+            f.write(f"Success:         {success_str}\n")
+            f.write(f"Efficiency:      {efficiency_str}\n")
+            f.write(f"Self-correction: {self_corr_str}\n\n")
             
             if traj_log.trajectory_reward is not None:
                 f.write("-" * 80 + "\n")
@@ -263,11 +267,18 @@ class ObservabilityLogger:
         
         num_trajectories = len(self.trajectory_logs)
         
-        # Calculate aggregate metrics
-        avg_success = sum(t.judge_success for t in self.trajectory_logs) / num_trajectories
-        avg_efficiency = sum(t.judge_efficiency for t in self.trajectory_logs) / num_trajectories
-        avg_self_correction = sum(t.judge_self_correction for t in self.trajectory_logs) / num_trajectories
+        # Calculate aggregate metrics (filter out None values from failed judge parses)
+        valid_successes = [t.judge_success for t in self.trajectory_logs if t.judge_success is not None]
+        valid_efficiencies = [t.judge_efficiency for t in self.trajectory_logs if t.judge_efficiency is not None]
+        valid_self_corrections = [t.judge_self_correction for t in self.trajectory_logs if t.judge_self_correction is not None]
+        
+        avg_success = sum(valid_successes) / len(valid_successes) if valid_successes else 0.0
+        avg_efficiency = sum(valid_efficiencies) / len(valid_efficiencies) if valid_efficiencies else 0.0
+        avg_self_correction = sum(valid_self_corrections) / len(valid_self_corrections) if valid_self_corrections else 0.0
         avg_steps = sum(t.total_steps for t in self.trajectory_logs) / num_trajectories
+        
+        # Track how many trajectories had judge failures
+        num_judge_failures = num_trajectories - len(valid_successes)
         
         rewards = [t.trajectory_reward for t in self.trajectory_logs if t.trajectory_reward is not None]
         
@@ -316,7 +327,11 @@ class ObservabilityLogger:
                 f.write(f"Trajectory #{traj.trajectory_id} (idx {traj.dataset_index})\n")
                 f.write(f"  Task: {traj.task_instruction[:60]}...\n")
                 f.write(f"  Steps: {traj.total_steps}\n")
-                f.write(f"  Judge: S={traj.judge_success:.2f}, E={traj.judge_efficiency:.2f}, SC={traj.judge_self_correction:.2f}\n")
+                # Handle None values from failed judge parses
+                s = f"{traj.judge_success:.2f}" if traj.judge_success is not None else "N/A"
+                e = f"{traj.judge_efficiency:.2f}" if traj.judge_efficiency is not None else "N/A"
+                sc = f"{traj.judge_self_correction:.2f}" if traj.judge_self_correction is not None else "N/A"
+                f.write(f"  Judge: S={s}, E={e}, SC={sc}\n")
                 if traj.trajectory_reward is not None:
                     f.write(f"  Reward: {traj.trajectory_reward:.4f}\n")
                 f.write("\n")

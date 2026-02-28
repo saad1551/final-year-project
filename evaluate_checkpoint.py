@@ -210,6 +210,14 @@ def print_comparison(checkpoint_results: list, base_results: list):
     cs, ce, csc, csteps = _extract_scores(checkpoint_results)
     bs, be, bsc, bsteps = _extract_scores(base_results)
 
+    n_cp = len(checkpoint_results)
+    n_base = len(base_results)
+    cp_binary = len([s for s in cs if s > 0.5])
+    base_binary = len([s for s in bs if s > 0.5])
+    cp_rate = cp_binary / n_cp * 100 if n_cp else 0.0
+    base_rate = base_binary / n_base * 100 if n_base else 0.0
+    rate_delta = cp_rate - base_rate
+
     def fmt(val):
         return f"{val:.4f}" if val is not None else "  N/A  "
 
@@ -230,13 +238,18 @@ def print_comparison(checkpoint_results: list, base_results: list):
     cm_steps   = _mean(csteps)
     bm_steps   = _mean(bsteps)
 
+    rate_delta_str = f"{rate_delta:+.1f}pp" + (" ✓" if rate_delta > 0 else (" ✗" if rate_delta < 0 else ""))
+
     print(f"\n{'='*65}")
     print("MODEL COMPARISON SUMMARY")
     print(f"{'='*65}")
     header = f"{'Metric':<22} {'Checkpoint':>12} {'Base Model':>12} {'Delta':>12}"
     print(header)
     print("-" * 65)
-    print(f"{'Avg Success':<22} {fmt(cm_success):>12} {fmt(bm_success):>12} {delta(cm_success, bm_success):>12}")
+    print(f"{'Task Success Rate':<22} {f'{cp_rate:.1f}%':>12} {f'{base_rate:.1f}%':>12} {rate_delta_str:>12}")
+    print(f"  (score > 0.5)  {f'{cp_binary}/{n_cp}':>22} {f'{base_binary}/{n_base}':>12}")
+    print("-" * 65)
+    print(f"{'Avg Success Score':<22} {fmt(cm_success):>12} {fmt(bm_success):>12} {delta(cm_success, bm_success):>12}")
     print(f"{'Avg Efficiency':<22} {fmt(cm_eff):>12} {fmt(bm_eff):>12} {delta(cm_eff, bm_eff):>12}")
     print(f"{'Avg Self-Correction':<22} {fmt(cm_sc):>12} {fmt(bm_sc):>12} {delta(cm_sc, bm_sc):>12}")
 
@@ -245,8 +258,8 @@ def print_comparison(checkpoint_results: list, base_results: list):
     step_delta = f"{(cm_steps - bm_steps):+.1f}" if (cm_steps and bm_steps) else "N/A"
     print(f"{'Avg Steps':<22} {c_step_str:>12} {b_step_str:>12} {step_delta:>12}")
     print(f"{'='*65}")
-    print(f"Tasks evaluated (checkpoint): {len([r for r in checkpoint_results if r])} / {len(checkpoint_results)}")
-    print(f"Tasks evaluated (base)      : {len([r for r in base_results if r])} / {len(base_results)}")
+    print(f"Tasks evaluated (checkpoint): {len([r for r in checkpoint_results if r])} / {n_cp}")
+    print(f"Tasks evaluated (base)      : {len([r for r in base_results if r])} / {n_base}")
     print(f"{'='*65}\n")
 
 
@@ -385,6 +398,9 @@ def print_summary(results: list):
         if j.self_correction is not None:
             self_corrections.append(j.self_correction)
 
+    binary_successes = [s for s in successes if s > 0.5]
+    success_rate = len(binary_successes) / len(results) * 100 if results else 0.0
+
     print(f"\n{'='*60}")
     print("EVALUATION SUMMARY")
     print(f"{'='*60}")
@@ -392,6 +408,7 @@ def print_summary(results: list):
     print(f"Successful runs       : {len(successful)}")
     print(f"Failed runs           : {len(results) - len(successful)}")
     print()
+    print(f"Task Success Rate     : {len(binary_successes)}/{len(results)} ({success_rate:.1f}%)  [judge score > 0.5]")
     if successes:
         print(f"Avg Success Score     : {sum(successes)/len(successes):.4f}")
     if efficiencies:

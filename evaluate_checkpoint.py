@@ -88,11 +88,16 @@ def load_base_model():
 
 
 def unload_model(model):
-    """Free GPU memory occupied by a model."""
+    """
+    Free GPU memory occupied by a model.
+    The caller MUST drop their own reference after this call:
+        model = unload_model(model)
+    """
     del model
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
     gc.collect()
+    return None
 
 
 def _instruction_bucket(instruction: str) -> str:
@@ -142,7 +147,6 @@ def sample_tasks(df, sample_size: int, seed: int):
             floored[b] += 1
 
     sampled_frames = []
-    rng = random.Random(seed)
     for bucket, n in floored.items():
         if n == 0:
             continue
@@ -166,7 +170,9 @@ def sample_tasks(df, sample_size: int, seed: int):
 
 def save_results(results: list, path: str):
     """Save a list of trajectory result dicts to a JSON file."""
-    os.makedirs(os.path.dirname(path), exist_ok=True)
+    parent = os.path.dirname(path)
+    if parent:
+        os.makedirs(parent, exist_ok=True)
     serialisable = []
     for r in results:
         if r is None:
@@ -255,7 +261,7 @@ def print_comparison(checkpoint_results: list, base_results: list):
 
     c_step_str = f"{cm_steps:.1f}" if cm_steps is not None else "N/A"
     b_step_str = f"{bm_steps:.1f}" if bm_steps is not None else "N/A"
-    step_delta = f"{(cm_steps - bm_steps):+.1f}" if (cm_steps and bm_steps) else "N/A"
+    step_delta = f"{(cm_steps - bm_steps):+.1f}" if (cm_steps is not None and bm_steps is not None) else "N/A"
     print(f"{'Avg Steps':<22} {c_step_str:>12} {b_step_str:>12} {step_delta:>12}")
     print(f"{'='*65}")
     print(f"Tasks evaluated (checkpoint): {len([r for r in checkpoint_results if r])} / {n_cp}")
@@ -429,10 +435,10 @@ def print_summary(results: list):
         if r is None:
             print(f"{i+1:<4} {'FAILED':<9} {'-':<9} {'-':<12} {'-':<6} -")
             continue
-        j = r["judgment"]
-        s = f"{j.success:.2f}" if j.success is not None else "-"
-        e = f"{j.efficiency:.2f}" if j.efficiency is not None else "-"
-        sc = f"{j.self_correction:.2f}" if j.self_correction is not None else "-"
+        j = r.get("judgment")
+        s = f"{j.success:.2f}" if (j and j.success is not None) else "-"
+        e = f"{j.efficiency:.2f}" if (j and j.efficiency is not None) else "-"
+        sc = f"{j.self_correction:.2f}" if (j and j.self_correction is not None) else "-"
         instr = r["task_instruction"][:50] + "..." if len(r["task_instruction"]) > 50 else r["task_instruction"]
         print(f"{i+1:<4} {s:<9} {e:<9} {sc:<12} {r['num_steps']:<6} {instr}")
 
@@ -572,7 +578,7 @@ if __name__ == "__main__":
         print("BASE MODEL EVALUATION")
         print(f"{'='*60}")
         print("Unloading checkpoint model to free GPU memory...")
-        unload_model(checkpoint_model)
+        checkpoint_model = unload_model(checkpoint_model)
 
         tokenizer, base_model = load_base_model()
         base_results = _run_tasks(task_rows, base_model, tokenizer, label="[BASE] ")

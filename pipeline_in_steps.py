@@ -21,6 +21,7 @@ from rl_trainer import OnPolicyTrainer, RLConfig, compute_reward_from_judgment
 from rl_sb3_ppo import SB3PPOTrainer
 from rl_sb3_config_examples import get_config as get_sb3_config
 from observability import ObservabilityLogger
+from training_logger import TrainingLogger
 
 
 MODEL_NAME = "btrabucco/Insta-Qwen3-1.7B-SFT"
@@ -770,6 +771,10 @@ if __name__ == "__main__":
     # Initialize observability logger
     obs_logger = ObservabilityLogger()
     print(f"Observability logging enabled: {obs_logger.log_dir}")
+    
+    # Initialize training logger (CSV file for tracking all trajectories)
+    training_logger = TrainingLogger(log_dir="training_logs")
+    print(f"Training CSV logger enabled: {training_logger.log_path}")
 
     print()
     
@@ -836,6 +841,22 @@ if __name__ == "__main__":
             else:
                 print(f"Trajectory {trajectory_num} produced no steps; skipping observability log.")
             
+            # Log to training CSV (always, for complete tracking)
+            training_logger.log_trajectory(
+                trajectory_id=trajectory_num,
+                dataset_index=task_idx,
+                website=trajectory_result['website'],
+                instruction=trajectory_result['task_instruction'],
+                num_steps=len(trajectory_result['trajectory_actions']),
+                trajectory_completed=True,
+                judgment=trajectory_result['judgment'],
+                rl_stats=trajectory_result.get('rl_update_stats'),
+                trainer_stats=trainer.training_stats if trainer else None,
+                algorithm=args.algorithm,
+                learning_rate=args.learning_rate,
+                min_reward_threshold=args.min_reward,
+            )
+            
             if trajectory_result.get('rl_update_stats'):
                 reward = trajectory_result['rl_update_stats']['trajectory_reward']
                 total_rewards.append(reward)
@@ -853,6 +874,17 @@ if __name__ == "__main__":
                 )
                 print(f"Checkpoint saved at trajectory {trajectory_num}")
         else:
+            # Log failed trajectory
+            training_logger.log_failed_trajectory(
+                trajectory_id=trajectory_num,
+                dataset_index=task_idx,
+                website=task_row.get('website', 'unknown'),
+                instruction=task_row.get('instruction', 'unknown'),
+                algorithm=args.algorithm,
+                learning_rate=args.learning_rate,
+                min_reward_threshold=args.min_reward,
+                error_reason="trajectory_failed"
+            )
             print(f"Trajectory {trajectory_num} generation failed.")
     
     # Save final checkpoint with the last trajectory info
@@ -875,3 +907,6 @@ if __name__ == "__main__":
     
     # Print observability summary
     obs_logger.print_summary()
+    
+    # Print training logger summary (CSV-based statistics)
+    training_logger.print_summary()

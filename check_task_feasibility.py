@@ -46,11 +46,11 @@ import requests
 from google import genai
 from google.genai.types import Tool, GenerateContentConfig, UrlContext
 
-# ── Gemini config (reused from judge_integration.py) ──────────────────────────
-from judge_integration import JUDGE_API_KEY, JUDGE_MODEL
-
-# ── Reuse evaluate_checkpoint sampling logic ──────────────────────────────────
-from evaluate_checkpoint import sample_tasks
+# ── Gemini config (same values as judge_integration.py) ───────────────────────
+# Imported directly to avoid pulling in the full insta package chain.
+JUDGE_API_KEY = "AIzaSyB69u9Zkswl8GjDwsA8h9UPBajdxnJ5ivQ"
+# gemini-2.0-flash: 1500 requests/day on the free tier (vs 20 for gemini-2.5-flash)
+JUDGE_MODEL = "gemini-2.0-flash"
 
 # ── HTTP probe ─────────────────────────────────────────────────────────────────
 HTTP_TIMEOUT = 10  # seconds
@@ -88,6 +88,70 @@ STALE_CONTENT_PATTERNS = [
     r"forbidden",
 ]
 _STALE_RE = re.compile("|".join(STALE_CONTENT_PATTERNS), re.IGNORECASE)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Stratified task sampling (mirrors evaluate_checkpoint.py logic exactly)
+# ══════════════════════════════════════════════════════════════════════════════
+
+
+def _instruction_bucket(instruction: str) -> str:
+    """Assign an instruction to a coarse action-type bucket based on its first verb."""
+    text = instruction.lower().strip()
+    patterns = [
+        ("search", r"\b(search|look for)\b"),
+        ("count", r"\b(how many|count|total number)\b"),
+        ("fill_submit", r"\b(fill|submit|enter|type)\b"),
+        ("navigate", r"\b(go to|navigate|open|click|visit)\b"),
+        ("find_locate", r"\b(find|locate|identify|determine|what is|what are)\b"),
+    ]
+    for bucket, pattern in patterns:
+        if re.search(pattern, text):
+            return bucket
+    return "other"
+
+
+def sample_tasks(df: pd.DataFrame, sample_size: int, seed: int) -> pd.DataFrame:
+    """Stratified random sample — identical logic to evaluate_checkpoint.py."""
+    random.seed(seed)
+    df = df.copy().reset_index(drop=True)
+    df["_bucket"] = df["instruction"].apply(_instruction_bucket)
+
+    bucket_counts = df["_bucket"].value_counts()
+    total = len(df)
+    raw_allocs = {
+        b: (count / total) * sample_size for b, count in bucket_counts.items()
+    }
+    floored = {b: int(v) for b, v in raw_allocs.items()}
+    remainder = sample_size - sum(floored.values())
+    frac_parts = sorted(raw_allocs.items(), key=lambda x: -(x[1] - int(x[1])))
+    for i, (b, _) in enumerate(frac_parts):
+        if i < remainder:
+            floored[b] += 1
+
+    sampled_frames = []
+    for bucket, n in floored.items():
+        if n == 0:
+            continue
+        bucket_df = df[df["_bucket"] == bucket]
+        n_draw = min(n, len(bucket_df))
+        sampled_frames.append(bucket_df.sample(n=n_draw, random_state=seed))
+
+    sample = (
+        pd.concat(sampled_frames)
+        .sample(frac=1, random_state=seed)
+        .reset_index(drop=True)
+    )
+    sample = sample.drop(columns=["_bucket"])
+
+    if len(sample) < sample_size:
+        remaining = df[~df.index.isin(sample.index)].drop(columns=["_bucket"])
+        shortfall = sample_size - len(sample)
+        extra = remaining.sample(n=min(shortfall, len(remaining)), random_state=seed)
+        sample = pd.concat([sample, extra]).reset_index(drop=True)
+
+    print(f"Sampled {len(sample)} tasks (seed={seed})")
+    return sample
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -201,10 +265,29 @@ Respond with a JSON object and nothing else:
 """
 
 
-def assess_feasibility_with_llm(task: dict, http_probe: dict, retries: int = 3) -> dict:
+def _parse_retry_delay(exc: Exception) -> Optional[float]:
+    """
+    Try to extract the suggested retryDelay (in seconds) from a Gemini 429
+    exception message.  Returns None if the value cannot be parsed.
+    """
+    msg = str(exc)
+    # The error detail looks like: 'retryDelay': '50s'  or  "retryDelay": "50.054s"
+    m = re.search(r"'retryDelay':\s*'([0-9.]+)s'", msg)
+    if not m:
+        m = re.search(r'"retryDelay":\s*"([0-9.]+)s"', msg)
+    if m:
+        return float(m.group(1))
+    return None
+
+
+def assess_feasibility_with_llm(task: dict, http_probe: dict, retries: int = 5) -> dict:
     """
     Ask Gemini to visit the website via url_context and classify feasibility.
     Falls back gracefully if the url_context call fails.
+
+    On 429 RESOURCE_EXHAUSTED the function reads the suggested retryDelay from
+    the error response and sleeps that long before retrying (up to `retries`
+    total attempts).
     """
     today = datetime.now().strftime("%B %Y")
     url = (
@@ -225,6 +308,16 @@ def assess_feasibility_with_llm(task: dict, http_probe: dict, retries: int = 3) 
             "classification": WEBSITE_DOWN,
             "confidence": 0.95,
             "reasoning": f"Website could not be reached: {http_probe.get('error', 'unknown error')}",
+        }
+
+    # HTTP 403 on the root page almost always means the site is blocking all
+    # automated access (Cloudflare, bot protection, etc.).  Sending a url_context
+    # request will also fail, so classify immediately.
+    if http_probe.get("status_code") == 403:
+        return {
+            "classification": WEBSITE_DOWN,
+            "confidence": 0.9,
+            "reasoning": "HTTP probe returned 403 Forbidden — site is blocking automated access.",
         }
 
     prompt = FEASIBILITY_PROMPT.format(
@@ -263,8 +356,21 @@ def assess_feasibility_with_llm(task: dict, http_probe: dict, retries: int = 3) 
             )
             return parsed
         except Exception as e:
+            is_rate_limit = "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e)
             if attempt < retries - 1:
-                time.sleep(2**attempt)
+                if is_rate_limit:
+                    delay = _parse_retry_delay(e)
+                    if delay is None:
+                        delay = 60.0  # conservative fallback
+                    # Add a small buffer on top of the suggested delay
+                    delay += 5.0
+                    print(
+                        f"  Rate limited (429). Waiting {delay:.0f}s before retry "
+                        f"(attempt {attempt + 1}/{retries})..."
+                    )
+                    time.sleep(delay)
+                else:
+                    time.sleep(2**attempt)
             else:
                 return {
                     "classification": UNCERTAIN,
@@ -285,19 +391,58 @@ def assess_feasibility_with_llm(task: dict, http_probe: dict, retries: int = 3) 
 
 
 def run_fresh_feasibility_check(
-    df: pd.DataFrame, sample_size: int, seed: int, output_dir: str
+    df: pd.DataFrame,
+    sample_size: int,
+    seed: int,
+    output_dir: str,
+    resume_from: Optional[str] = None,
 ) -> list:
     """
     For each sampled task:
       1. HTTP probe the website
       2. Ask Gemini to classify feasibility
     Returns a list of result dicts.
+
+    If `resume_from` is a path to a prior JSON output, tasks that were already
+    successfully assessed (confidence > 0 or classification != UNCERTAIN) are
+    loaded from that file and skipped.  This lets you continue after a quota
+    reset without re-assessing the first ~11 tasks.
     """
     sample_df = sample_tasks(df, sample_size, seed)
     tasks = sample_df.to_dict(orient="records")
 
+    # ── Load prior results if resuming ────────────────────────────────────────
+    prior_results: dict[int, dict] = {}
+    if resume_from and os.path.isfile(resume_from):
+        with open(resume_from) as f:
+            prior = json.load(f)
+        for r in prior:
+            idx = r.get("task_index")
+            # Only reuse entries that had a real LLM assessment (not rate-limit failures)
+            real_assessment = (
+                r.get("confidence", 0.0) > 0
+                or r.get("classification", UNCERTAIN) != UNCERTAIN
+            )
+            if idx is not None and real_assessment:
+                prior_results[idx] = r
+        print(
+            f"Resuming from '{resume_from}': "
+            f"{len(prior_results)} tasks already assessed, "
+            f"{len(tasks) - len(prior_results)} remaining."
+        )
+
     results = []
     for i, task in enumerate(tasks):
+        # ── Reuse prior result if available ───────────────────────────────────
+        if i in prior_results:
+            r = prior_results[i]
+            print(
+                f"\n[{i + 1}/{len(tasks)}] {task['website']}  "
+                f"[SKIP — already: {r['classification']}]"
+            )
+            results.append(r)
+            continue
+
         print(f"\n[{i + 1}/{len(tasks)}] {task['website']}")
         print(f"  Instruction: {task['instruction'][:90]}...")
 
@@ -329,13 +474,20 @@ def run_fresh_feasibility_check(
             }
         )
 
-        # Small delay to avoid rate limiting
-        time.sleep(0.5)
+        # Save incrementally after every task so progress is never lost
+        os.makedirs(output_dir, exist_ok=True)
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        tmp_path = os.path.join(output_dir, f"feasibility_check_{ts}.json")
+        with open(tmp_path, "w") as f:
+            json.dump(results, f, indent=2)
+
+        # Small delay between tasks to stay well within rate limits
+        time.sleep(2.0)
 
     # Print summary
     _print_feasibility_summary(results)
 
-    # Save results
+    # Final save
     os.makedirs(output_dir, exist_ok=True)
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
     path = os.path.join(output_dir, f"feasibility_check_{ts}.json")
@@ -585,6 +737,16 @@ def main():
         default=False,
         help="Skip the fresh HTTP+LLM feasibility check (only analyse --eval_results).",
     )
+    parser.add_argument(
+        "--resume_from",
+        default=None,
+        metavar="PATH",
+        help=(
+            "Path to a prior feasibility JSON output.  Tasks that were already "
+            "successfully assessed in that file are skipped.  Useful after a "
+            "quota reset to avoid re-running tasks from scratch."
+        ),
+    )
     args = parser.parse_args()
 
     # ── Fresh feasibility check ────────────────────────────────────────────────
@@ -592,7 +754,13 @@ def main():
         print(f"\nLoading dataset: {args.dataset}")
         df = pd.read_csv(args.dataset)
         print(f"Dataset loaded: {len(df)} rows")
-        run_fresh_feasibility_check(df, args.sample_size, args.seed, args.output_dir)
+        run_fresh_feasibility_check(
+            df,
+            args.sample_size,
+            args.seed,
+            args.output_dir,
+            resume_from=args.resume_from,
+        )
 
     # ── Eval results analysis ──────────────────────────────────────────────────
     if args.eval_results:

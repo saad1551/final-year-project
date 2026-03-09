@@ -43,10 +43,11 @@ from typing import Optional
 
 import pandas as pd
 import requests
-from openai import OpenAI
+from google import genai
+from google.genai.types import Tool, GenerateContentConfig, UrlContext
 
 # ── Gemini config (reused from judge_integration.py) ──────────────────────────
-from judge_integration import JUDGE_API_KEY, JUDGE_BASE_URL, JUDGE_MODEL
+from judge_integration import JUDGE_API_KEY, JUDGE_MODEL
 
 # ── Reuse evaluate_checkpoint sampling logic ──────────────────────────────────
 from evaluate_checkpoint import sample_tasks
@@ -146,88 +147,110 @@ def probe_website(website: str) -> dict:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# LLM feasibility assessment
+# LLM feasibility assessment  (uses Gemini url_context to read the live page)
 # ══════════════════════════════════════════════════════════════════════════════
 
-_gemini_client: Optional[OpenAI] = None
+_gemini_client: Optional[genai.Client] = None
 
 
-def get_gemini_client() -> OpenAI:
+def get_gemini_client() -> genai.Client:
     global _gemini_client
     if _gemini_client is None:
-        _gemini_client = OpenAI(api_key=JUDGE_API_KEY, base_url=JUDGE_BASE_URL)
+        _gemini_client = genai.Client(api_key=JUDGE_API_KEY)
     return _gemini_client
 
 
 FEASIBILITY_PROMPT = """\
-You are auditing whether a web-navigation task that was created roughly one year
-ago is still completable as of {today}.
+Today is {today}. You are auditing whether a web-navigation task created roughly
+one year ago is still completable.
 
----
+Use the url_context tool to visit the website below and read its current content,
+then decide whether the task can still be completed.
+
 Website (starting URL): {website}
 Task instruction      : {instruction}
 Success criteria      : {criteria}
-Steps (as written)    : {steps}
+Steps (as written ~1 year ago): {steps}
 HTTP probe result     : {http_status}
----
 
-Classify the task into exactly one of these four categories:
+After reading the page, classify the task into exactly one of these categories:
 
 FEASIBLE
-  The website is operational and the specific information / page required by
-  the task appears stable and likely still present.
+  The website is operational and the specific information / page / functionality
+  required by the task is still present.
 
 WEBSITE_DOWN
   The website is unreachable, returns a server error (5xx), or the domain no
-  longer resolves.  The task is impossible regardless of the agent.
+  longer resolves.
 
 CONTENT_LIKELY_OUTDATED
-  The website exists but the specific page, data, or information the task
-  requires is likely no longer available — for example: a specific event page
-  that would have expired, a personnel listing that frequently changes, a
-  product that may have been discontinued, a "current count" as of a past date
-  that will now give a different answer, or a feature / page that websites
-  commonly retire.
+  The site is up but the specific page, data, or information the task requires
+  is no longer available — e.g. an expired event page, changed personnel
+  listing, discontinued product, or time-specific data that is now stale.
 
 UNCERTAIN
-  There is insufficient information to determine feasibility without actually
-  visiting the specific page.
+  The starting page loaded but doesn't have enough information to confirm
+  feasibility without further navigation into the site.
 
 Respond with a JSON object and nothing else:
 {{
   "classification": "<one of the four labels above>",
-  "confidence": <float 0.0–1.0>,
-  "reasoning": "<one or two sentences explaining the classification>"
+  "confidence": <float 0.0-1.0>,
+  "reasoning": "<one or two sentences based on what you actually saw on the page>"
 }}
 """
 
 
 def assess_feasibility_with_llm(task: dict, http_probe: dict, retries: int = 3) -> dict:
-    """Ask Gemini to classify whether the task is still feasible today."""
+    """
+    Ask Gemini to visit the website via url_context and classify feasibility.
+    Falls back gracefully if the url_context call fails.
+    """
     today = datetime.now().strftime("%B %Y")
+    url = (
+        task["website"]
+        if task["website"].startswith("http")
+        else f"https://{task['website']}"
+    )
     status_str = (
         f"HTTP {http_probe['status_code']}"
         if http_probe["status_code"] is not None
         else f"Unreachable ({http_probe.get('error', 'unknown error')})"
     )
+
+    # If the website is already confirmed down via HTTP probe, skip the url_context
+    # call and return immediately — there is nothing to visit.
+    if not http_probe["reachable"] and http_probe["status_code"] is None:
+        return {
+            "classification": WEBSITE_DOWN,
+            "confidence": 0.95,
+            "reasoning": f"Website could not be reached: {http_probe.get('error', 'unknown error')}",
+        }
+
     prompt = FEASIBILITY_PROMPT.format(
         today=today,
-        website=task["website"],
+        website=url,
         instruction=task["instruction"],
         criteria=task.get("criteria", "N/A"),
         steps=task.get("steps", "N/A"),
         http_status=status_str,
     )
+
     client = get_gemini_client()
+    url_context_tool = Tool(url_context=UrlContext)
+
     for attempt in range(retries):
         try:
-            resp = client.chat.completions.create(
+            response = client.models.generate_content(
                 model=JUDGE_MODEL,
-                messages=[{"role": "user", "content": prompt}],
-                max_tokens=512,
-                temperature=0.2,
+                contents=prompt,
+                config=GenerateContentConfig(
+                    tools=[url_context_tool],
+                    response_modalities=["TEXT"],
+                    temperature=0.2,
+                ),
             )
-            raw = resp.choices[0].message.content.strip()
+            raw = response.text.strip()
             # Strip markdown code fences if present
             raw = re.sub(r"^```(?:json)?\s*", "", raw)
             raw = re.sub(r"\s*```$", "", raw)
@@ -248,6 +271,12 @@ def assess_feasibility_with_llm(task: dict, http_probe: dict, retries: int = 3) 
                     "confidence": 0.0,
                     "reasoning": f"LLM assessment failed: {e}",
                 }
+    # Should not reach here, but satisfies type checker
+    return {
+        "classification": UNCERTAIN,
+        "confidence": 0.0,
+        "reasoning": "No attempts made",
+    }
 
 
 # ══════════════════════════════════════════════════════════════════════════════

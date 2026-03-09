@@ -35,6 +35,7 @@ pillow>=10.0.0  # For screenshot handling
 
 # LLM API Clients
 openai>=1.0.0  # For judge LLM (supports Gemini via OpenAI-compatible endpoint)
+google-genai>=1.0.0  # For Gemini url_context tool (task feasibility checking)
 anthropic>=0.7.0  # Optional: if using Claude as judge
 
 # Utilities

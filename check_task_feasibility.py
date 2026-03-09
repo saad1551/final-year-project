@@ -19,8 +19,18 @@ Two modes:
 
 Usage examples
 --------------
-  # Fresh check on the same 50 tasks used during evaluation:
+  # Fresh check on the same 50 tasks used during evaluation (AI Studio key):
   python check_task_feasibility.py --sample_size 50 --seed 42
+
+  # Same check via Vertex AI (no daily quota cap; needs GCP credentials):
+  export GOOGLE_APPLICATION_CREDENTIALS="/path/to/service-account-key.json"
+  python check_task_feasibility.py --sample_size 50 --seed 42 \\
+      --vertex_project my-gcp-project-id
+
+  # Resume a previous run that was interrupted by quota limits:
+  python check_task_feasibility.py --sample_size 50 --seed 42 \\
+      --resume_from feasibility_results/feasibility_check_<timestamp>.json \\
+      --vertex_project my-gcp-project-id
 
   # Analyse results you already have (download the JSON from RunPod first):
   python check_task_feasibility.py \\
@@ -46,10 +56,11 @@ import requests
 from google import genai
 from google.genai.types import Tool, GenerateContentConfig, UrlContext
 
-# ── Gemini config (same values as judge_integration.py) ───────────────────────
-# Imported directly to avoid pulling in the full insta package chain.
+# ── Gemini config ─────────────────────────────────────────────────────────────
+# Gemini AI Studio (free tier, API key auth):
 JUDGE_API_KEY = "AIzaSyB69u9Zkswl8GjDwsA8h9UPBajdxnJ5ivQ"
-# gemini-2.0-flash: 1500 requests/day on the free tier (vs 20 for gemini-2.5-flash)
+# gemini-2.0-flash: 1500 requests/day on the AI Studio free tier
+# On Vertex AI there is no daily cap — pay-per-use only.
 JUDGE_MODEL = "gemini-2.0-flash"
 
 # ── HTTP probe ─────────────────────────────────────────────────────────────────
@@ -216,11 +227,29 @@ def probe_website(website: str) -> dict:
 
 _gemini_client: Optional[genai.Client] = None
 
+# Set by main() when --vertex_project is supplied
+_vertex_project: Optional[str] = None
+_vertex_location: str = "us-central1"
+
 
 def get_gemini_client() -> genai.Client:
+    """
+    Return a cached Gemini client.
+
+    - If _vertex_project is set, authenticates via Vertex AI (uses
+      GOOGLE_APPLICATION_CREDENTIALS or gcloud ADC — no API key needed).
+    - Otherwise falls back to AI Studio API key auth.
+    """
     global _gemini_client
     if _gemini_client is None:
-        _gemini_client = genai.Client(api_key=JUDGE_API_KEY)
+        if _vertex_project:
+            _gemini_client = genai.Client(
+                vertexai=True,
+                project=_vertex_project,
+                location=_vertex_location,
+            )
+        else:
+            _gemini_client = genai.Client(api_key=JUDGE_API_KEY)
     return _gemini_client
 
 
@@ -747,7 +776,34 @@ def main():
             "quota reset to avoid re-running tasks from scratch."
         ),
     )
+    parser.add_argument(
+        "--vertex_project",
+        default=None,
+        metavar="PROJECT_ID",
+        help=(
+            "Google Cloud project ID to use Vertex AI instead of AI Studio. "
+            "Requires GOOGLE_APPLICATION_CREDENTIALS to be set (service account "
+            "JSON key) or gcloud ADC configured. Bypasses the free-tier daily quota."
+        ),
+    )
+    parser.add_argument(
+        "--vertex_location",
+        default="us-central1",
+        metavar="REGION",
+        help="Vertex AI region (default: us-central1).",
+    )
     args = parser.parse_args()
+
+    # ── Configure Vertex AI globals if requested ───────────────────────────────
+    if args.vertex_project:
+        global _vertex_project, _vertex_location
+        _vertex_project = args.vertex_project
+        _vertex_location = args.vertex_location
+        print(
+            f"Using Vertex AI  project={_vertex_project}  location={_vertex_location}"
+        )
+    else:
+        print("Using AI Studio API key auth (free tier)")
 
     # ── Fresh feasibility check ────────────────────────────────────────────────
     if not args.skip_fresh:

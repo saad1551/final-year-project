@@ -260,6 +260,12 @@ def main() -> None:
         action="store_true",
         help="Zero out the configured observation sleep to measure pure HTTP + processing latency",
     )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=DEFAULT_BROWSER_CONFIG.playwright_port,
+        help=f"Port the Playwright server is listening on (default: {DEFAULT_BROWSER_CONFIG.playwright_port})",
+    )
     args = parser.parse_args()
 
     obs_sleep = (
@@ -273,6 +279,7 @@ def main() -> None:
     print(SEPARATOR)
     print(f"  URL        : {args.url}")
     print(f"  Steps      : {args.steps}")
+    print(f"  Port       : {args.port}")
     print(
         f"  Obs sleep  : {'disabled (--no-sleep)' if args.no_sleep else f'{obs_sleep}s'}"
     )
@@ -281,6 +288,7 @@ def main() -> None:
 
     playwright_url = "http://localhost:{port}"
     browser_config = build_browser_config(playwright_url, zero_obs_sleep=args.no_sleep)
+    browser_config.playwright_port = args.port
     client = initialize_session(args.url, browser_config)
 
     timings: dict[str, list[float]] = {"obs": [], "md": [], "exec": []}

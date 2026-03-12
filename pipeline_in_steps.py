@@ -84,6 +84,32 @@ class StepProfiler:
         self.timings[phase].append(elapsed)
         return elapsed
 
+    def get_mean_timings(self) -> dict:
+        """Return mean seconds per step for each phase, plus a step_total key.
+
+        Phases with no recorded values are omitted.
+        """
+        import statistics
+
+        result = {}
+        step_totals = None
+        for phase in self.PHASES:
+            vals = self.timings[phase]
+            if not vals:
+                continue
+            result[phase] = statistics.mean(vals)
+            # Accumulate per-step totals across all phases
+            if step_totals is None:
+                step_totals = list(vals)
+            else:
+                step_totals = [
+                    step_totals[i] + vals[i]
+                    for i in range(min(len(step_totals), len(vals)))
+                ]
+        if step_totals:
+            result["step_total"] = statistics.mean(step_totals)
+        return result
+
     def print_step_summary(self, step: int) -> None:
         """Print a one-line timing summary for the most recent step."""
         parts = []
@@ -660,6 +686,7 @@ def run_trajectory(
                 "judgment": None,
                 "rl_update_stats": None,
                 "trainer": trainer,
+                "prof_timings": profiler.get_mean_timings() if profiler else None,
             }
 
         print("\n--- Judging Trajectory ---")
@@ -776,6 +803,7 @@ def run_trajectory(
             "judgment": judgment,
             "rl_update_stats": rl_update_stats,
             "trainer": trainer,
+            "prof_timings": profiler.get_mean_timings() if profiler else None,
         }
 
     except Exception as e:
@@ -1145,6 +1173,7 @@ if __name__ == "__main__":
                 algorithm=args.algorithm,
                 learning_rate=args.learning_rate,
                 min_reward_threshold=args.min_reward,
+                prof_timings=trajectory_result.get("prof_timings"),
             )
 
             if trajectory_result.get("rl_update_stats"):

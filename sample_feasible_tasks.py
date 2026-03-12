@@ -53,6 +53,10 @@ JUDGE_MODEL = "gemini-2.5-flash"
 TARGET_COUNT = 50
 MIN_CONFIDENCE = 0.95
 DEFAULT_DATASET = "data/insta-150k-test.csv"
+DATASET_SPLITS = {
+    "test": "data/insta-150k-test.csv",
+    "train": "data/insta-150k-train.csv",
+}
 DEFAULT_OUTPUT_DIR = "feasibility_results"
 DEFAULT_SEED = 42
 
@@ -400,9 +404,18 @@ def main():
         epilog=__doc__,
     )
     parser.add_argument(
+        "--split",
+        choices=["test", "train"],
+        default="test",
+        help="Which dataset split to sample from: 'test' or 'train' (default: test)",
+    )
+    parser.add_argument(
         "--dataset",
-        default=DEFAULT_DATASET,
-        help=f"Path to test CSV (default: {DEFAULT_DATASET})",
+        default=None,
+        help=(
+            "Explicit path to a CSV file. Overrides --split if provided. "
+            f"Defaults to '{DATASET_SPLITS['test']}' when --split=test."
+        ),
     )
     parser.add_argument(
         "--target",
@@ -464,8 +477,13 @@ def main():
     else:
         print("Using AI Studio API key auth (free tier)")
 
-    print(f"\nLoading dataset: {args.dataset}")
-    df = pd.read_csv(args.dataset)
+    # Resolve dataset path: explicit --dataset overrides --split
+    dataset_path = args.dataset if args.dataset else DATASET_SPLITS[args.split]
+
+    print(
+        f"\nLoading dataset: {dataset_path}  (split={args.split if not args.dataset else 'custom'})"
+    )
+    df = pd.read_csv(dataset_path)
     print(f"Dataset loaded: {len(df)} rows")
     print(
         f"Target: {args.target} FEASIBLE tasks with confidence >= {args.min_confidence}"

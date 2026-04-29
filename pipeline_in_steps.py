@@ -654,7 +654,10 @@ if __name__ == "__main__":
     # Debug options
     parser.add_argument("--debug", action="store_true", default=False,
                         help="Enable detailed RL debug logging")
-    
+
+    parser.add_argument("--train_csv", type=str, default="data/insta-150k-train.csv",
+                        help="CSV file containing the training tasks (must have website/instruction/steps/criteria columns)")
+
     args = parser.parse_args()
     
     enable_rl_update = args.enable_rl and not args.disable_rl
@@ -689,7 +692,8 @@ if __name__ == "__main__":
     if args.algorithm == "sb3_ppo":
         rl_config.sb3_preset = args.sb3_preset
     
-    df = pd.read_csv("data/insta-150k-train.csv")
+    df = pd.read_csv(args.train_csv)
+    print(f"Training dataset loaded from: {args.train_csv}  ({len(df)} tasks)")
     
     trainer = None
     total_rewards = []

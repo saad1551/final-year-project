@@ -9,7 +9,10 @@ ENV_NAME="${ENV_NAME:-insta}"
 SESSION="${SESSION:-fyp-train}"
 RESUME_FROM="${RESUME_FROM:-checkpoints/checkpoint_trajectory_600}"
 TRAIN_CSV="${TRAIN_CSV:-feasibility_results/feasible_sample_20260324_195836.csv}"
-NUM_TRAJECTORIES="${NUM_TRAJECTORIES:-500}"
+# num_trajectories is the *target* trajectory_id, not an increment. When
+# resuming from checkpoint_trajectory_600 we need 600 + new trajectories.
+# Default targets ~500 additional trajectories on top of the warm-start.
+NUM_TRAJECTORIES="${NUM_TRAJECTORIES:-1100}"
 SAVE_EVERY="${SAVE_EVERY:-25}"
 REF_KL_FREQUENCY="${REF_KL_FREQUENCY:-5}"
 LOG_FILE="${LOG_FILE:-training_$(date +%Y%m%d_%H%M%S).log}"
@@ -37,30 +40,35 @@ export JUDGE_USE_VERTEX="${JUDGE_USE_VERTEX:-1}"
 export JUDGE_VERTEX_LOCATION="${JUDGE_VERTEX_LOCATION:-us-central1}"
 # JUDGE_VERTEX_PROJECT is optional — auto-detected from gcloud config or the
 # GCE metadata server if unset.
+export JUDGE_VERTEX_PROJECT="${JUDGE_VERTEX_PROJECT:-}"
 
-# Build the inner command. Activate conda, start playwright server in
-# background, then run the trainer.
+# Build the inner command. The DL VM image uses system Python directly
+# (no conda env), so we just start the Playwright server and run training.
 INNER_CMD=$(cat <<EOF
 set -euo pipefail
-source ~/miniconda3/etc/profile.d/conda.sh
-conda activate $ENV_NAME
 
-echo "[$(date)] starting playwright server"
-nohup bash start_playwright_server.sh > playwright_server.log 2>&1 &
-sleep 5
+# (Re)start the Playwright server in a detached screen, idempotent.
+screen -S playwright -X quit 2>/dev/null || true
+sleep 1
+echo "[\$(date)] starting playwright server"
+bash start_playwright_server.sh
+sleep 8
+# Sanity-check it's listening
+if ! curl -sS -m 3 -o /dev/null -w "%{http_code}" http://localhost:3000/ | grep -qE "^[2-4]"; then
+  echo "ERROR: playwright server did not come up on :3000" >&2
+  exit 1
+fi
+echo "[\$(date)] playwright server up"
 
 echo "[$(date)] starting training"
 echo "  csv         : $TRAIN_CSV"
 echo "  resume_from : $RESUME_FROM"
 echo "  trajectories: $NUM_TRAJECTORIES"
 
-export JUDGE_USE_VERTEX="$JUDGE_USE_VERTEX"
-export JUDGE_VERTEX_LOCATION="$JUDGE_VERTEX_LOCATION"
-if [[ -n "${JUDGE_VERTEX_PROJECT:-}" ]]; then
-  export JUDGE_VERTEX_PROJECT="$JUDGE_VERTEX_PROJECT"
-fi
+# JUDGE_USE_VERTEX, JUDGE_VERTEX_LOCATION, JUDGE_VERTEX_PROJECT are already
+# exported by the outer script and inherited via tmux's env passthrough.
 
-python pipeline_in_steps.py \
+python3 pipeline_in_steps.py \
   --train_csv "$TRAIN_CSV" \
   --resume_from "$RESUME_FROM" \
   --num_trajectories $NUM_TRAJECTORIES \

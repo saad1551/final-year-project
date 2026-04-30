@@ -9,12 +9,22 @@ ENV_NAME="${ENV_NAME:-insta}"
 SESSION="${SESSION:-fyp-train}"
 RESUME_FROM="${RESUME_FROM:-checkpoints/checkpoint_trajectory_600}"
 TRAIN_CSV="${TRAIN_CSV:-feasibility_results/feasible_sample_20260324_195836.csv}"
-# num_trajectories is the *target* trajectory_id, not an increment. When
-# resuming from checkpoint_trajectory_600 we need 600 + new trajectories.
-# Default targets ~500 additional trajectories on top of the warm-start.
-NUM_TRAJECTORIES="${NUM_TRAJECTORIES:-1100}"
+# Save new checkpoints to a separate dir so they don't collide with the old
+# warm-start checkpoints (checkpoints/checkpoint_trajectory_500/600/...).
+# When RESUME_DATASET_IDX=0 resets the trajectory counter, names like
+# "checkpoint_trajectory_500" would otherwise overwrite the originals.
+CHECKPOINT_DIR="${CHECKPOINT_DIR:-checkpoints_feasible}"
+# num_trajectories is the *target* trajectory_id, not an increment. With
+# RESUME_DATASET_IDX=0 the counter resets, so 500 means run trajectories 1..500
+# of the feasible CSV from a model warm-started at checkpoint_trajectory_600.
+NUM_TRAJECTORIES="${NUM_TRAJECTORIES:-500}"
 SAVE_EVERY="${SAVE_EVERY:-25}"
 REF_KL_FREQUENCY="${REF_KL_FREQUENCY:-5}"
+# Optional override: where in the CSV to start. Useful when the warm-start
+# checkpoint was trained on a different dataset (e.g. insta-150k-train.csv)
+# and the inferred resume index doesn't match the new CSV. Leave unset to
+# let the script auto-resume from checkpoint metadata.
+RESUME_DATASET_IDX="${RESUME_DATASET_IDX:-}"
 LOG_FILE="${LOG_FILE:-training_$(date +%Y%m%d_%H%M%S).log}"
 
 cd "$REPO_DIR"
@@ -41,6 +51,13 @@ export JUDGE_VERTEX_LOCATION="${JUDGE_VERTEX_LOCATION:-us-central1}"
 # JUDGE_VERTEX_PROJECT is optional — auto-detected from gcloud config or the
 # GCE metadata server if unset.
 export JUDGE_VERTEX_PROJECT="${JUDGE_VERTEX_PROJECT:-}"
+
+# Compose extra args for the python invocation (resolved by the outer shell
+# before being baked into the inner heredoc).
+EXTRA_ARGS=""
+if [[ -n "${RESUME_DATASET_IDX:-}" ]]; then
+  EXTRA_ARGS="--resume_dataset_idx $RESUME_DATASET_IDX"
+fi
 
 # Build the inner command. The DL VM image uses system Python directly
 # (no conda env), so we just start the Playwright server and run training.
@@ -71,10 +88,12 @@ echo "  trajectories: $NUM_TRAJECTORIES"
 python3 pipeline_in_steps.py \
   --train_csv "$TRAIN_CSV" \
   --resume_from "$RESUME_FROM" \
+  --checkpoint_dir "$CHECKPOINT_DIR" \
   --num_trajectories $NUM_TRAJECTORIES \
   --save_every $SAVE_EVERY \
   --algorithm ppo \
   --ref_kl_frequency $REF_KL_FREQUENCY \
+  $EXTRA_ARGS \
   2>&1 | tee "$LOG_FILE"
 EOF
 )

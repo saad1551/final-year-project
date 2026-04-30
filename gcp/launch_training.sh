@@ -73,21 +73,23 @@ if [[ -n "${RESUME_DATASET_IDX:-}" ]]; then
 fi
 
 # Build the inner command. The DL VM image uses system Python directly
-# (no conda env), so we just start the Playwright server and run training.
+# (no conda env). Playwright server lifecycle is managed by the watchdog
+# (gcp/playwright_watchdog.sh) — start it separately in a 'watchdog' screen
+# before launching training. Here we just verify port 3000 is live.
 INNER_CMD=$(cat <<EOF
 set -euo pipefail
 
-# (Re)start the Playwright server in a detached screen, idempotent.
-screen -S playwright -X quit 2>/dev/null || true
-sleep 1
-echo "[\$(date)] starting playwright server"
-bash start_playwright_server.sh
-sleep 8
-# Sanity-check it's listening
-if ! curl -sS -m 3 -o /dev/null -w "%{http_code}" http://localhost:3000/ | grep -qE "^[2-4]"; then
-  echo "ERROR: playwright server did not come up on :3000" >&2
-  exit 1
-fi
+echo "[\$(date)] checking playwright server"
+deadline=\$((SECONDS + 30))
+while ! curl -sS -m 3 -o /dev/null http://localhost:3000/ 2>/dev/null; do
+  if (( SECONDS > deadline )); then
+    echo "ERROR: playwright server did not respond on :3000 within 30s" >&2
+    echo "       Make sure the watchdog screen is running:" >&2
+    echo "       screen -S watchdog -dm bash gcp/playwright_watchdog.sh" >&2
+    exit 1
+  fi
+  sleep 2
+done
 echo "[\$(date)] playwright server up"
 
 echo "[$(date)] starting training"

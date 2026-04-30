@@ -1,61 +1,108 @@
 #!/usr/bin/env bash
-# Run ON the VM to set up the Python environment and Playwright browser.
-# Assumes a Deep Learning VM image (CUDA + Python pre-installed).
+# Run ON the VM to set up everything training needs.
+#
+# Idempotent: safe to re-run after preemption + restart. Each install step
+# guards on "already installed".
+#
+# DL VM (pytorch-2-9-cu129-ubuntu-2204) ships with:
+#   - Python 3.10.12 + PyTorch 2.9.1+cu129 (system-wide)
+#   - screen, tmux, git, build-essential
+# We add: Node.js LTS, npm packages for the Playwright server, and the
+# Python deps needed for training/eval.
 
 set -euo pipefail
 
 REPO_DIR="${REPO_DIR:-$HOME/final-year-project}"
-ENV_NAME="${ENV_NAME:-insta}"
-PYTHON_VERSION="${PYTHON_VERSION:-3.10}"
 
 echo "===================================================================="
-echo "VM environment setup"
+echo "VM environment setup  ($(date))"
 echo "===================================================================="
-echo "Repo dir : $REPO_DIR"
-echo "Conda env: $ENV_NAME (python $PYTHON_VERSION)"
-echo "===================================================================="
-
 cd "$REPO_DIR"
 
-if ! command -v conda >/dev/null; then
-  echo "Installing miniconda..."
-  curl -fsSL -o /tmp/miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-  bash /tmp/miniconda.sh -b -p "$HOME/miniconda3"
-  eval "$($HOME/miniconda3/bin/conda shell.bash hook)"
-  conda init bash
+# 1. Node.js LTS (for the Playwright JS server in javascript/server/)
+if ! command -v node >/dev/null 2>&1; then
+  echo "[setup] Installing Node.js LTS..."
+  curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+  sudo apt-get install -y nodejs
+else
+  echo "[setup] Node.js already installed: $(node --version)"
 fi
 
-eval "$(conda shell.bash hook)"
-
-if ! conda env list | grep -q "^$ENV_NAME "; then
-  if [[ -f "environment.yml" ]]; then
-    echo "Creating conda env from environment.yml..."
-    conda env create -n "$ENV_NAME" -f environment.yml
+# 2. npm install for the Playwright server
+if [[ -d javascript/server ]]; then
+  if [[ ! -d javascript/server/node_modules ]]; then
+    echo "[setup] Installing JS server dependencies..."
+    pushd javascript/server >/dev/null
+    npm install --silent
+    popd >/dev/null
   else
-    echo "Creating conda env (fallback path)..."
-    conda create -y -n "$ENV_NAME" "python=$PYTHON_VERSION"
+    echo "[setup] javascript/server/node_modules already present"
   fi
 fi
 
-conda activate "$ENV_NAME"
+# 3. Playwright browsers for the JS server
+echo "[setup] Installing Playwright browsers (chromium, with deps)..."
+sudo npx playwright install --with-deps chromium >/dev/null 2>&1 || \
+  npx playwright install chromium
 
-if [[ -f "requirements.txt" ]]; then
-  echo "Installing requirements.txt..."
-  pip install --upgrade pip
-  pip install -r requirements.txt
+# 4. Python deps for training / eval
+# Skip vllm, sk-video, gradio-client, anthropic, lxml-html-clean — not used at train time
+PY_DEPS=(
+  "transformers>=4.35.0"
+  "accelerate>=0.24.0"
+  "peft>=0.7.0"
+  "bitsandbytes>=0.45.0"
+  "sentencepiece>=0.1.99"
+  "protobuf>=3.20.0"
+  "stable-baselines3>=2.0.0"
+  "gymnasium>=0.28.0"
+  "pandas>=1.5.0"
+  "huggingface-hub>=0.16.4"
+  "numpy>=1.24.0"
+  "datasets>=2.14.0"
+  "tabulate>=0.9.0"
+  "playwright>=1.40.0"
+  "requests>=2.31.0"
+  "beautifulsoup4>=4.12.0"
+  "lxml>=4.9.0"
+  "lxml-html-clean>=0.1.0"
+  "pillow>=10.0.0"
+  "openai>=1.0.0"
+  "google-genai>=1.0.0"
+  "tqdm>=4.65.0"
+  "colorama>=0.4.6"
+  "python-dotenv>=1.0.0"
+)
+
+echo "[setup] Installing Python training deps..."
+python3 -m pip install --quiet --upgrade pip
+python3 -m pip install --quiet "${PY_DEPS[@]}"
+
+# 5. Install the InSTA package (local, editable) if a setup.py is present
+if [[ -f setup.py ]]; then
+  echo "[setup] Installing local insta package (editable)..."
+  python3 -m pip install --quiet -e .
 fi
 
-echo "Installing Playwright browsers..."
-python -m playwright install --with-deps chromium
-
+# 6. Smoke checks
 echo ""
-echo "Smoke checks:"
-python - <<'PY'
+echo "===================================================================="
+echo "Smoke checks"
+echo "===================================================================="
+python3 - <<'PY'
+import sys
+print(f"  python    : {sys.version.split()[0]}")
 import torch
-print(f"  torch: {torch.__version__}, cuda available: {torch.cuda.is_available()}")
+print(f"  torch     : {torch.__version__}  cuda={torch.cuda.is_available()}")
 if torch.cuda.is_available():
-    print(f"  device: {torch.cuda.get_device_name(0)}")
+    print(f"  device    : {torch.cuda.get_device_name(0)}  ({torch.cuda.get_device_properties(0).total_memory/1024**3:.1f} GiB)")
+import transformers, peft, bitsandbytes
+print(f"  transformers: {transformers.__version__}")
+print(f"  peft        : {peft.__version__}")
+print(f"  bitsandbytes: {bitsandbytes.__version__}")
 PY
 
 echo ""
-echo "Done. Next: bash gcp/launch_training.sh"
+echo "Done. Next steps:"
+echo "  export JUDGE_API_KEY=<your Gemini API key>"
+echo "  bash gcp/launch_training.sh"

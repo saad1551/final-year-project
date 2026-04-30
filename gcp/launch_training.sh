@@ -20,6 +20,14 @@ CHECKPOINT_DIR="${CHECKPOINT_DIR:-checkpoints_feasible}"
 NUM_TRAJECTORIES="${NUM_TRAJECTORIES:-500}"
 SAVE_EVERY="${SAVE_EVERY:-25}"
 REF_KL_FREQUENCY="${REF_KL_FREQUENCY:-5}"
+# min_reward_for_update threshold: trajectories with reward below this are
+# skipped from the RL update. Default 0.0 = train on every completed
+# trajectory. The 0.1 default in the python script was set when the dataset
+# was raw InSTA (full of broken tasks); now that we're on the
+# feasibility-filtered CSV, low rewards reflect real agent failures whose
+# negative gradient is signal, not noise. PPO clip + ref-KL + grad-norm
+# already bound destabilization.
+MIN_REWARD="${MIN_REWARD:-0.0}"
 # Optional override: where in the CSV to start. Useful when the warm-start
 # checkpoint was trained on a different dataset (e.g. insta-150k-train.csv)
 # and the inferred resume index doesn't match the new CSV. Leave unset to
@@ -98,6 +106,7 @@ python3 pipeline_in_steps.py \
   --save_every $SAVE_EVERY \
   --algorithm ppo \
   --ref_kl_frequency $REF_KL_FREQUENCY \
+  --min_reward $MIN_REWARD \
   $EXTRA_ARGS \
   2>&1 | tee "$LOG_FILE"
 EOF

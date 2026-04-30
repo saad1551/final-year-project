@@ -40,10 +40,15 @@ if [[ -d javascript/server ]]; then
   fi
 fi
 
-# 3. Playwright browsers for the JS server
-echo "[setup] Installing Playwright browsers (chromium, with deps)..."
-sudo npx playwright install --with-deps chromium >/dev/null 2>&1 || \
-  npx playwright install chromium
+# 3. Playwright browsers for the JS server.
+# IMPORTANT: install browsers as the *user* (not sudo) so they land in
+# ~/.cache/ms-playwright where the JS server (running as the user) can find
+# them. Using sudo would put them in /root/.cache and break runtime.
+# We do still need sudo for system deps (libs, fonts) once.
+echo "[setup] Installing Playwright system deps (sudo)..."
+sudo npx playwright install-deps chromium >/dev/null 2>&1 || true
+echo "[setup] Installing Chromium browser into user cache..."
+npx playwright install chromium
 
 # 4. Python deps for training / eval
 # Skip vllm, sk-video, gradio-client, anthropic, lxml-html-clean — not used at train time

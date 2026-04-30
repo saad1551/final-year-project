@@ -29,8 +29,14 @@ if [[ ! -d "$RESUME_FROM" ]]; then
   echo "ERROR: warm-start checkpoint not found at $RESUME_FROM" >&2; exit 1
 fi
 
-# Required env: Gemini judge API key (drawn from the GenAI credit pool).
-: "${JUDGE_API_KEY:?Must set JUDGE_API_KEY (Gemini API key) before launching}"
+# Vertex AI is the default judge backend on the VM. The credit pool the user
+# wants billed (GenAI app builder) only applies via Vertex / Gemini products,
+# not Compute Engine. JUDGE_USE_VERTEX=1 + JUDGE_VERTEX_PROJECT (auto-detected
+# via metadata server / gcloud) tells judge_integration.py to use Vertex.
+export JUDGE_USE_VERTEX="${JUDGE_USE_VERTEX:-1}"
+export JUDGE_VERTEX_LOCATION="${JUDGE_VERTEX_LOCATION:-us-central1}"
+# JUDGE_VERTEX_PROJECT is optional — auto-detected from gcloud config or the
+# GCE metadata server if unset.
 
 # Build the inner command. Activate conda, start playwright server in
 # background, then run the trainer.
@@ -48,7 +54,11 @@ echo "  csv         : $TRAIN_CSV"
 echo "  resume_from : $RESUME_FROM"
 echo "  trajectories: $NUM_TRAJECTORIES"
 
-export JUDGE_API_KEY="$JUDGE_API_KEY"
+export JUDGE_USE_VERTEX="$JUDGE_USE_VERTEX"
+export JUDGE_VERTEX_LOCATION="$JUDGE_VERTEX_LOCATION"
+if [[ -n "${JUDGE_VERTEX_PROJECT:-}" ]]; then
+  export JUDGE_VERTEX_PROJECT="$JUDGE_VERTEX_PROJECT"
+fi
 
 python pipeline_in_steps.py \
   --train_csv "$TRAIN_CSV" \

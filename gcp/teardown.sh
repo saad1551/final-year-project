@@ -20,7 +20,7 @@ case "$ACTION" in
     ;;
   delete)
     read -r -p "Delete VM AND boot disk for '$INSTANCE_NAME'? This is irreversible. [y/N] " confirm
-    if [[ "${confirm,,}" != "y" && "${confirm,,}" != "yes" ]]; then
+    if [[ ! "$confirm" =~ ^[yY] ]]; then
       echo "Aborted."
       exit 1
     fi

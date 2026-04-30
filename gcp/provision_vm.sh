@@ -20,7 +20,7 @@ GPU_TYPE="${GPU_TYPE:-nvidia-tesla-t4}"
 GPU_COUNT="${GPU_COUNT:-1}"
 DISK_SIZE_GB="${DISK_SIZE_GB:-150}"
 DISK_TYPE="${DISK_TYPE:-pd-balanced}"
-IMAGE_FAMILY="${IMAGE_FAMILY:-pytorch-latest-gpu}"
+IMAGE_FAMILY="${IMAGE_FAMILY:-pytorch-2-9-cu129-ubuntu-2204-nvidia-580}"
 IMAGE_PROJECT="${IMAGE_PROJECT:-deeplearning-platform-release}"
 
 DRY_RUN=0
@@ -70,7 +70,7 @@ if [[ "$DRY_RUN" == "1" ]]; then
 fi
 
 read -r -p "Launch VM now? [y/N] " confirm
-if [[ "${confirm,,}" != "y" && "${confirm,,}" != "yes" ]]; then
+if [[ ! "$confirm" =~ ^[yY] ]]; then
   echo "Aborted."
   exit 1
 fi

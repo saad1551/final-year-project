@@ -52,6 +52,11 @@ export JUDGE_VERTEX_LOCATION="${JUDGE_VERTEX_LOCATION:-us-central1}"
 # GCE metadata server if unset.
 export JUDGE_VERTEX_PROJECT="${JUDGE_VERTEX_PROJECT:-}"
 
+# Disable per-step screenshot saving. Over 500 trajectories with ~10 steps
+# each the visualization_output dir balloons to several GB and adds disk
+# IO overhead per step. Set DISABLE_SCREENSHOTS=0 to re-enable for debugging.
+export DISABLE_SCREENSHOTS="${DISABLE_SCREENSHOTS:-1}"
+
 # Compose extra args for the python invocation (resolved by the outer shell
 # before being baked into the inner heredoc).
 EXTRA_ARGS=""

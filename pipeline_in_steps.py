@@ -43,9 +43,11 @@ def pipeline_debug(message: str, level: str = "INFO"):
 
 
 def save_screenshot(observation: BrowserObservation, step: int, prefix: str = "step"):
+    if os.environ.get("DISABLE_SCREENSHOTS", "").lower() in ("1", "true", "yes"):
+        return
     if observation is None or observation.screenshot is None:
         return
-    
+
     os.makedirs(SCREENSHOT_OUTPUT_DIR, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     filename = f"{prefix}_{step:03d}_{timestamp}.png"

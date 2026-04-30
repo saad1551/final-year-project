@@ -1,10 +1,15 @@
+import os
 from insta.judge import BrowserJudge
 from insta.configs.judge_config import JudgeConfig, BrowserJudgment
 from typing import List
 
 
-# Gemini API Configuration
-JUDGE_API_KEY = "AIzaSyCpMDhbwWz12rsPGErG2v3oqTQjNg3N8C8"
+# Gemini API Configuration.
+# Read from JUDGE_API_KEY env var; the literal below is a development fallback
+# only and should be overridden in production / on the training VM.
+JUDGE_API_KEY = os.environ.get(
+    "JUDGE_API_KEY", "AIzaSyCpMDhbwWz12rsPGErG2v3oqTQjNg3N8C8"
+)
 JUDGE_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
 JUDGE_MODEL = "gemini-2.5-flash"
 

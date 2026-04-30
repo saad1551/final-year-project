@@ -7,10 +7,11 @@ set -euo pipefail
 REPO_DIR="${REPO_DIR:-$HOME/final-year-project}"
 ENV_NAME="${ENV_NAME:-insta}"
 SESSION="${SESSION:-fyp-train}"
-RESUME_FROM="${RESUME_FROM:-checkpoints/final_checkpoint}"
+RESUME_FROM="${RESUME_FROM:-checkpoints/checkpoint_trajectory_600}"
 TRAIN_CSV="${TRAIN_CSV:-feasibility_results/feasible_sample_20260324_195836.csv}"
 NUM_TRAJECTORIES="${NUM_TRAJECTORIES:-500}"
 SAVE_EVERY="${SAVE_EVERY:-25}"
+REF_KL_FREQUENCY="${REF_KL_FREQUENCY:-5}"
 LOG_FILE="${LOG_FILE:-training_$(date +%Y%m%d_%H%M%S).log}"
 
 cd "$REPO_DIR"
@@ -55,6 +56,7 @@ python pipeline_in_steps.py \
   --num_trajectories $NUM_TRAJECTORIES \
   --save_every $SAVE_EVERY \
   --algorithm ppo \
+  --ref_kl_frequency $REF_KL_FREQUENCY \
   2>&1 | tee "$LOG_FILE"
 EOF
 )

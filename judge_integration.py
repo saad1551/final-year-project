@@ -56,10 +56,10 @@ JUDGE_VERTEX_PROJECT = os.environ.get("JUDGE_VERTEX_PROJECT", "")
 JUDGE_VERTEX_LOCATION = os.environ.get("JUDGE_VERTEX_LOCATION", "us-central1")
 JUDGE_USE_VERTEX = os.environ.get("JUDGE_USE_VERTEX", "").lower() in ("1", "true", "yes")
 
-# AI Studio fallback key (kept for local dev only; production should set Vertex)
-JUDGE_API_KEY = os.environ.get(
-    "JUDGE_API_KEY", "AIzaSyCpMDhbwWz12rsPGErG2v3oqTQjNg3N8C8"
-)
+# AI Studio fallback path. Read from env only — no hardcoded fallback.
+# Used only when Vertex auth (JUDGE_USE_VERTEX / JUDGE_VERTEX_PROJECT) is
+# not configured. Get a key at https://aistudio.google.com/apikey.
+JUDGE_API_KEY = os.environ.get("JUDGE_API_KEY")
 
 
 _NULL_JUDGMENT = BrowserJudgment(

@@ -166,7 +166,9 @@ Training is ongoing at submission time. Across the first 115 trajectories, we ob
 
 ### 4.5 Results: held-out test-set evaluation  *[FILL — depends on training completion]*
 
-We use a **3 × 2 factorial design**: three checkpoints evaluated on two test sets, all with the same task seed so cross-checkpoint comparisons are paired.
+Our primary evaluation is on the **filtered held-out test set** (200 feasibility-confirmed tasks). We argue this is the scientifically meaningful evaluation: §3 establishes that ~72% of unfiltered InSTA-150k-test tasks are infeasible (websites down, content stale, or judge-uncertain), and an agent's behavior on infeasible tasks is uninformative about its capability — every model fails by construction.
+
+A small **unfiltered validation experiment** (30 tasks per checkpoint) is reported only as confirmation of the predicted measurement-bias gap (~0.28× scaling per §3.2), not as a measure of agent capability. We elaborate on this design choice below.
 
 **Checkpoints** (rows of Table 1):
 
@@ -178,10 +180,10 @@ We use a **3 × 2 factorial design**: three checkpoints evaluated on two test se
 
 **Test sets** (columns):
 
-| Test set | Description |
-|---|---|
-| **Filtered** | 200 tasks from `feasibility_results/feasible_sample_20260424_124844.csv` — InSTA-150k-test tasks that the feasibility judge (§3) classified as `FEASIBLE` with confidence ≥ 0.95 |
-| **Unfiltered** | A matched random sample of 150 tasks from `data/insta-150k-test.csv` — the raw InSTA-150k test split with no filtering, 5-task-stratified by instruction verb (find/navigate/search/count/fill) |
+| Test set | Description | Purpose |
+|---|---|---|
+| **Filtered** (primary) | 200 tasks from `feasibility_results/feasible_sample_20260424_124844.csv` — InSTA-150k-test tasks that the feasibility judge (§3) classified as `FEASIBLE` with confidence ≥ 0.95 | The headline measurement of agent capability |
+| **Unfiltered** (validation only) | 30 tasks randomly sampled from `data/insta-150k-test.csv` | Small validation experiment to confirm the predicted measurement-bias scaling and document the gap between feasibility-aware and standard reporting practice |
 
 **Table 1 — held-out evaluation results** (mean ± 95% bootstrap CI; bold = best per column):
 
@@ -199,10 +201,12 @@ The three rows of Table 1 enable three independent claims, in increasing order o
 2. **Base SFT vs RL-on-filtered** *(this paper, headline claim)*. Total gain from RL on a feasibility-filtered subset.
 3. **RL-on-raw vs RL-on-filtered** *(this paper, attribution claim)*. The **incremental** gain from training on cleaned data, holding the RL algorithm and total training budget roughly fixed. This is the experiment that isolates the value of feasibility filtering specifically.
 
-Cross-column comparisons isolate the impact of benchmark hygiene on *measurement* (independent of training):
+Cross-column comparisons (using the small unfiltered validation sample) isolate the impact of benchmark hygiene on *measurement* (independent of training):
 
-4. **Base SFT, Filtered vs Unfiltered.** Quantifies how much benchmark decay distorts measured agent performance even for a model that wasn't trained on cleaned data — a claim the broader benchmarking community needs to hear.
-5. **RL-on-filtered, Filtered vs Unfiltered.** Tells us whether training on cleaned data widens or narrows the filtered-vs-unfiltered measurement gap.
+4. **Base SFT, Filtered vs Unfiltered.** Confirms that benchmark decay distorts measured performance by approximately the predicted factor (≈0.28×, from §3.2). If the unfiltered mean ≈ 0.28 × the filtered mean, this validates the feasibility analysis's methodological correctness and demonstrates the downward bias in standard reporting practice.
+5. **RL-on-filtered, Filtered vs Unfiltered.** Confirms the same scaling holds for the trained checkpoint — i.e., training on cleaned data does not specifically over-fit to the filtered distribution; the filtered-to-unfiltered ratio is roughly constant across checkpoints.
+
+**Why a small unfiltered N is sufficient for these claims.** §3.2 quantifies that ~72% of unfiltered InSTA-150k-test tasks are infeasible. On those tasks every checkpoint receives ≈0 reward by construction (the agent cannot extract an answer that isn't there or load a site that won't respond). The unfiltered mean is therefore approximately the feasibility rate × the on-feasible mean, scaled-down version of the filtered mean. Validating that prediction needs only a small sample, since the effect (broken tasks → 0 reward) is large and the predicted scaling is precise.
 
 We report:
 

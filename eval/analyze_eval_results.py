@@ -154,15 +154,23 @@ def main():
     inv3 = rd / "inv3_unfiltered_base_and_raw"
     inv4 = rd / "inv4_unfiltered_rl_filtered"
 
-    # Load each cell's per-task results
+    # Filtered cells are required; unfiltered are optional (only present if
+    # RUN_UNFILTERED=1 was set in run_full_eval.sh).
     cells: dict[tuple[str, str], list[dict]] = {
         ("Base SFT", "Filtered"):       load_results(latest("base_results_*.json", inv1)),
         ("RL-on-raw", "Filtered"):      load_results(latest("checkpoint_results_*.json", inv1)),
         ("RL-on-filtered", "Filtered"): load_results(latest("checkpoint_results_*.json", inv2)),
-        ("Base SFT", "Unfiltered"):       load_results(latest("base_results_*.json", inv3)),
-        ("RL-on-raw", "Unfiltered"):      load_results(latest("checkpoint_results_*.json", inv3)),
-        ("RL-on-filtered", "Unfiltered"): load_results(latest("checkpoint_results_*.json", inv4)),
     }
+    has_unfiltered = inv3.exists() and inv4.exists()
+    if has_unfiltered:
+        try:
+            cells.update({
+                ("Base SFT", "Unfiltered"):       load_results(latest("base_results_*.json", inv3)),
+                ("RL-on-raw", "Unfiltered"):      load_results(latest("checkpoint_results_*.json", inv3)),
+                ("RL-on-filtered", "Unfiltered"): load_results(latest("checkpoint_results_*.json", inv4)),
+            })
+        except FileNotFoundError:
+            has_unfiltered = False
 
     # Compute per-cell metrics (paired across checkpoints by row order — eval script uses same seed)
     metrics: dict[tuple[str, str], dict] = {}
@@ -179,19 +187,29 @@ def main():
 
     # Render the main table
     rows = ["Base SFT", "RL-on-raw", "RL-on-filtered"]
-    cols = ["Filtered", "Unfiltered"]
+    cols = ["Filtered", "Unfiltered"] if has_unfiltered else ["Filtered"]
 
     md = ["## Table 1 — held-out evaluation (mean [95% bootstrap CI])\n"]
-    md.append("| Checkpoint | Filtered Reward | Filtered Success | Unfiltered Reward | Unfiltered Success | Mean steps (Filt / Unfilt) |")
-    md.append("|---|---|---|---|---|---|")
-    for ckpt in rows:
-        f = metrics[(ckpt, "Filtered")]
-        u = metrics[(ckpt, "Unfiltered")]
-        md.append(
-            f"| **{ckpt}** | {fmt_ci(f['reward'])} | {fmt_ci(f['success_rate'])} | "
-            f"{fmt_ci(u['reward'])} | {fmt_ci(u['success_rate'])} | "
-            f"{f['mean_steps']:.1f} / {u['mean_steps']:.1f} |"
-        )
+    if has_unfiltered:
+        md.append("| Checkpoint | Filtered Reward | Filtered Success | Unfiltered Reward | Unfiltered Success | Mean steps (Filt / Unfilt) |")
+        md.append("|---|---|---|---|---|---|")
+        for ckpt in rows:
+            f = metrics[(ckpt, "Filtered")]
+            u = metrics[(ckpt, "Unfiltered")]
+            md.append(
+                f"| **{ckpt}** | {fmt_ci(f['reward'])} | {fmt_ci(f['success_rate'])} | "
+                f"{fmt_ci(u['reward'])} | {fmt_ci(u['success_rate'])} | "
+                f"{f['mean_steps']:.1f} / {u['mean_steps']:.1f} |"
+            )
+    else:
+        md.append("| Checkpoint | Filtered Reward | Filtered Success | Mean steps |")
+        md.append("|---|---|---|---|")
+        for ckpt in rows:
+            f = metrics[(ckpt, "Filtered")]
+            md.append(
+                f"| **{ckpt}** | {fmt_ci(f['reward'])} | {fmt_ci(f['success_rate'])} | "
+                f"{f['mean_steps']:.1f} |"
+            )
     md.append("")
 
     # Pairwise tests (the comparisons that go in §4.5 prose)

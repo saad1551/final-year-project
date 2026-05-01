@@ -37,7 +37,14 @@ RL_FILT="${RL_FILT:-checkpoints_feasible/checkpoint_trajectory_500}"
 FILT_CSV="${FILT_CSV:-feasibility_results/feasible_sample_20260424_124844.csv}"
 UNFILT_CSV="${UNFILT_CSV:-data/insta-150k-test.csv}"
 N_FILTERED="${N_FILTERED:-200}"
-N_UNFILTERED="${N_UNFILTERED:-150}"
+# Unfiltered eval is OFF by default — §3 already establishes that ~72% of
+# unfiltered tasks are infeasible, so running them adds little signal about
+# agent capability. Set RUN_UNFILTERED=1 to enable, primarily as a small
+# validation experiment that quantifies the filtered-vs-unfiltered measurement
+# gap. Default size is small because the effect (broken tasks -> ~0 reward)
+# is large and doesn't need high N to demonstrate.
+RUN_UNFILTERED="${RUN_UNFILTERED:-0}"
+N_UNFILTERED="${N_UNFILTERED:-30}"
 SEED="${SEED:-42}"
 OUT="${OUT:-eval_results/run_$(date +%Y%m%d_%H%M%S)}"
 
@@ -94,27 +101,40 @@ run "Inv 2/4: RL-on-filtered on Filtered" \
     --seed "$SEED" \
     --output_dir "$OUT/inv2_filtered_rl_filtered"
 
-# inv 3: Base SFT + RL-on-raw on Unfiltered
-run "Inv 3/4: Base SFT + RL-on-raw on Unfiltered" \
-  python3 evaluate_checkpoint.py \
-    --checkpoint_dir "$RL_RAW" \
-    --dataset "$UNFILT_CSV" \
-    --sample_size "$N_UNFILTERED" \
-    --seed "$SEED" \
-    --compare \
-    --output_dir "$OUT/inv3_unfiltered_base_and_raw"
+if [[ "$RUN_UNFILTERED" == "1" ]]; then
+  # inv 3: Base SFT + RL-on-raw on Unfiltered
+  run "Inv 3/4: Base SFT + RL-on-raw on Unfiltered (validation only, n=$N_UNFILTERED)" \
+    python3 evaluate_checkpoint.py \
+      --checkpoint_dir "$RL_RAW" \
+      --dataset "$UNFILT_CSV" \
+      --sample_size "$N_UNFILTERED" \
+      --seed "$SEED" \
+      --compare \
+      --output_dir "$OUT/inv3_unfiltered_base_and_raw"
 
-# inv 4: RL-on-filtered on Unfiltered
-run "Inv 4/4: RL-on-filtered on Unfiltered" \
-  python3 evaluate_checkpoint.py \
-    --checkpoint_dir "$RL_FILT" \
-    --dataset "$UNFILT_CSV" \
-    --sample_size "$N_UNFILTERED" \
-    --seed "$SEED" \
-    --output_dir "$OUT/inv4_unfiltered_rl_filtered"
+  # inv 4: RL-on-filtered on Unfiltered
+  run "Inv 4/4: RL-on-filtered on Unfiltered (validation only, n=$N_UNFILTERED)" \
+    python3 evaluate_checkpoint.py \
+      --checkpoint_dir "$RL_FILT" \
+      --dataset "$UNFILT_CSV" \
+      --sample_size "$N_UNFILTERED" \
+      --seed "$SEED" \
+      --output_dir "$OUT/inv4_unfiltered_rl_filtered"
+else
+  echo
+  echo "===================================================================="
+  echo "Skipping unfiltered eval (set RUN_UNFILTERED=1 to enable as validation"
+  echo "experiment). The filtered eval above is sufficient for the headline"
+  echo "agent-capability comparison."
+  echo "===================================================================="
+fi
 
 echo
 echo "===================================================================="
-echo "All 4 invocations done. Result JSONs are under: $OUT"
+if [[ "$RUN_UNFILTERED" == "1" ]]; then
+  echo "All 4 invocations done. Result JSONs are under: $OUT"
+else
+  echo "Filtered eval done (2 invocations). Result JSONs are under: $OUT"
+fi
 echo "Run analysis with:  python3 eval/analyze_eval_results.py --run_dir $OUT"
 echo "===================================================================="

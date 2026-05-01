@@ -1,8 +1,17 @@
+"""Quick sanity check that the google-genai SDK + url_context tool work.
+Read the API key from env (set JUDGE_API_KEY=... before running)."""
+import os
 from google import genai
 from google.genai.types import Tool, GenerateContentConfig
 
-client = genai.Client(api_key="AIzaSyCpMDhbwWz12rsPGErG2v3oqTQjNg3N8C8")
-model_id = "gemini-3-flash-preview"
+api_key = os.environ.get("JUDGE_API_KEY")
+if not api_key:
+    raise RuntimeError(
+        "JUDGE_API_KEY env var not set. "
+        "Get a key at https://aistudio.google.com/apikey."
+    )
+client = genai.Client(api_key=api_key)
+model_id = "gemini-2.5-flash"
 
 tools = [
   {"url_context": {}},

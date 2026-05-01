@@ -18,8 +18,10 @@ from insta.configs.agent_config import BrowserAction
 from utils import safe_call, BrowserStatus
 from judge_integration import judge_trajectory, print_judgment
 from rl_trainer import OnPolicyTrainer, RLConfig, compute_reward_from_judgment
-from rl_sb3_ppo import SB3PPOTrainer
-from rl_sb3_config_examples import get_config as get_sb3_config
+# SB3 PPO modules live under experimental/ — they're imported lazily
+# inside run_trajectory() because the SB3 path doesn't actually train on
+# real trajectory data (see experimental/README.md). The default
+# --algorithm ppo path doesn't need them.
 from observability import ObservabilityLogger
 from training_logger import TrainingLogger
 
@@ -388,7 +390,9 @@ def run_trajectory(task_data: dict, model, tokenizer, trainer: OnPolicyTrainer =
             print("\n⚠️  WARNING: SB3 PPO trains on a dummy environment, NOT your real trajectory data.")
             print("   The custom PPO algorithm (--algorithm ppo) computes gradients on actual trajectories")
             print("   and is strongly recommended for meaningful RL learning.\n")
-            # Use SB3 PPO trainer
+            # Lazy-import the SB3 modules — they live under experimental/.
+            from experimental.rl_sb3_ppo import SB3PPOTrainer
+            from experimental.rl_sb3_config_examples import get_config as get_sb3_config
             sb3_preset = getattr(rl_config, 'sb3_preset', 'default')
             sb3_config = get_sb3_config(sb3_preset)
             # Override with learning_rate if specified
@@ -710,6 +714,8 @@ if __name__ == "__main__":
         if args.algorithm == "sb3_ppo":
             print("\n⚠️  WARNING: SB3 PPO trains on a dummy environment, NOT your real trajectory data.")
             print("   Consider using --algorithm ppo instead for meaningful RL learning.\n")
+            from experimental.rl_sb3_ppo import SB3PPOTrainer
+            from experimental.rl_sb3_config_examples import get_config as get_sb3_config
             sb3_preset = args.sb3_preset
             sb3_config = get_sb3_config(sb3_preset)
             sb3_config.learning_rate = args.learning_rate

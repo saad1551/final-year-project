@@ -32,21 +32,36 @@ import os
 import re
 import sys
 import time
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from typing import Optional
 
 # Force unbuffered stdout so logs appear immediately when redirected
 sys.stdout.reconfigure(line_buffering=True)
 
+# Pakistan Standard Time (UTC+5)
+PKT = timezone(timedelta(hours=5))
+
+
+def log(msg: str = "") -> None:
+    """Print a message prefixed with the current Pakistan time (AM/PM)."""
+    ts = datetime.now(PKT).strftime("%I:%M:%S %p")
+    # Preserve leading newlines before the timestamp
+    leading = ""
+    while msg.startswith("\n"):
+        leading += "\n"
+        msg = msg[1:]
+    print(f"{leading}[{ts}] {msg}")
+
+
 import pandas as pd
 import requests
 from google import genai
-from google.genai.types import GenerateContentConfig, Tool, UrlContext
+from google.genai.types import GenerateContentConfig, HttpOptions, Tool, UrlContext
 
 # ── Gemini config ──────────────────────────────────────────────────────────────
-JUDGE_API_KEY = os.environ.get(
-    "JUDGE_API_KEY", "AIzaSyDLEsYSohwSZ3-ppPMKNyzIsEZ2GYBVeZ4"
-)
+# Read from env only — no hardcoded fallback. For Vertex AI auth, pass
+# --vertex_project on the CLI; for AI Studio, set JUDGE_API_KEY.
+JUDGE_API_KEY = os.environ.get("JUDGE_API_KEY")
 JUDGE_MODEL = "gemini-2.5-flash"
 
 # ── Defaults ───────────────────────────────────────────────────────────────────
@@ -68,6 +83,7 @@ UNCERTAIN = "UNCERTAIN"
 
 # ── HTTP probe ─────────────────────────────────────────────────────────────────
 HTTP_TIMEOUT = 10
+LLM_TIMEOUT = 120  # seconds for Gemini generate_content (includes url_context fetches)
 HTTP_HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -237,6 +253,7 @@ def assess_feasibility_with_llm(task: dict, http_probe: dict, retries: int = 5) 
                     tools=[url_context_tool],
                     response_modalities=["TEXT"],
                     temperature=0.2,
+                    http_options=HttpOptions(timeout=LLM_TIMEOUT * 1000),
                 ),
             )
             raw = response.text.strip()
@@ -258,7 +275,7 @@ def assess_feasibility_with_llm(task: dict, http_probe: dict, retries: int = 5) 
                     if delay is None:
                         delay = 60.0
                     delay += 5.0
-                    print(
+                    log(
                         f"  Rate limited (429). Waiting {delay:.0f}s before retry "
                         f"(attempt {attempt + 1}/{retries})..."
                     )
@@ -288,6 +305,7 @@ def collect_feasible_tasks(
     seed: int,
     output_dir: str,
     resume_from: Optional[str] = None,
+    rejected_from: Optional[str] = None,
 ) -> pd.DataFrame:
     """
     Shuffle the dataset and iterate row-by-row, calling Gemini for each task.
@@ -296,6 +314,7 @@ def collect_feasible_tasks(
 
     Saves a running CSV of accepted tasks after each new acceptance so progress
     is never lost.  Supports resuming from a prior output CSV.
+    Also tracks rejected tasks in a separate CSV to avoid re-checking.
     """
     os.makedirs(output_dir, exist_ok=True)
 
@@ -310,10 +329,20 @@ def collect_feasible_tasks(
         prior_df = pd.read_csv(resume_from)
         accepted_rows = prior_df.to_dict(orient="records")
         seen_websites = set(prior_df["website"].tolist())
-        print(
+        log(
             f"Resuming from '{resume_from}': "
             f"{len(accepted_rows)} tasks already collected, "
             f"{target - len(accepted_rows)} remaining."
+        )
+
+    # ── Load prior rejected tasks if resuming ───────────────────────────────────
+    rejected_rows: list[dict] = []
+    if rejected_from and os.path.isfile(rejected_from):
+        rejected_df = pd.read_csv(rejected_from)
+        rejected_rows = rejected_df.to_dict(orient="records")
+        seen_websites.update(rejected_df["website"].tolist())
+        log(
+            f"Loaded {len(rejected_rows)} previously rejected tasks from '{rejected_from}'"
         )
 
     # ── Determine output path (reuse resume_from path or create new) ───────────
@@ -322,6 +351,9 @@ def collect_feasible_tasks(
     else:
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
         out_path = os.path.join(output_dir, f"feasible_sample_{ts}.csv")
+
+    # Rejected tasks output path
+    rejected_out_path = out_path.replace("feasible_sample", "rejected_sample")
 
     total_checked = 0
 
@@ -334,27 +366,27 @@ def collect_feasible_tasks(
             continue
 
         total_checked += 1
-        print(
+        log(
             f"\n[Accepted: {len(accepted_rows)}/{target} | Checked: {total_checked}] "
             f"{row['website']}"
         )
-        print(f"  Instruction: {str(row['instruction'])[:90]}...")
+        log(f"  Instruction: {str(row['instruction'])[:90]}...")
 
         # Step 1 – HTTP probe
         probe = probe_website(row["website"])
-        print(
+        log(
             f"  HTTP: status={probe['status_code']}  reachable={probe['reachable']}"
             + (f"  error={probe['error']}" if probe["error"] else "")
         )
 
         # Step 2 – LLM assessment
-        print("  Asking Gemini for feasibility classification...")
+        log("  Asking Gemini for feasibility classification...")
         assessment = assess_feasibility_with_llm(row.to_dict(), probe)
         cls = assessment.get("classification", UNCERTAIN)
         conf = assessment.get("confidence", 0.0)
         reason = assessment.get("reasoning", "")
-        print(f"  Classification : {cls}  (confidence={conf:.2f})")
-        print(f"  Reasoning      : {reason}")
+        log(f"  Classification : {cls}  (confidence={conf:.2f})")
+        log(f"  Reasoning      : {reason}")
 
         # Accept if FEASIBLE with sufficient confidence
         if cls == FEASIBLE and conf >= min_confidence:
@@ -367,26 +399,36 @@ def collect_feasible_tasks(
             record["http_error"] = probe["error"]
             accepted_rows.append(record)
             seen_websites.add(row["website"])
-            print(f"  ✓ Accepted  ({len(accepted_rows)}/{target})")
+            log(f"  ✓ Accepted  ({len(accepted_rows)}/{target})")
 
             # Save incrementally after every accepted task
             pd.DataFrame(accepted_rows).to_csv(out_path, index=False)
         else:
-            print(f"  ✗ Skipped  (cls={cls}, conf={conf:.2f})")
+            # Save rejected task
+            rejected_record = row.to_dict()
+            rejected_record["feasibility_classification"] = cls
+            rejected_record["feasibility_confidence"] = conf
+            rejected_record["feasibility_reasoning"] = reason
+            rejected_record["http_status_code"] = probe["status_code"]
+            rejected_record["http_reachable"] = probe["reachable"]
+            rejected_record["http_error"] = probe["error"]
+            rejected_rows.append(rejected_record)
+            log(f"  ✗ Skipped  (cls={cls}, conf={conf:.2f})")
+            pd.DataFrame(rejected_rows).to_csv(rejected_out_path, index=False)
 
         # Small delay to stay within rate limits
         time.sleep(2.0)
 
     result_df = pd.DataFrame(accepted_rows)
 
-    print(f"\n{'=' * 65}")
-    print(f"DONE — collected {len(result_df)} feasible tasks")
-    print(f"  Total tasks checked : {total_checked}")
-    print(
+    log(f"\n{'=' * 65}")
+    log(f"DONE — collected {len(result_df)} feasible tasks")
+    log(f"  Total tasks checked : {total_checked}")
+    log(
         f"  Acceptance rate     : {len(result_df) / max(total_checked, 1) * 100:.1f}%"
     )
-    print(f"  Output saved to     : {out_path}")
-    print(f"{'=' * 65}")
+    log(f"  Output saved to     : {out_path}")
+    log(f"{'=' * 65}")
 
     return result_df
 
@@ -450,6 +492,15 @@ def main():
         ),
     )
     parser.add_argument(
+        "--rejected_from",
+        default=None,
+        metavar="PATH",
+        help=(
+            "Path to a prior rejected_sample CSV. Already-checked (rejected) tasks "
+            "are loaded and their websites are skipped."
+        ),
+    )
+    parser.add_argument(
         "--vertex_project",
         default=None,
         metavar="PROJECT_ID",
@@ -471,21 +522,21 @@ def main():
         global _vertex_project, _vertex_location
         _vertex_project = args.vertex_project
         _vertex_location = args.vertex_location
-        print(
+        log(
             f"Using Vertex AI  project={_vertex_project}  location={_vertex_location}"
         )
     else:
-        print("Using AI Studio API key auth (free tier)")
+        log("Using AI Studio API key auth (free tier)")
 
     # Resolve dataset path: explicit --dataset overrides --split
     dataset_path = args.dataset if args.dataset else DATASET_SPLITS[args.split]
 
-    print(
+    log(
         f"\nLoading dataset: {dataset_path}  (split={args.split if not args.dataset else 'custom'})"
     )
     df = pd.read_csv(dataset_path)
-    print(f"Dataset loaded: {len(df)} rows")
-    print(
+    log(f"Dataset loaded: {len(df)} rows")
+    log(
         f"Target: {args.target} FEASIBLE tasks with confidence >= {args.min_confidence}"
     )
 
@@ -496,6 +547,7 @@ def main():
         seed=args.seed,
         output_dir=args.output_dir,
         resume_from=args.resume_from,
+        rejected_from=args.rejected_from,
     )
 
 

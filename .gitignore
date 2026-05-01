@@ -1,21 +1,56 @@
-/javascript/server/node_modules
-markdown
-*.json
-*.arrow
+# ── Python ─────────────────────────────────────────────────────────────────────
 __pycache__/
 *.pyc
 *.pyo
-*.pyc
-node_modules
-*.json
-*.csv
-playwright.log
-configs/__pycache__/__init__.cpython-313.pyc
-visualization_output
+*.pyd
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# ── Virtual envs ───────────────────────────────────────────────────────────────
 venv/
+.venv/
+env/
 insta_env*/
+
+# ── IDEs / editors ─────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# ── Node ───────────────────────────────────────────────────────────────────────
+node_modules/
+/javascript/server/node_modules/
+package-lock.json
+
+# ── Project artifacts (generated; do not commit) ──────────────────────────────
+playwright.log
+playwright_watchdog.log
+visualization_output/
 observability_logs/
+training_logs/
+training_*.log
+eval_results/
+checkpoints/
+checkpoints_*/
+checkpoints*.zip
 *.pt
 *.safetensors
 *.jinja
-checkpoints/
+*.arrow
+
+# ── Secrets ────────────────────────────────────────────────────────────────────
+.env
+.env.local
+*.pem
+# set_env_commands.txt previously contained a GitHub PAT in plaintext.
+# Block it from ever returning even by accident.
+set_env_commands.txt
+
+# ── Per-task feasibility check snapshots (rolling, not authoritative) ─────────
+feasibility_results/feasibility_check_*.json
+feasibility_results/run_*.log
+feasibility_results/run_log.txt
+feasibility_results/aborted/

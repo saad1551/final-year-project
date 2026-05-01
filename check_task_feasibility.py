@@ -57,10 +57,17 @@ from google import genai
 from google.genai.types import Tool, GenerateContentConfig, UrlContext
 
 # ── Gemini config ─────────────────────────────────────────────────────────────
-# Gemini AI Studio (free tier, API key auth):
-JUDGE_API_KEY = "AIzaSyB69u9Zkswl8GjDwsA8h9UPBajdxnJ5ivQ"
-# gemini-2.0-flash: 1500 requests/day on the AI Studio free tier
+# Read from env only — no hardcoded fallback.
+# For Gemini AI Studio (free tier, API key auth), get a key at
+# https://aistudio.google.com/apikey and set JUDGE_API_KEY.
+# gemini-2.0-flash: 1500 requests/day on the AI Studio free tier.
 # On Vertex AI there is no daily cap — pay-per-use only.
+JUDGE_API_KEY = os.environ.get("JUDGE_API_KEY")
+if not JUDGE_API_KEY:
+    raise RuntimeError(
+        "JUDGE_API_KEY environment variable is not set. "
+        "Get a key at https://aistudio.google.com/apikey and `export JUDGE_API_KEY=...`."
+    )
 JUDGE_MODEL = "gemini-2.0-flash"
 
 # ── HTTP probe ─────────────────────────────────────────────────────────────────

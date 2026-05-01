@@ -5,7 +5,7 @@ This file demonstrates different configuration presets for the SB3 PPO
 implementation, similar to how the custom RL algorithms can be configured.
 """
 
-from rl_sb3_ppo import SB3PPOConfig
+from experimental.rl_sb3_ppo import SB3PPOConfig
 
 # ============================================================================
 # Standard Configurations

@@ -18,7 +18,7 @@ This paper makes two contributions:
 
 1. **A feasibility audit of the InSTA benchmark.** We use a Gemini-2.5-Flash-based judge with URL-context grounding to classify 2,598 sampled InSTA test tasks into feasible / website-down / content-outdated / uncertain categories. We report per-class breakdowns, characterize the disagreement between HTTP-reachability probes and the LLM judge, and release the per-task classifications for reuse.
 
-2. **A continued-training experiment on a feasibility-filtered subset.** We continue PPO + LoRA training of a 1.7B-parameter SLM agent (warm-started from a checkpoint at trajectory 600) on a 2,068-task feasibility-filtered subset, and evaluate on a held-out 200-task feasibility-filtered subset. We compare to the warm-start checkpoint on both filtered and unfiltered test sets.
+2. **A continued-training experiment on a feasibility-filtered subset.** We continue PPO + LoRA training of a 1.7B-parameter SLM agent (pre-traininged from a checkpoint at trajectory 600) on a 2,068-task feasibility-filtered subset, and evaluate on a held-out 200-task feasibility-filtered subset. We compare to the pre-training checkpoint on both filtered and unfiltered test sets.
 
 Our results suggest that benchmark hygiene is not just a measurement issue but an **agent-development** issue: training on a set of mostly broken tasks corrupts the gradient signal, while training on a cleaned subset produces a measurably better agent.
 
@@ -143,7 +143,7 @@ The reference-KL term is the methodologically distinctive piece: it anchors the 
 ### 4.3 Setup
 
 - **Hardware.** A single NVIDIA L4 GPU (24 GB VRAM, on-demand, GCP `g2-standard-8` in `us-east4-c`).
-- **Warm-start.** We continue from `checkpoint_trajectory_600`, an LoRA adapter checkpoint produced during prior training on the *unfiltered* InSTA train split. This isolates the variable: same model, same algorithm, only the dataset changes.
+- **Pre-training.** We continue from `checkpoint_trajectory_600`, an LoRA adapter checkpoint produced during prior training on the *unfiltered* InSTA train split. This isolates the variable: same model, same algorithm, only the dataset changes.
 - **Training set.** 2,068 feasibility-filtered tasks from the InSTA train split (95+ feasibility confidence, sampled identically to §3.1 but on the train side).
 - **Held-out test set.** 200 feasibility-filtered tasks from the InSTA *test* split, never seen during training.
 - **Trajectories.** 500 new trajectories starting at dataset index 0, with checkpoints saved every 25 trajectories to `checkpoints_feasible/`.
@@ -166,18 +166,49 @@ Training is ongoing at submission time. Across the first 115 trajectories, we ob
 
 ### 4.5 Results: held-out test-set evaluation  *[FILL — depends on training completion]*
 
-We compare the warm-start checkpoint and the post-training checkpoint on the held-out 200 feasibility-filtered test tasks, and on the matched-size unfiltered test sample, using the same Gemini judge as during training.
+We use a **3 × 2 factorial design**: three checkpoints evaluated on two test sets, all with the same task seed so cross-checkpoint comparisons are paired.
 
-| Checkpoint | Test set | Success rate (judge > 0.5) | Mean reward | Mean steps |
+**Checkpoints** (rows of Table 1):
+
+| Checkpoint | What it is |
+|---|---|
+| **Base SFT** | `btrabucco/Insta-Qwen3-1.7B-SFT` — Qwen3-1.7B already supervised-fine-tuned on InSTA navigation by the InSTA authors, with no LoRA adapter / no RL applied |
+| **RL-on-raw** | `checkpoint_trajectory_600` — the LoRA adapter from our group's earlier RL training round on the unfiltered InSTA-150k-train set (600 trajectories) |
+| **RL-on-filtered** | `checkpoints_feasible/checkpoint_trajectory_500` — the LoRA adapter from this paper's RL training round on the 2,068-task feasibility-filtered subset (500 trajectories), pre-traininged from RL-on-raw |
+
+**Test sets** (columns):
+
+| Test set | Description |
+|---|---|
+| **Filtered** | 200 tasks from `feasibility_results/feasible_sample_20260424_124844.csv` — InSTA-150k-test tasks that the feasibility judge (§3) classified as `FEASIBLE` with confidence ≥ 0.95 |
+| **Unfiltered** | A matched random sample of 150 tasks from `data/insta-150k-test.csv` — the raw InSTA-150k test split with no filtering, 5-task-stratified by instruction verb (find/navigate/search/count/fill) |
+
+**Table 1 — held-out evaluation results** (mean ± 95% bootstrap CI; bold = best per column):
+
+| Checkpoint | Filtered eval — Reward | Filtered eval — Success | Unfiltered eval — Reward | Unfiltered eval — Success |
 |---|---|---|---|---|
-| `checkpoint_trajectory_600` (warm-start) | Filtered (n=200) | **TBD** | **TBD** | **TBD** |
-| `checkpoint_trajectory_600` (warm-start) | Unfiltered (n=200) | **TBD** | **TBD** | **TBD** |
-| Post-training (final) | Filtered (n=200) | **TBD** | **TBD** | **TBD** |
-| Post-training (final) | Unfiltered (n=200) | **TBD** | **TBD** | **TBD** |
+| Base SFT | **TBD** | **TBD** | **TBD** | **TBD** |
+| RL-on-raw | **TBD** | **TBD** | **TBD** | **TBD** |
+| RL-on-filtered (this paper) | **TBD** | **TBD** | **TBD** | **TBD** |
 
-> **Figure 3.** *(Bar chart of the four cells with bootstrap 95% CIs.)*
+> **Figure 3.** *(Grouped bar chart, 6 cells, with 95% bootstrap CI error bars; success rate on the y-axis, x-axis = checkpoint, hue = filtered vs unfiltered eval.)*
 
-Headline claim (to verify): continued training on the feasibility-filtered subset produces a checkpoint that outperforms its warm-start ancestor on **both** the filtered and unfiltered held-out test sets, with the gap larger on the filtered set — consistent with the model having learned signal from cleaner data that partially transfers back to noisier evaluation.
+The three rows of Table 1 enable three independent claims, in increasing order of specificity to this paper's contribution:
+
+1. **Base SFT vs RL-on-raw** *(prior work — replicates that RL on the released InSTA train set improves over SFT alone)*. Sets the baseline gain from any RL.
+2. **Base SFT vs RL-on-filtered** *(this paper, headline claim)*. Total gain from RL on a feasibility-filtered subset.
+3. **RL-on-raw vs RL-on-filtered** *(this paper, attribution claim)*. The **incremental** gain from training on cleaned data, holding the RL algorithm and total training budget roughly fixed. This is the experiment that isolates the value of feasibility filtering specifically.
+
+Cross-column comparisons isolate the impact of benchmark hygiene on *measurement* (independent of training):
+
+4. **Base SFT, Filtered vs Unfiltered.** Quantifies how much benchmark decay distorts measured agent performance even for a model that wasn't trained on cleaned data — a claim the broader benchmarking community needs to hear.
+5. **RL-on-filtered, Filtered vs Unfiltered.** Tells us whether training on cleaned data widens or narrows the filtered-vs-unfiltered measurement gap.
+
+We report:
+
+- Per-cell **mean** with **95% bootstrap CI** (10 000 resamples).
+- For each within-row pair (e.g. RL-on-filtered vs Base SFT on Filtered eval): paired Wilcoxon signed-rank test on the per-task reward delta, McNemar's test on the per-task binary success indicator (judge_success > 0.5).
+- The mean delta with 95% bootstrap CI on the difference (more interpretable than just a p-value).
 
 ## 5. Limitations  *[DRAFT]*
 
@@ -245,7 +276,7 @@ A random sample (seed=42) of judge classifications across all five categories �
 
 1. **You**: read InSTA, WebArena, Mind2Web, WebShop papers; populate §2.
 2. **Me / pipeline**: when training run completes, generate Figure 2 from the final CSV.
-3. **Me / pipeline**: run `evaluate_checkpoint.py` on warm-start vs final checkpoint × {filtered, unfiltered} test sets.
+3. **Me / pipeline**: run `evaluate_checkpoint.py` on pre-training vs final checkpoint × {filtered, unfiltered} test sets.
 4. **You**: fill Results numbers (§4.5, abstract, conclusion).
 5. **Me**: bootstrap CI computation on eval deltas.
 6. **You**: convert to LaTeX (workshop template) when ready to submit.

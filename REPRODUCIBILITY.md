@@ -14,7 +14,12 @@ All commands assume you have followed `INSTALLATION.md`. For sections 2 and 3, a
 
 ### Inputs
 
-- `data/insta-150k-test.csv` (~2 MB). The InSTA test split. Originally from the [InSTA dataset on Hugging Face](https://huggingface.co/datasets/btrabucco/insta-150k); we ship a copy.
+- `data/insta-150k-test.csv` (~2 MB) — the InSTA test split, shipped in the repo.
+- `data/insta-150k-train.csv` (~102 MB) — **not shipped**, fetched from Hugging Face:
+  ```bash
+  python data/download.py
+  ```
+  Requires the `datasets` package (already in `requirements.txt`). Re-run with `--force` to re-download.
 - A Vertex-AI-enabled GCP project, OR a Gemini API key from https://aistudio.google.com/apikey.
 
 ### Run the feasibility classifier

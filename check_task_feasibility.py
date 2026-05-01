@@ -62,8 +62,7 @@ from google.genai.types import Tool, GenerateContentConfig, UrlContext
 # https://aistudio.google.com/apikey and set JUDGE_API_KEY.
 # gemini-2.0-flash: 1500 requests/day on the AI Studio free tier.
 # On Vertex AI there is no daily cap — pay-per-use only.
-import os as _os
-JUDGE_API_KEY = _os.environ.get("JUDGE_API_KEY")
+JUDGE_API_KEY = os.environ.get("JUDGE_API_KEY")
 if not JUDGE_API_KEY:
     raise RuntimeError(
         "JUDGE_API_KEY environment variable is not set. "

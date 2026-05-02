@@ -6,7 +6,8 @@ This script simulates the entire RL training flow without requiring:
 - Browser (no Playwright server)
 - Judge LLM (mocked responses)
 
-Run with: python test_rl_mock.py --debug
+Run with: pytest tests/test_rl_mock.py        (recommended)
+       or: python tests/test_rl_mock.py --debug   (direct invocation; conftest.py adjusts sys.path)
 """
 
 import torch

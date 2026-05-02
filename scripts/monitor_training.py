@@ -11,10 +11,10 @@ Typical use during a GCP training run:
   rsync -avz fyp-train-t4:~/final-year-project/training_logs/  ./training_logs/
 
   # 2) Print a status line
-  python monitor_training.py --csv training_logs/<latest>.csv
+  python scripts/monitor_training.py --csv training_logs/<latest>.csv
 
   # 3) Plot to PNG
-  python monitor_training.py --csv training_logs/<latest>.csv --plot
+  python scripts/monitor_training.py --csv training_logs/<latest>.csv --plot
 
 The CSV columns expected (per training_logger.py):
   timestamp, trajectory_id, dataset_index, website, instruction,

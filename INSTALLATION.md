@@ -45,7 +45,7 @@ print(f'bitsandbytes {bitsandbytes.__version__}')
 "
 ```
 
-For just rendering figures or running analysis, you don't need GPU/CUDA — the analysis scripts (`feasibility_results/figure1_dataset_decay.py`, `eval/analyze_eval_results.py`, `monitor_training.py`) all run on CPU.
+For just rendering figures or running analysis, you don't need GPU/CUDA — the analysis scripts (`feasibility_results/figure1_dataset_decay.py`, `eval/analyze_eval_results.py`, `scripts/monitor_training.py`) all run on CPU.
 
 ---
 

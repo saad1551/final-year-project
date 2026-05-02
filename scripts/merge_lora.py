@@ -2,7 +2,7 @@
 as a standard HuggingFace model directory ready for GGUF conversion.
 
 Usage:
-    python merge_lora.py [--adapter PATH] [--output PATH]
+    python scripts/merge_lora.py [--adapter PATH] [--output PATH]
 
 Defaults:
     --adapter  ./checkpoints/final_checkpoint

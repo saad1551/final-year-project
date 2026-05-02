@@ -125,7 +125,7 @@ The script auto-resumes from the checkpoint's metadata (no need to set `RESUME_D
 After training, with the CSV available locally:
 
 ```bash
-python monitor_training.py \
+python scripts/monitor_training.py \
   --csv training_logs/training_log_<ts>.csv \
   --window 25 \
   --plot

@@ -20,14 +20,21 @@ This repository contains the code, data, and analysis artifacts for a final-year
 ├── rl_trainer.py              # RL algorithm implementations
 ├── judge_integration.py       # Vertex AI Gemini judge wrapper
 ├── evaluate_checkpoint.py     # held-out evaluation
-├── monitor_training.py        # live training-log monitor
-├── merge_lora.py              # merge LoRA adapter into base model
+├── sample_feasible_tasks.py   # feasibility audit (Section 3)
 ├── client.py                  # browser session client
-├── browser_session_script.py
 ├── training_logger.py         # per-trajectory CSV logger
 ├── observability.py           # per-step JSON observability
-├── trajectory_builder.py
 ├── utils.py
+│
+├── tests/                     # test suites
+│   ├── test.py
+│   ├── test_rl_mock.py
+│   └── conftest.py            # adds repo root to sys.path
+│
+├── scripts/                   # standalone CLI helpers
+│   ├── check_progress.py      # live training-log monitor (VM-aware)
+│   ├── monitor_training.py    # render training curves from CSV
+│   └── merge_lora.py          # merge LoRA adapter into base model
 │
 ├── eval/                      # held-out evaluation harness
 │   ├── run_full_eval.sh       # orchestrate the 3×{1,2}-cell evaluation

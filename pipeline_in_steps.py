@@ -9,21 +9,21 @@ import pandas as pd
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 
-import rl_trainer
-from client import BrowserClient
+from src import rl_trainer
+from src.client import BrowserClient
 from markdown import get_markdown_tree, render_markdown_tree
 from insta.agent_prompts.base_agent_prompt import BaseAgentPrompt, AGENT_PATTERN
 from configs.browser_config import BrowserObservation, NodeMetadata, BrowserConfig
 from insta.configs.agent_config import BrowserAction
-from utils import safe_call, BrowserStatus
-from judge_integration import judge_trajectory, print_judgment
-from rl_trainer import OnPolicyTrainer, RLConfig, compute_reward_from_judgment
+from src.utils import safe_call, BrowserStatus
+from src.judge_integration import judge_trajectory, print_judgment
+from src.rl_trainer import OnPolicyTrainer, RLConfig, compute_reward_from_judgment
 # SB3 PPO modules live under experimental/ — they're imported lazily
 # inside run_trajectory() because the SB3 path doesn't actually train on
 # real trajectory data (see experimental/README.md). The default
 # --algorithm ppo path doesn't need them.
-from observability import ObservabilityLogger
-from training_logger import TrainingLogger
+from src.observability import ObservabilityLogger
+from src.training_logger import TrainingLogger
 
 
 MODEL_NAME = "btrabucco/Insta-Qwen3-1.7B-SFT"

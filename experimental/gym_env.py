@@ -1,4 +1,4 @@
-from utils import (
+from src.utils import (
     BrowserStatus,
     EnvError,
     ServerError,
@@ -15,7 +15,7 @@ from configs.agent_config import (
     BrowserAction
 )
 
-from client import (
+from src.client import (
     BrowserClient
 )
 

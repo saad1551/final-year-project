@@ -57,7 +57,7 @@ def example_compare_algorithms():
     Compare custom PPO with SB3 PPO on the same data.
     """
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    from rl_trainer import OnPolicyTrainer, RLConfig
+    from src.rl_trainer import OnPolicyTrainer, RLConfig
     from experimental.rl_sb3_ppo import SB3PPOTrainer, SB3PPOConfig
     from experimental.rl_sb3_config_examples import get_config
     from insta.configs.judge_config import BrowserJudgment
@@ -101,7 +101,7 @@ def example_configurable_selection(algorithm_type="sb3_ppo"):
     Choose between custom and SB3 PPO based on configuration.
     """
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    from rl_trainer import OnPolicyTrainer, RLConfig
+    from src.rl_trainer import OnPolicyTrainer, RLConfig
     from experimental.rl_sb3_ppo import SB3PPOTrainer
     from experimental.rl_sb3_config_examples import get_config
     
@@ -139,7 +139,7 @@ def example_pipeline_integration():
     """
     import argparse
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    from rl_trainer import OnPolicyTrainer, RLConfig
+    from src.rl_trainer import OnPolicyTrainer, RLConfig
     from experimental.rl_sb3_ppo import SB3PPOTrainer, SB3PPOConfig
     from experimental.rl_sb3_config_examples import get_config
     
@@ -243,7 +243,7 @@ def example_experiment_tracking():
     Track experiments comparing different algorithms and configurations.
     """
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    from rl_trainer import OnPolicyTrainer, RLConfig
+    from src.rl_trainer import OnPolicyTrainer, RLConfig
     from experimental.rl_sb3_ppo import SB3PPOTrainer
     from experimental.rl_sb3_config_examples import get_config
     from insta.configs.judge_config import BrowserJudgment
@@ -297,7 +297,7 @@ def example_factory_pattern():
     Add SB3 PPO to a factory pattern similar to rl_trainer.py.
     """
     from transformers import PreTrainedModel, PreTrainedTokenizer
-    from rl_trainer import OnPolicyTrainer, RLConfig
+    from src.rl_trainer import OnPolicyTrainer, RLConfig
     from experimental.rl_sb3_ppo import SB3PPOTrainer, SB3PPOConfig
     from experimental.rl_sb3_config_examples import get_config
     

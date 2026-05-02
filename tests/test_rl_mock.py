@@ -7,8 +7,17 @@ This script simulates the entire RL training flow without requiring:
 - Judge LLM (mocked responses)
 
 Run with: pytest tests/test_rl_mock.py        (recommended)
-       or: python tests/test_rl_mock.py --debug   (direct invocation; conftest.py adjusts sys.path)
+       or: python tests/test_rl_mock.py --debug   (direct invocation works thanks to the sys.path fix below)
 """
+
+# Direct-invocation support: conftest.py only runs under pytest. When running
+# this file with `python tests/test_rl_mock.py`, the script's directory
+# (tests/) is on sys.path but the repo root (where the `src/` package lives)
+# is not. Insert it here so `from src import rl_trainer` resolves.
+import os, sys
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _REPO_ROOT not in sys.path:
+    sys.path.insert(0, _REPO_ROOT)
 
 import torch
 import torch.nn as nn

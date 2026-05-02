@@ -14,8 +14,8 @@ def example_basic_replacement():
     Replace custom PPO with SB3 PPO in the pipeline.
     """
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    from rl_sb3_ppo import SB3PPOTrainer
-    from rl_sb3_config_examples import get_config
+    from experimental.rl_sb3_ppo import SB3PPOTrainer
+    from experimental.rl_sb3_config_examples import get_config
     from insta.configs.judge_config import BrowserJudgment
     
     # Load your model
@@ -58,8 +58,8 @@ def example_compare_algorithms():
     """
     from transformers import AutoModelForCausalLM, AutoTokenizer
     from rl_trainer import OnPolicyTrainer, RLConfig
-    from rl_sb3_ppo import SB3PPOTrainer, SB3PPOConfig
-    from rl_sb3_config_examples import get_config
+    from experimental.rl_sb3_ppo import SB3PPOTrainer, SB3PPOConfig
+    from experimental.rl_sb3_config_examples import get_config
     from insta.configs.judge_config import BrowserJudgment
     
     # Load models
@@ -102,8 +102,8 @@ def example_configurable_selection(algorithm_type="sb3_ppo"):
     """
     from transformers import AutoModelForCausalLM, AutoTokenizer
     from rl_trainer import OnPolicyTrainer, RLConfig
-    from rl_sb3_ppo import SB3PPOTrainer
-    from rl_sb3_config_examples import get_config
+    from experimental.rl_sb3_ppo import SB3PPOTrainer
+    from experimental.rl_sb3_config_examples import get_config
     
     # Load models
     model = AutoModelForCausalLM.from_pretrained("your-model-path")
@@ -140,8 +140,8 @@ def example_pipeline_integration():
     import argparse
     from transformers import AutoModelForCausalLM, AutoTokenizer
     from rl_trainer import OnPolicyTrainer, RLConfig
-    from rl_sb3_ppo import SB3PPOTrainer, SB3PPOConfig
-    from rl_sb3_config_examples import get_config
+    from experimental.rl_sb3_ppo import SB3PPOTrainer, SB3PPOConfig
+    from experimental.rl_sb3_config_examples import get_config
     
     # Parse arguments
     parser = argparse.ArgumentParser()
@@ -194,8 +194,8 @@ def example_different_configs():
     Examples of using different SB3 PPO configurations for different scenarios.
     """
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    from rl_sb3_ppo import SB3PPOTrainer
-    from rl_sb3_config_examples import get_config
+    from experimental.rl_sb3_ppo import SB3PPOTrainer
+    from experimental.rl_sb3_config_examples import get_config
     
     model = AutoModelForCausalLM.from_pretrained("your-model-path")
     tokenizer = AutoTokenizer.from_pretrained("your-model-path")
@@ -244,8 +244,8 @@ def example_experiment_tracking():
     """
     from transformers import AutoModelForCausalLM, AutoTokenizer
     from rl_trainer import OnPolicyTrainer, RLConfig
-    from rl_sb3_ppo import SB3PPOTrainer
-    from rl_sb3_config_examples import get_config
+    from experimental.rl_sb3_ppo import SB3PPOTrainer
+    from experimental.rl_sb3_config_examples import get_config
     from insta.configs.judge_config import BrowserJudgment
     import json
     
@@ -298,8 +298,8 @@ def example_factory_pattern():
     """
     from transformers import PreTrainedModel, PreTrainedTokenizer
     from rl_trainer import OnPolicyTrainer, RLConfig
-    from rl_sb3_ppo import SB3PPOTrainer, SB3PPOConfig
-    from rl_sb3_config_examples import get_config
+    from experimental.rl_sb3_ppo import SB3PPOTrainer, SB3PPOConfig
+    from experimental.rl_sb3_config_examples import get_config
     
     def create_rl_trainer(
         model: PreTrainedModel,

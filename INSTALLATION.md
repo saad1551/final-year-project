@@ -1,165 +1,201 @@
-# Installation Guide
+# Installation
 
-This guide covers installing all dependencies for the RL Browser Navigation Training Pipeline.
+This project has two installation paths: **local development** (small experiments, eval analysis, figure rendering) and **GCP VM** (full training runs, large-scale eval). For reproducing the experiments we ran, follow the GCP VM path.
 
-## Quick Start
+---
 
-### Option 1: Using Conda (Recommended)
+## Path 1 — Local development
 
-```bash
-# Update your existing conda environment
-conda env update -f environment.yml --prune
+For the lighter parts: editing code, generating figures from existing CSVs, running the analysis scripts.
 
-# Activate the environment
-conda activate fyp-venv
+### Prerequisites
 
-# Install playwright browsers (one-time)
-playwright install
+- Python 3.10
+- Node.js 18+ (only if you want to run the Playwright server locally)
+- ~10 GB free disk for the InSTA dataset and dependencies
 
-# Verify installation
-python -c "import torch; print(f'PyTorch {torch.__version__}, CUDA: {torch.cuda.is_available()}')"
-python -c "import transformers, peft, stable_baselines3; print('✓ All packages installed!')"
-```
-
-### Option 2: Using pip
+### Setup
 
 ```bash
-# If you have CUDA 12.1 GPU
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+# Create a virtual environment
+python3.10 -m venv .venv
+source .venv/bin/activate
 
-# Install all other dependencies
+# Install Python dependencies
+pip install --upgrade pip
 pip install -r requirements.txt
 
-# Install playwright browsers (one-time)
-playwright install
+# Install the local insta package (provides judge prompts, configs)
+pip install -e .
+
+# Optional: only if running browser sessions locally
+playwright install chromium
+cd javascript/server && npm install && cd ../..
 ```
 
-## Checking Your CUDA Version
+### Verify
 
 ```bash
-nvidia-smi
+python -c "
+import torch, transformers, peft, bitsandbytes
+print(f'torch {torch.__version__}, cuda={torch.cuda.is_available()}')
+print(f'transformers {transformers.__version__}')
+print(f'peft {peft.__version__}')
+print(f'bitsandbytes {bitsandbytes.__version__}')
+"
 ```
 
-Look for the CUDA Version in the output. Common versions:
-- CUDA 11.8: Use `pytorch-cuda=11.8`
-- CUDA 12.1: Use `pytorch-cuda=12.1`
+For just rendering figures or running analysis, you don't need GPU/CUDA — the analysis scripts (`feasibility_results/figure1_dataset_decay.py`, `eval/analyze_eval_results.py`, `monitor_training.py`) all run on CPU.
 
-If you see "CUDA Version: 12.1", your GPU supports CUDA 12.1.
+---
 
-## For CPU-Only (No GPU)
+## Path 2 — GCP VM (for training and full eval)
 
-Edit `environment.yml` and **remove** this line:
-```yaml
-  - pytorch-cuda=12.1
-```
+This is the path we used for the actual training run. The L4 + system-Python deep-learning image setup avoids a number of pitfalls (see notes below).
 
-Then run:
+### Provision a VM
+
+Prerequisites on your local machine:
+- `gcloud` CLI authenticated to a GCP project with billing enabled
+- GPU quota: `GPUS_ALL_REGIONS ≥ 1` (request via Console → IAM → Quotas)
+- Vertex AI User role granted to the default Compute Engine service account (so the judge calls work without an API key)
+
 ```bash
-conda env update -f environment.yml --prune
+# From your local repo root:
+bash gcp/provision_vm.sh --dry-run    # review what'll be created
+bash gcp/provision_vm.sh              # actually launch (you'll be prompted to confirm)
 ```
 
-## Verifying Your Installation
+Default config (override via env vars; see `gcp/provision_vm.sh` header):
+- `g2-standard-8` + 1× NVIDIA L4
+- 150 GB pd-balanced boot disk
+- `pytorch-2-9-cu129-ubuntu-2204-nvidia-580` deep-learning image
+- On-demand pricing (~\$0.71/hr); set `--provisioning-model=SPOT` (~\$0.22/hr) at your own risk of preemption
 
-Run this comprehensive check:
+### Transfer code
 
 ```bash
-python - << 'EOF'
-import sys
-print("=" * 60)
-print("DEPENDENCY CHECK")
-print("=" * 60)
+# Two options. Direct rsync via the gcloud-installed ssh key is fastest:
+rsync -avz \
+  -e "ssh -i ~/.ssh/google_compute_engine \
+         -o StrictHostKeyChecking=accept-new \
+         -o UserKnownHostsFile=~/.ssh/google_compute_known_hosts" \
+  --exclude='.git/' --exclude='__pycache__/' --exclude='*.pyc' \
+  --exclude='.DS_Store' --exclude='checkpoints.zip' \
+  --exclude='eval_results/' --exclude='visualization_output/' \
+  --exclude='feasibility_results/feasibility_check_2026*.json' \
+  --exclude='javascript/server/node_modules/' \
+  ./ saadashraf@<VM_EXTERNAL_IP>:final-year-project/
 
-checks = [
-    ("Python", lambda: sys.version.split()[0]),
-    ("PyTorch", lambda: __import__('torch').__version__),
-    ("CUDA Available", lambda: str(__import__('torch').cuda.is_available())),
-    ("Transformers", lambda: __import__('transformers').__version__),
-    ("PEFT (LoRA)", lambda: __import__('peft').__version__),
-    ("BitsAndBytes", lambda: __import__('bitsandbytes').__version__),
-    ("Stable Baselines3", lambda: __import__('stable_baselines3').__version__),
-    ("Gymnasium", lambda: __import__('gymnasium').__version__),
-    ("Pandas", lambda: __import__('pandas').__version__),
-    ("OpenAI", lambda: __import__('openai').__version__),
-    ("Playwright", lambda: __import__('playwright').__version__),
-]
-
-all_ok = True
-for name, check_fn in checks:
-    try:
-        version = check_fn()
-        print(f"✓ {name:20s} {version}")
-    except Exception as e:
-        print(f"✗ {name:20s} MISSING")
-        all_ok = False
-
-print("=" * 60)
-if all_ok:
-    print("✓ All dependencies installed successfully!")
-else:
-    print("✗ Some dependencies are missing. Install them first.")
-print("=" * 60)
-EOF
+# (Or use gcloud compute scp --recurse if you can't get rsync's -e wrapper to work.)
 ```
+
+### Set up the VM environment
+
+```bash
+gcloud compute ssh fyp-train-l4 --zone=us-east4-c
+cd ~/final-year-project
+bash gcp/setup_vm.sh
+```
+
+`setup_vm.sh` is **idempotent** — re-running it after a reboot or zone migration is safe. It:
+
+1. Installs Node.js LTS (the Playwright server is a Node.js app)
+2. Runs `npm install` in `javascript/server/`
+3. Installs Playwright browsers **without sudo** so they land in the user's cache (the Node server runs as the user; sudo would put them in `/root/.cache` and break)
+4. Installs Python deps via `pip` directly into the deep-learning image's system Python (which already ships with `torch + cu129`)
+5. Editable-installs the local `insta` package
+6. Runs smoke checks (torch+CUDA, transformers, peft, bitsandbytes)
+
+### Start the Playwright server (with watchdog)
+
+```bash
+# Start the watchdog first — it monitors port 3000 and auto-restarts the
+# Playwright server if it crashes. Without this, transient server failures
+# can cause many failed trajectories.
+screen -S watchdog -dm bash ~/final-year-project/gcp/playwright_watchdog.sh
+
+# Watchdog will detect the missing server and start it on first check (~20s).
+# Or start it manually first if you don't want to wait:
+bash ~/final-year-project/start_playwright_server.sh
+
+# Verify
+curl -sS -X POST 'http://localhost:3000/start?width=1920&height=1080' -i | head -3
+# Expect: HTTP/1.1 200 OK + a session id in the body
+```
+
+### Authenticate the judge to use Vertex AI
+
+Two options:
+
+**Option A — VM service account (preferred, no API key in source):**
+
+```bash
+# Confirm the SA has the Vertex AI User role:
+gcloud projects get-iam-policy <YOUR_PROJECT> --format=json | grep -A1 'aiplatform'
+
+# Default Compute Engine SA needs roles/aiplatform.user. To grant:
+gcloud projects add-iam-policy-binding <YOUR_PROJECT> \
+  --member="serviceAccount:$(gcloud iam service-accounts list \
+                              --filter='email:*-compute@developer.gserviceaccount.com' \
+                              --format='value(email)' | head -1)" \
+  --role="roles/aiplatform.user"
+```
+
+Then set on the VM:
+
+```bash
+export JUDGE_USE_VERTEX=1
+# JUDGE_VERTEX_PROJECT and JUDGE_VERTEX_LOCATION auto-detect from the
+# metadata server — no need to set them on a GCE VM.
+```
+
+**Option B — AI Studio API key (fallback, not recommended for shared/published code):**
+
+```bash
+export JUDGE_API_KEY="<your Gemini API key from https://aistudio.google.com/apikey>"
+```
+
+`judge_integration.py` auto-selects between the two based on env vars. Vertex is preferred because (a) it bills against GCP credits rather than a per-key quota, (b) doesn't require committing keys to source.
+
+### (Optional) Hugging Face token for higher download rate limits
+
+```bash
+huggingface-cli login --token <your_hf_token>
+```
+
+The base model `btrabucco/Insta-Qwen3-1.7B-SFT` is public, so this is purely a "no warning, faster downloads" thing.
+
+---
+
+## What's in the deep-learning image already
+
+The `pytorch-2-9-cu129-ubuntu-2204-nvidia-580` image ships with:
+- Python 3.10, pip
+- PyTorch 2.9.1 + CUDA 12.9
+- NVIDIA driver 580
+- screen, tmux, git, build-essential
+
+We don't use `conda` on the VM — system Python is sufficient and avoids re-downloading a duplicate PyTorch stack.
+
+## Common pitfalls (we hit these so you don't have to)
+
+- **Playwright "Executable doesn't exist at /home/.../.cache/ms-playwright/...".** You ran `sudo playwright install`. The browser landed in `/root/.cache`. Re-run **without sudo** so it lands in the user's cache. `setup_vm.sh` does this correctly.
+- **Vertex 403 PERMISSION_DENIED on `aiplatform.endpoints.predict`.** The default Compute Engine service account doesn't have the Vertex AI User role. See "Authenticate the judge to use Vertex AI" above.
+- **`set -u` in the launch script: "JUDGE_VERTEX_PROJECT: unbound variable".** Already fixed — `gcp/launch_training.sh` defaults the var to empty before referencing it.
+- **Playwright server crashes mid-training, training keeps producing `trajectory_failed` rows.** Use the watchdog (`gcp/playwright_watchdog.sh`). It SIGSTOPs the python trainer during outages so trajectories don't fail in cascade.
+- **bash 3.2 incompatibility on macOS launches.** `provision_vm.sh` and `teardown.sh` use `${var,,}` lowercasing — replaced with regex matches that work on bash 3.2+.
+- **Spot preemption.** Spot T4/L4 in `us-central1-c` was unstable when we ran. We migrated to on-demand L4 in `us-east4-c` via snapshot. See "Provision a VM" overrides.
 
 ## Troubleshooting
 
-### `bitsandbytes` fails on Windows
-- Use WSL2 (Windows Subsystem for Linux) instead
-- Or use the Windows-compatible version: `pip install bitsandbytes-windows`
+### CUDA out of memory
+Already optimized: 4-bit NF4 quantization, gradient checkpointing, micro-batching, LoRA (only 1.69% of params trainable). If still tight, in `pipeline_in_steps.py`:
+- Lower `MAX_TRAJECTORY_STEPS` from 20 → 12
+- Lower `JUDGE_LAST_OBS` and `JUDGE_LAST_ACTIONS` from 50 → 20
 
-### CUDA out of memory errors
-Already optimized in the pipeline:
-- 4-bit quantization
-- Gradient checkpointing
-- Micro-batching
-- LoRA (trains only ~2% of parameters)
+### `bitsandbytes` import errors on Windows
+Use WSL2. `bitsandbytes` Windows builds are unreliable.
 
-If still having issues:
-1. Reduce `MAX_TRAJECTORY_STEPS` to 8 in `pipeline_in_steps.py`
-2. Use the `low_memory` SB3 preset: `--sb3_preset low_memory`
-
-### ImportError for `insta` modules
-The project uses local modules. Make sure you're running from the project root:
-```bash
-cd /Users/saadashraf/fyp/final-year-project
-python pipeline_in_steps.py --help
-```
-
-### Playwright browsers not found
-```bash
-# Install browsers
-playwright install
-
-# If that fails, try with sudo (Linux/Mac)
-sudo playwright install
-```
-
-## Training Pipeline Usage
-
-After installation, run your training pipeline:
-
-```bash
-# Default: SB3 PPO with aggressive preset, 5e-5 learning rate
-python pipeline_in_steps.py \
-    --num_trajectories 30 \
-    --debug
-
-# Custom configuration
-python pipeline_in_steps.py \
-    --algorithm sb3_ppo \
-    --sb3_preset conservative \
-    --learning_rate 3e-5 \
-    --num_trajectories 50 \
-    --save_every 10
-```
-
-## GPU Memory Recommendations
-
-- **8GB VRAM**: Should work with default settings (10 trajectory steps, 4-bit quantization)
-- **12GB+ VRAM**: Increase to `MAX_TRAJECTORY_STEPS = 15`
-- **24GB+ VRAM**: Can use 8-bit quantization for better quality
-
-Monitor GPU usage during training:
-```bash
-watch -n 1 nvidia-smi
-```
+### `ImportError` for `insta.*` modules
+Run from the project root, and ensure `pip install -e .` was run.

@@ -1,0 +1,13 @@
+website,instruction,steps,criteria,feasibility_classification,feasibility_confidence,feasibility_reasoning,http_status_code,http_reachable,http_error
+jpr.sagepub.com,Find the submission guidelines for the Journal of Peace Research and identify the maximum word count for standard research articles.,"['Navigate to jpr.sagepub.com' 'Accept non-essential cookies if prompted'
+ ""Click on the 'Submission Guidelines' link under 'Journal information'""
+ 'Locate the maximum word count for standard research articles within the submission guidelines']","[""Successfully navigates to the 'Submission Guidelines' page.""
+ 'Identifies and states the correct maximum word count for standard research articles as specified in the guidelines.']",WEBSITE_DOWN,0.95,"Website could not be reached: HTTPSConnectionPool(host='jpr.sagepub.com', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLError(1, '[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] ssl/tls alert handshake failure (_ssl.c:1028)')))",,False,"HTTPSConnectionPool(host='jpr.sagepub.com', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLError(1, '[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] ssl/tls alert handshake failure (_ssl.c:1028)')))"
+oref.org,"Using the 'Funded Research Search tool', find a grant awarded in the 2010s that focuses on 'joint replacement' and identify the principal investigator's name.","[""Navigate to 'oref.org'""
+ ""Click on the 'Funded Research Search tool' link to access the search interface.""
+ 'Filter the search results to include grants from the 2010s (e.g., 2010-2019).'
+ ""Search or filter for grants related to 'joint replacement'.""
+ 'Identify and report the name of a principal investigator from one of the relevant grants.']","[""Successfully navigates to the 'Funded Research Search tool'.""
+ 'Applies a date filter for the 2010s (e.g., 2010-2019).'
+ ""Applies a keyword filter for 'joint replacement' or a similar relevant term.""
+ 'Identifies and states the name of a principal investigator from a grant meeting both criteria.']",UNCERTAIN,0.0,"LLM assessment failed: 400 INVALID_ARGUMENT. {'error': {'code': 400, 'message': 'API Key not found. Please pass a valid API key.', 'status': 'INVALID_ARGUMENT', 'details': [{'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': {'service': 'generativelanguage.googleapis.com'}}, {'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API Key not found. Please pass a valid API key.'}]}}",200.0,True,

@@ -12,8 +12,8 @@ from insta.configs.judge_config import BrowserJudgment
 
 # Import SB3 PPO components
 try:
-    from rl_sb3_ppo import SB3PPOTrainer, SB3PPOConfig, SB3_AVAILABLE
-    from rl_sb3_config_examples import get_config, CONFIG_PRESETS
+    from experimental.rl_sb3_ppo import SB3PPOTrainer, SB3PPOConfig, SB3_AVAILABLE
+    from experimental.rl_sb3_config_examples import get_config, CONFIG_PRESETS
 except ImportError as e:
     print(f"Error importing SB3 PPO modules: {e}")
     print("Make sure stable-baselines3 is installed: pip install stable-baselines3")

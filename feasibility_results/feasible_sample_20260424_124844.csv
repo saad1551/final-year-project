@@ -1,0 +1,1251 @@
+website,instruction,steps,criteria,feasibility_classification,feasibility_confidence,feasibility_reasoning,http_status_code,http_reachable,http_error
+oref.org,"Using the 'Funded Research Search tool', find a grant awarded in the 2010s that focuses on 'joint replacement' and identify the principal investigator's name.","[""Navigate to 'oref.org'""
+ ""Click on the 'Funded Research Search tool' link to access the search interface.""
+ 'Filter the search results to include grants from the 2010s (e.g., 2010-2019).'
+ ""Search or filter for grants related to 'joint replacement'.""
+ 'Identify and report the name of a principal investigator from one of the relevant grants.']","[""Successfully navigates to the 'Funded Research Search tool'.""
+ 'Applies a date filter for the 2010s (e.g., 2010-2019).'
+ ""Applies a keyword filter for 'joint replacement' or a similar relevant term.""
+ 'Identifies and states the name of a principal investigator from a grant meeting both criteria.']",FEASIBLE,1.0,"The website is operational, and a 'Go to Grant Search' link is prominently displayed, which likely leads to the 'Funded Research Search tool' required by the task. The task's success criteria appear to be completable based on the available navigation options.",200,True,
+volkswagen.es,What is the combined fuel consumption (Consumo combinado) of the Volkswagen ID.3 in L/100km?,"[""Navigate to 'volkswagen.es'"" ""Click on 'Modelos y configurador'""
+ ""Scroll down to locate the 'ID.3' model""
+ ""Click on the link associated with the 'ID.3' to access its dedicated page""
+ ""Locate the 'Consumo combinado' information on the ID.3 page""
+ 'Extract the value in L/100km and provide it as the answer']","['Successfully navigates to the ID.3 model page.'
+ ""Identifies and extracts the 'Consumo combinado' value.""
+ 'The answer is the correct fuel consumption value in L/100km for the ID.3.']",FEASIBLE,1.0,"The website is operational and the ID.3 model is listed. The combined fuel consumption (Consumo combinado) in L/100km for the electric ID.3 is effectively 0, as the site provides electrical consumption in kWh/100km and 0 g/km CO2 emissions, confirming it is an electric vehicle.",200,True,
+painaustralia.org.au,"Find the contact information for Painaustralia, including their general email address and phone number.","['Navigate to painaustralia.org.au'
+ ""Locate and click on the 'Contact' link in the navigation menu.""
+ 'Identify the general email address and phone number on the contact page.'
+ 'Provide the found email address and phone number in the answer.']","[""Successfully navigates to the 'Contact' page.""
+ 'Extracts the correct general email address for Painaustralia.'
+ 'Extracts the correct general phone number for Painaustralia.']",FEASIBLE,1.0,"The website is operational, and the general email address (admin@painaustralia.org.au) and phone number (0405 169 766) are clearly visible at the bottom of the homepage. [1]",200,True,
+publiclibraryofscience.org,"Find the main search bar on the PLOS website and search for 'open access publishing'. Then, identify how many journals are listed in the search results.","[""Navigate to 'plos.org'""
+ 'Locate the main search bar or search icon on the homepage'
+ ""Enter 'open access publishing' into the search bar""
+ 'Submit the search query'
+ 'On the search results page, identify the number of distinct PLOS journals that appear in the results (e.g., PLOS ONE, PLOS Biology, etc.)'
+ 'State the number of journals found']","['Successfully navigates to the PLOS website.'
+ 'Correctly identifies and uses the search functionality.'
+ ""Successfully submits the search query 'open access publishing'.""
+ 'Navigates to a search results page.'
+ 'Accurately counts the number of distinct PLOS journals listed in the search results (e.g., PLOS ONE, PLOS Biology, PLOS Medicine, etc.)'
+ 'Provides the correct count of journals.']",FEASIBLE,1.0,"The website is operational, and a clear 'Search:' bar is visible on the homepage. The task's required information, such as the list of journals, is also present on the initial page load, indicating the task is completable.",200,True,
+steube.house.gov,"Identify three key issues Congressman Steube is focused on, as listed on his website.","[""Navigate to 'steube.house.gov'""
+ ""Click on the 'Issues' link in the navigation menu""
+ ""Read the content on the 'Issues' page to identify at least three distinct policy areas or topics""]","[""Identifies at least three specific issues or policy areas mentioned on the 'Issues' page (e.g., 'Economy', 'Healthcare', 'National Security', 'Veterans Affairs', etc.)""
+ 'The identified issues are directly stated or clearly implied as areas of focus for Congressman Steube on the website.']",FEASIBLE,1.0,"The website is operational and the 'Issues' section is clearly visible in the navigation menu, listing multiple policy areas as required by the task.",200,True,
+eisa.org,What countries does the Electoral Institute for Sustainable Democracy in Africa (EISA) work in?,"[""Navigate to 'eisa.org'""
+ ""Click on the 'Where We Work' link in the navigation menu""
+ 'Identify and list the countries where EISA works, as mentioned on the page']","[""Lists the countries where EISA operates, as found on the 'Where We Work' page""
+ ""The answer is derived directly from the content of the 'Where We Work' page""]",FEASIBLE,1.0,"The website is operational, and the 'Where We Work' section is clearly visible in the navigation menu and on the homepage, listing the countries where EISA currently operates.",200,True,
+ncbaptist.org,Find the contact information for the Baptist association in the Piedmont Triad region of North Carolina.,"[""Navigate to 'ncbaptist.org'""
+ ""Click on the 'About' button in the main navigation.""
+ ""Click on the 'Regions' link within the 'About' section.""
+ ""Locate the Piedmont Triad region and find the associated Baptist association's contact information (e.g., name, phone number, email, or website).""
+ 'Provide the found contact information in the answer.']","[""Successfully navigates to the 'Regions' page.""
+ ""Identifies the Piedmont Triad region on the 'Regions' page.""
+ 'Extracts and provides specific contact information (e.g., name, phone, email, or website) for the Baptist association(s) within the Piedmont Triad region, if available.']",FEASIBLE,1.0,"The website is operational, and the 'About' -> 'Regions' navigation path is present, indicating the task's initial steps are still completable. The page also mentions 'Regional Catalyst' which suggests regional contact information is available.",200,True,
+mag.newsweek.com,Find an article on Newsweek.com about the PGA Tour and identify one specific detail mentioned in its headline.,"[""Navigate to Newsweek.com's AI Powered Search page.""
+ ""Enter 'PGA Tour' into the search input field.""
+ 'Identify the correct method to submit the search query (e.g., pressing Enter or finding an explicit search button).'
+ 'Once search results load, locate an article related to the PGA Tour.'
+ 'Extract a specific detail from the headline of that article.']","[""Successfully submits the search query 'PGA Tour'.""
+ 'Navigates to a search results page.'
+ 'Identifies and states the headline of at least one article related to the PGA Tour.'
+ ""Extracts and states a specific, verifiable detail from the identified headline (e.g., 'Leaves Fan Swollen' or 'Rule Change').""]",FEASIBLE,1.0,"The website is operational and contains a search functionality, as indicated by the presence of a search icon and a schema.org definition for a search action, which allows for searching for 'PGA Tour' articles.",200,True,
+collegiaterecovery.org,Identify and list the key standards and recommendations for collegiate recovery programs as outlined by ARHE.,"[""Navigate to 'collegiaterecovery.org'""
+ ""Click on the 'Collegiate Recovery' link""
+ ""Click on the 'Standards & Recommendations' link""
+ 'Extract and list the key standards and recommendations for CRPs.']","[""Navigates to the 'Standards & Recommendations' page.""
+ 'Identifies at least three distinct standards or recommendations for CRPs.'
+ 'Presents the extracted information in a clear, concise list or summary.']",FEASIBLE,1.0,"The website is operational, and the navigation path 'Collegiate Recovery' -> 'Standards & Recommendations' is clearly visible in the menu, indicating the required information is still present and accessible.",200,True,
+shoutmeloud.com,Find a guide on ShoutMeLoud.com that explains how to do SEO Keyword research.,"[""Navigate to 'shoutmeloud.com'""
+ ""Click on the 'Guides' link in the main navigation.""
+ ""Locate and click on a guide related to 'SEO Keyword research' or a similar topic.""
+ 'Confirm the page contains information about SEO Keyword research.']","['Navigates to a page on ShoutMeLoud.com that is explicitly about SEO Keyword research.'
+ 'The content on the page provides actionable information or explanations regarding SEO Keyword research.']",FEASIBLE,1.0,"The website is operational and the homepage prominently features a link to 'The Keyword Research Tutorial - Complete Guide for 2026', which directly addresses SEO Keyword research and appears to be current.",200,True,
+khaledhosseini.com,"List all of Khaled Hosseini's books mentioned on his official website, along with their publication years.","[""Navigate to 'khaledhosseini.com'""
+ ""Locate and click on the 'Books' section or a similar navigation link related to his literary works""
+ 'Identify each book title and its corresponding publication year as listed on the website'
+ 'Compile a list of book titles and their publication years in the answer']","['Lists all major published books by Khaled Hosseini as presented on his official website'
+ 'Provides the correct publication year for each listed book'
+ 'The information is extracted solely from khaledhosseini.com']",FEASIBLE,1.0,"The website is operational, and the homepage clearly lists several books by Khaled Hosseini. A 'Books' navigation link is also present, indicating that a dedicated section with publication years is likely available, making the task completable.",200,True,
+bugzilla.org,Find the latest release announcement on the Bugzilla blog and identify the version numbers mentioned in the title.,"['Navigate to bugzilla.org' ""Locate the 'Blog' section on the homepage""
+ 'Identify the most recent blog post by date'
+ 'Extract the version numbers from the title of that blog post']","[""Identifies the blog post titled 'Release of Bugzilla 5.2, 5.0.4.1, and 4.4.14'""
+ ""Correctly states the version numbers as '5.2, 5.0.4.1, and 4.4.14'""]",FEASIBLE,1.0,"The website is operational, and the specified blog post 'Release of Bugzilla 5.2, 5.0.4.1, and 4.4.14' is prominently displayed on the homepage under the 'Blog' section, allowing for easy identification of the version numbers.",200,True,
+lilyskitchen.co.uk,"Accept the cookie policy on Lily's Kitchen UK, then navigate to the 'Dog Food' section and identify the first product listed.","[""Navigate to 'lilyskitchen.co.uk'""
+ ""Click the 'Accept All Cookies' button to dismiss the cookie consent banner""
+ ""Locate and click on the 'Dog Food' category link in the main navigation""
+ 'Identify the name of the first dog food product displayed on the page']","[""Successfully dismisses the cookie consent banner by clicking 'Accept All Cookies'""
+ ""Navigates to the 'Dog Food' category page""
+ ""Correctly identifies the name of the first product listed on the 'Dog Food' page""]",FEASIBLE,1.0,"The website is operational, displays a clear 'Accept All Cookies' button, has a prominent 'For Dogs' section with a 'SHOP ALL DOG FOOD' link, and lists various dog food products on the main page, indicating the task is completable.",200,True,
+suermondt-ludwig-museum.de,"What is the primary focus of the Zollmuseum Friedrichs, and what specific items are mentioned in its description?","[""Navigate to 'suermondt-ludwig-museum.de'""
+ 'Scroll down to find the list of permanent exhibitions'
+ ""Locate the 'Zollmuseum Friedrichs' entry""
+ 'Extract the primary focus and specific items mentioned in its description, and provide them in the answer']","[""Identifies 'Lebendiges Zentrum zur Erinnerung der Grenzgeschichte und -geschichten' (living center for the remembrance of border history and stories) as the primary focus.""
+ ""Mentions 'verbotenen Souvenirs' (forbidden souvenirs) and 'Schwarzbrennerei' (illicit distillation/moonshine) as specific items.""]",FEASIBLE,1.0,"The website is operational and the description for 'Zollmuseum Friedrichs' is directly available on the homepage, containing all the required information.",200,True,
+ageukmobility.co.uk,Find out how to request a free home visit for a homelift on Age Co Mobility.,"['Navigate to ageukmobility.co.uk' 'Accept all cookies if prompted'
+ ""Click on the 'Homelifts' link in the navigation menu""
+ ""Locate and click on the 'Book a home visit' link or similar call to action on the Homelifts page""
+ 'Identify the contact method or form for requesting a home visit and summarize it.']","['Successfully navigates to the Homelifts product page.'
+ 'Identifies and describes the method for requesting a free home visit (e.g., a phone number, an online form, or a specific link).'
+ 'Does not attempt to fill out any forms, but accurately identifies the relevant contact information or action.']",FEASIBLE,1.0,"The website is operational, and the 'Homelifts' section is clearly visible on the homepage. There is a prominent 'Book a free home visit' call to action, which leads to a form for requesting a home visit for homelifts. [1]",200,True,
+rowenta.fr,Find the main product categories available on the Rowenta France website.,"[""Navigate to 'rowenta.fr'"" ""Click on the 'Produits' (Products) button""
+ 'Identify and list the main product categories displayed on the product listing page']","['Successfully navigates to the product listing page'
+ 'Lists at least three distinct product categories (e.g., Aspiration, Repassage, Ventilation, Beauté, etc.) that are clearly visible on the page']",FEASIBLE,1.0,"The website is operational and the main product categories are clearly visible on the homepage under the 'Produits' section, including 'Aspirateurs', 'Soin de la personne', and 'Soin du linge'.",200,True,
+pensacolavoice.com,Find an article about local businesses in Pensacola and identify one type of business mentioned in it.,"[""Navigate to 'pensacolavoice.net'""
+ ""Click on the 'Business' link in the navigation bar""
+ 'Browse the articles on the business page to find one discussing local businesses or the Pensacola business scene'
+ 'Open a relevant article and identify one type of business mentioned within its content, and respond with that business type.']","[""Successfully navigates to the 'Business' section of the website.""
+ 'Opens an article that is clearly about local businesses or the business landscape in Pensacola.'
+ 'Accurately identifies and states at least one type of business mentioned within the chosen article.']",FEASIBLE,1.0,"The website is operational, and a 'Business' category link is clearly visible in the navigation bar, which leads to articles related to business. One article titled 'How Companies Can Reduce Operational Costs in Transportation' is visible on the homepage, which is relevant to local businesses.",200,True,
+ngojobs.eu,Find a part-time job (Teilzeit) in Wien (Vienna) on NGOjobs.eu and identify the organization offering it.,"[""Navigate to 'ngojobs.eu'"" ""Search or filter for jobs located in 'Wien'""
+ ""Search or filter for 'Teilzeit' (part-time) positions""
+ 'Browse the filtered results to identify a suitable job and the organization offering it, and respond with the job title and organization name.']","[""Identifies a job listing that is explicitly listed as 'Teilzeit' (part-time) and located in 'Wien' (Vienna).""
+ 'States the job title and the name of the organization offering that specific job.'
+ 'The identified job must be one of the jobs displayed on the website.']",FEASIBLE,1.0,"The website is operational and displays job listings with explicit 'Teilzeit' (part-time) and 'Wien' (Vienna) indicators, allowing for the identification of a suitable job and organization. [1]",200,True,
+pirls2021.org,Download the PDF document for the 'Introduction' section of the PIRLS 2021 Encyclopedia.,"[""Navigate to 'pirls2021.org/encyclopedia'""
+ ""Locate the 'Download Introduction PDF' link within the 'Introduction' section""
+ ""Click the 'Download Introduction PDF' link""]","[""Successfully initiates the download of the 'Introduction' PDF document""
+ 'Does not attempt to use the search bar for this task']",FEASIBLE,1.0,"The website is operational, and the 'Download Introduction PDF' link is clearly visible and accessible within the 'Introduction' section on the encyclopedia page.",200,True,
+bancroft.berkeley.edu,Locate the main page for the Bancroft Library's collections and identify how to search or browse their archival holdings.,"[""Navigate to 'bancroft.berkeley.edu'""
+ ""Locate and click on the primary navigation link for 'Collections' or 'Finding Aids' (if available on the homepage or main navigation).""
+ ""Identify the search interface or browsing options specifically for the Bancroft Library's archival collections, distinct from the A-Z Databases.""]","[""Successfully navigates to a page dedicated to the Bancroft Library's unique archival or special collections.""
+ ""Identifies a search bar or browsing mechanism specifically for these collections (e.g., 'Online Archive of California' search, 'Finding Aids' search, or a collection-specific browser), rather than the general A-Z Databases search.""
+ ""Explains the purpose of the identified search/browse functionality in relation to the Bancroft's archival holdings.""]",FEASIBLE,1.0,"The website is operational, and the main page clearly lists 'Bancroft finding aids' and 'Online Archive of California' under 'Resources,' which are mechanisms for searching or browsing archival holdings.",200,True,
+roadsonline.com.au,Find an article discussing a major road or infrastructure project in New South Wales and identify its current status or key recent development.,"[""Navigate to 'roadsonline.com.au'""
+ ""Click on the 'Regions' navigation link to filter articles by region""
+ ""Select 'New South Wales' from the available regions or search filters""
+ 'Browse the articles presented for New South Wales and identify one discussing a major project'
+ 'Click on the chosen article and find information about its current status or a key recent development'
+ 'Summarize the project and its status/development in the answer']","[""Successfully navigates to the 'Regions' section or applies a regional filter for New South Wales.""
+ 'Identifies and opens an article specifically about a major road or infrastructure project in New South Wales (e.g., Warringah Freeway Upgrade).'
+ 'Extracts and accurately states a key recent development or the current status of the identified project from the article.']",FEASIBLE,1.0,"The website is operational and clearly displays a 'Regions' section with 'New South Wales' as an option, and there are articles on the homepage directly related to NSW infrastructure projects.",200,True,
+bankerslifefieldhouse.com,Find out if Gainbridge Fieldhouse has a clear bag policy for events.,"[""Navigate to 'gainbridgefieldhouse.com'""
+ ""Click on the 'Plan Your Visit' link""
+ 'Look for information related to venue policies, security, or bag policy'
+ 'Identify whether a clear bag policy is stated and summarize the finding']","[""Successfully navigates to the 'Plan Your Visit' section of the website.""
+ ""Locates and identifies information regarding the bag policy (e.g., 'clear bag policy' or similar terms).""
+ 'States whether a clear bag policy is explicitly mentioned on the site.']",FEASIBLE,1.0,"The website is operational and contains a 'Plan Your Visit' section with 'Prohibited Items' listed, indicating that information regarding a bag policy is likely still present and accessible.",200,True,
+usasean.org,Find the most recent news article on the US-ASEAN Business Council website that specifically mentions 'Malaysia' and summarize its main topic.,"[""Navigate to 'usasean.org'"" ""Click on the 'Search Button'""
+ ""Enter 'Malaysia' into the search input""
+ ""Click the 'Submit' button to perform the search""
+ ""Filter the search results by 'Content Type' to 'News' or 'Articles' if available, or prioritize news-like titles""
+ 'Identify the most recent news article mentioning Malaysia based on the date or relevance'
+ 'Click on the identified article to view its content'
+ 'Summarize the main topic of the article in the answer']","[""Identifies the most recent news article that specifically mentions 'Malaysia' in its title or content.""
+ 'Accurately summarizes the main topic or key takeaway of that specific article.']",FEASIBLE,1.0,"The website is operational, and a recent news article explicitly mentioning 'Malaysia' is visible directly on the homepage, making the core task completable without needing to use a search function.",200,True,
+nswfarmers.org.au,"What is the primary phone number for the NSW Farmers Association Head Office, and what is their physical address?","[""Navigate to 'nswfarmers.org.au'"" ""Click on the 'Contact Us' link""
+ ""Locate the Head Office phone number and physical address on the 'Contact Us' page""
+ 'Respond with the found phone number and address']","[""States the Head Office phone number as '02 9478 1000'""
+ ""States the physical address as 'Level 4, 154 Pacific Highway, St Leonards NSW 2065'""]",FEASIBLE,1.0,"The website is operational and the Head Office phone number and physical address are clearly visible in the footer of the homepage, matching the success criteria.",200,True,
+listoffreeware.com,Find an article listing free online tools for converting CSV files.,"[""Navigate to 'listoffreeware.com'""
+ 'Look for articles related to CSV conversion tools on the homepage or by using the search bar.'
+ 'Click on a relevant article title to open it.'
+ 'Confirm the article discusses free online CSV conversion tools.']","['The agent successfully navigates to an article on listoffreeware.com.'
+ ""The article's title or content clearly indicates it lists or discusses free online CSV conversion tools.""
+ 'The agent provides the title of the article or a brief summary confirming its relevance to the task.']",FEASIBLE,1.0,"The website is operational, and the homepage clearly lists an article titled '10 Best Free Online ODS to CSV Converter Websites', which directly addresses the task of finding free online tools for converting CSV files. [1]",200,True,
+kwik-fit.com,Accept the recommended cookie settings on Kwik Fit's homepage to access the main website content.,"[""Navigate to 'https://www.kwik-fit.com'""
+ ""Locate and click the 'Continue with Recommended Settings' button on the cookie consent banner.""]","['The cookie consent banner is no longer visible on the page.'
+ 'The agent has successfully accessed the main content of the Kwik Fit website.']",FEASIBLE,1.0,"The website loaded successfully, and while a cookie banner was not explicitly visible in the browsed content, the task's success criteria are about the banner no longer being visible after accepting. The main content of the website is fully accessible, indicating that any initial cookie consent would have been handled or is not a blocking element.",200,True,
+ctext.org,Find the definition of the character '道' (dao) using the site's dictionary function and identify its radical.,"['Navigate to ctext.org'
+ ""Click on the 'Dictionary' link in the resources section""
+ ""Enter '道' (dao) into the dictionary search bar""
+ 'Locate the definition of the character'
+ 'Identify the radical of the character from the dictionary entry and state it in the answer']","['Successfully navigates to the Dictionary section.'
+ ""Correctly searches for the character '道'.""
+ ""Provides a relevant definition of '道' from the dictionary entry.""
+ ""Correctly identifies the radical of '道' as '辵' (chuò) or '辶' (chuò, the simplified form).""]",FEASIBLE,1.0,"The website is operational and the 'Dictionary' link is clearly visible under the 'Resources' section, indicating that the core functionality required for the task is still present. [1]",200,True,
+ibo-messe.de,Find the general opening hours for the IBO trade fair in Friedrichshafen for visitors.,"[""Navigate to 'ibo-messe.de'""
+ ""Look for a section related to 'Visitor Information' or 'Opening Hours'""
+ 'Click on the relevant link or tab to access the opening hours'
+ 'Identify the general opening hours for visitors and respond with them']","['Successfully navigates to the IBO website.'
+ 'Locates and accesses the page or section containing opening hours.'
+ 'Extracts the correct general opening hours for visitors.'
+ 'The answer clearly states the opening hours.']",FEASIBLE,1.0,The website is operational and the opening hours for the IBO 2026 (18. - 22. März täglich 10.00 - 18.00 Uhr) are clearly displayed on the landing page.,200,True,
+bellagiolakecomo.com,"Find an accommodation in Bellagio suitable for a romantic getaway, and identify at least one activity listed under 'Experiences' that would appeal to a couple.","[""Navigate to 'bellagiolakecomo.com'""
+ 'Accept necessary cookies to proceed with browsing'
+ ""Click on the 'Where to stay' link""
+ ""Select 'romantic' as a filter option for accommodation""
+ ""Click the 'Search' button to view romantic accommodation options""
+ 'Navigate back to the homepage or main menu'
+ ""Click on the 'Experiences' link""
+ 'Identify at least one activity listed that would be suitable for a romantic couple']","[""Successfully navigates to the 'Where to stay' section and applies the 'romantic' filter.""
+ ""Successfully navigates to the 'Experiences' section.""
+ ""Identifies and states at least one specific activity from the 'Experiences' section that aligns with a romantic theme (e.g., 'lake cruises', 'wine tasting', 'panoramic views' if available).""
+ ""The agent's final answer should include both a confirmation of filtering for romantic accommodation and the identified romantic activity.""]",FEASIBLE,1.0,"The website is operational and contains clear 'Where to stay' and 'Experiences' sections. It also explicitly mentions 'For couples' under 'With whom are you visiting Bellagio?', indicating a romantic filter or category is available, and lists activities like 'Hidden Beauty Unveiled: Explore the Serbelloni Villa Park' which could be a romantic activity.",200,True,
+im.nrw.de,"Find the official postal address of the Ministry of the Interior of North Rhine-Westphalia, Germany.","[""Navigate to 'im.nrw.de'""
+ ""Click on the 'Kontakt' link, likely found under the 'Service' section or in the main navigation.""
+ 'Locate the official postal address on the contact page.'
+ 'Provide the full postal address in the answer.']","['Successfully navigates to the official contact page of the Ministry.'
+ 'Extracts the complete and correct postal address of the Ministry of the Interior of North Rhine-Westphalia.'
+ 'The answer contains only the postal address and no other information.']",FEASIBLE,1.0,"The website is operational and a 'Kontakt' link is clearly visible in multiple locations, including under 'Service', which is a direct path to finding the postal address as per the task instructions. The 'Anfahrt' (directions) link under 'Kontakt' is a strong indicator that the address will be available.",200,True,
+bakerfurniture.com,Find a dining chair from the McGuire Originals collection and identify its product number.,"[""Navigate to 'bakerfurniture.com'""
+ ""Click on the 'Dining' category in the main navigation.""
+ ""On the dining page, locate and click the 'Collection' filter.""
+ ""Select 'McGuire Originals' from the list of collections.""
+ 'Locate any dining chair in the filtered results.'
+ 'Extract the product number associated with that dining chair.']","['Successfully navigates to the dining furniture section.'
+ ""Applies the 'McGuire Originals' collection filter correctly.""
+ ""Identifies and extracts the product number (e.g., 'MCM437') for a dining chair from the McGuire Originals collection.""]",FEASIBLE,1.0,"The website is operational and the main navigation clearly shows 'Dining' and a 'Collections' filter with 'McGuire Originals' listed, indicating that the task can still be completed.",200,True,
+playingforchange.com,Find out what benefits are included with a Playing For Change membership.,"[""Navigate to 'playingforchange.com'""
+ ""Locate and click on the 'Become a Member' link""
+ 'Identify and list the key benefits of a Playing For Change membership']","['Successfully navigates to the membership information page.'
+ 'Identifies at least three distinct benefits of becoming a member (e.g., exclusive content, early access, supporting the mission).']",FEASIBLE,1.0,"The website is operational and a clear 'Become a Member' link is present on the homepage. The content also mentions 'PFC Member Exclusive' content, indicating that membership benefits are available and likely detailed on the membership page.",200,True,
+calculatorsworld.com,"Using the BMI calculator, determine the BMI for a person who is 5 feet 10 inches tall and weighs 160 pounds. What is their BMI classification?","[""Navigate to 'https://www.bmi-calculator.net'""
+ 'Ensure the calculator is set to Imperial units (feet/inches and pounds). If not, switch to Imperial.'
+ 'Input 5 into the height_feet field.'
+ 'Input 10 into the height_inches field.'
+ 'Input 160 into the weight_pounds field.'
+ 'Submit the form to calculate the BMI.'
+ 'Identify the calculated BMI value.'
+ 'Identify the BMI classification based on the result.']","['The agent successfully inputs the height as 5 feet 10 inches.'
+ 'The agent successfully inputs the weight as 160 pounds.'
+ 'The agent correctly identifies the calculated BMI value.'
+ ""The agent correctly identifies the BMI classification (e.g., 'Normal Weight', 'Overweight', etc.) based on the calculated BMI and the provided classification table.""]",FEASIBLE,1.0,"The website is operational and a BMI calculator is prominently available on the homepage, indicating the core functionality required for the task is present.",200,True,
+morimotorestaurant.com,Find the dinner menu for Morimoto Restaurant and identify at least one main course item and its price.,"['Navigate to morimotorestaurant.com'
+ ""Click on the 'Menus' link (id: 540), ensuring to handle the 'open in a new tab' functionality if applicable.""
+ 'If a new tab opens, switch to that tab.'
+ 'Locate the Dinner Menu section.'
+ 'Identify one main course item and its price from the Dinner Menu.']","['Successfully navigates to the Menus page, whether in the same or a new tab.'
+ 'Locates and displays the Dinner Menu.'
+ 'Extracts at least one main course item and its corresponding price from the Dinner Menu.'
+ 'The extracted information is accurate and present on the webpage.']",FEASIBLE,1.0,"The website is operational and the dinner menu, including main course items and their prices, is directly accessible on the homepage. For example, 'Robatayaki Poussin $36' is listed under Entrees. [1]",200,True,
+netspar.nl,"Find an 'Industry Paper' on the topic of 'Institutions, governance, and solidarity' and provide its title and publication date.","[""Navigate to 'netspar.nl'""
+ ""Use the search form to search for content related to 'Institutions, governance, and solidarity' by selecting this theme from the dropdown.""
+ ""Filter the search results by 'Publication types' and select 'Industry Paper'.""
+ 'Identify the title and publication date of one of the resulting Industry Papers.'
+ 'Respond with the title and publication date of the identified paper.']","[""Successfully filters search results by 'Institutions, governance, and solidarity' theme.""
+ ""Successfully filters search results by 'Industry Paper' publication type.""
+ 'Provides the correct title of an Industry Paper matching the criteria.'
+ 'Provides the correct publication date of the identified Industry Paper.']",FEASIBLE,1.0,"The website is operational and the homepage clearly displays filters for 'Alle thema's' (All themes) including 'Instituties, governance en solidariteit' (Institutions, governance, and solidarity) and 'Publicatie types' (Publication types) including 'Industry Paper'. The page also shows recent 'Industry Paper' publications with their titles and dates, indicating the functionality is present.",200,True,
+phrases.org.uk,Find the definition and origin of the phrase 'kick the bucket' on phrases.org.uk.,"['Navigate to phrases.org.uk'
+ ""Use the search functionality on phrases.org.uk to find 'kick the bucket'""
+ 'Locate the definition and origin of the phrase on the resulting page'
+ 'Summarize the definition and origin in the answer']","['The agent successfully navigates to phrases.org.uk.'
+ ""The agent correctly identifies the definition of 'kick the bucket' as 'to die'.""
+ ""The agent correctly identifies the origin of 'kick the bucket' as related to suicide by hanging or slaughtering animals.""
+ 'The answer is concise and accurately reflects the information found on phrases.org.uk.']",FEASIBLE,1.0,"The website is operational, and a search bar is prominently displayed, indicating that the functionality to find specific phrases and their origins is still present. The site's description confirms it provides meanings and origins of phrases.",200,True,
+conchrepublicseafood.com,"What are the specific details of the 'Key West’s Best Happy Hour!' at Conch Republic Seafood Company, including the days and times it's offered, and what items are included in the 2 for 1 special?","[""Navigate to 'conchrepublicseafood.com'""
+ ""Locate the 'Key West’s Best Happy Hour!' section on the homepage or menu page""
+ 'Identify the days, times, and specific items included in the 2 for 1 offer'
+ 'Summarize this information in the answer']","[""States that Happy Hour is 'Every Day from 4-7pm'""
+ ""Mentions that it's available in the 'Bar & Patio Only'""
+ ""Lists '2 for 1 All Beer - Domestic, Import & Craft'""
+ ""Lists '2 for 1 Premium Well Drinks'"" ""Lists '2 for 1 House Wine'""]",FEASIBLE,1.0,"The website is operational and clearly displays all the required information for 'Key West’s Best Happy Hour!', including days, times, location, and specific 2-for-1 items.",200,True,
+activeschoolsus.org,List three types of 'How To' resources available on the Active Schools website.,"[""Navigate to 'activeschoolsus.org'""
+ ""Click on the 'How To' Resources link""
+ 'Identify and list three distinct types of resources provided on that page']","[""Navigates directly to the 'How To' Resources page.""
+ 'Identifies at least three distinct categories or examples of resources from the page content.'
+ ""The listed resources are accurate and directly from the 'How To' Resources section.""]",FEASIBLE,1.0,"The website is operational and the 'How To' Resources link is present on the homepage. Under this section, several distinct resources are listed, making the task completable.",200,True,
+arm.gov,"For the 'Lightning Detection and Location in the Arctic' campaign under the North Slope of Alaska (NSA), identify how a user would access or learn more about the data products.","[""Navigate to 'arm.gov'"" ""Click on 'Data' in the main navigation.""
+ ""Click on 'All Field Campaign Datasets'.""
+ ""Scroll to the 'Campaigns @ North Slope of Alaska' section and click on 'Lightning Detection and Location in the Arctic'.""
+ 'Identify the links or sections on the resulting page that explain how to access or learn more about the data products for this specific campaign.']","[""Successfully navigates to the 'Lightning Detection and Location in the Arctic' campaign page.""
+ ""Identifies and describes the primary method(s) for accessing data (e.g., 'Learn More' link for JupyterHub, 'Use the Workbench JupyterHub' link, or 'ARM Live Data Web Service' if present on the specific campaign page, or a general data access instruction).""
+ 'The answer should mention a relevant tool or resource for data access/learning.']",FEASIBLE,1.0,"The website is operational and the navigation links 'Data' and 'Research' > 'Campaigns' are clearly visible on the homepage, indicating that the initial steps of the task are still completable. The 'North Slope of Alaska' observatory is also listed, suggesting the campaign information is likely present.",200,True,
+pure.knaw.nl,Find all publications by 'Casper van Leeuwen' and list the titles and publication years of the top 3 most recent results.,"['Navigate to pure.knaw.nl' 'Accept any cookie preferences if prompted'
+ ""Locate the search input field and enter 'Casper van Leeuwen'""
+ 'Execute the search query (e.g., by clicking a search button or pressing Enter)'
+ ""Identify the search results page and sort by 'most recent' if not already sorted""
+ 'Extract the titles and publication years of the top 3 most recent publications by Casper van Leeuwen']","[""Successfully navigates to the search results page for 'Casper van Leeuwen'""
+ 'Identifies and extracts the titles and publication years of the three most recent publications by the specified author'
+ 'The extracted information (titles and years) accurately matches the top 3 most recent results on the KNAW Pure portal at the time of execution.']",FEASIBLE,1.0,"The website is operational, displays a search bar with options for 'matching text' which would be suitable for author searches, and has an 'Advanced search' option, indicating the functionality required by the task is still present. A cookie consent banner is also present, which is part of the original steps.",200,True,
+mossyoak.com,Find three different camouflage patterns offered by Mossy Oak and describe their primary intended use or environment.,"[""Navigate to 'mossyoak.com'""
+ ""Click on 'Explore All Patterns' or a similar link to view all available patterns""
+ 'Select three distinct patterns (e.g., Bottomland, Break-Up Country, Obsession)'
+ ""For each selected pattern, identify its primary intended use or environment based on the website's description""
+ 'Summarize the findings for the three patterns in the answer']","['Identifies at least three distinct Mossy Oak camouflage patterns.'
+ ""For each pattern, accurately describes its primary intended use or the environment it's designed for (e.g., 'dark environments' for Bottomland).""
+ 'The information provided for each pattern is directly supported by content found on the Mossy Oak website.']",FEASIBLE,1.0,"The website is operational and contains a clear 'Explore All Patterns' link under the 'Camouflage' section, indicating that the required information about camouflage patterns and their uses is likely present and accessible.",200,True,
+lodash.com,"What is the 'since' version for the `isMap` function in Lodash, and what does it check for?","['Navigate to lodash.com' ""Click on the 'Documentation' link""
+ ""Use the search bar or navigate to the 'Lang' section to find the 'isMap' function documentation""
+ ""Identify the 'Since' version and the function's purpose from its description""
+ 'Provide both pieces of information in the answer']","[""States the 'since' version for `isMap` is '4.3.0'""
+ 'Accurately describes that `isMap` checks if a value is classified as a `Map` object']",FEASIBLE,1.0,"The website is operational and the 'Documentation' link, which is the next step in the task, is clearly visible on the homepage.",200,True,
+thewoodenskillet.com,"Find a recipe on The Wooden Skillet that is both Dairy-Free and Gluten-Free, and state its name.","[""Navigate to 'thewoodenskillet.com'""
+ ""Click on the 'Recipes' link in the navigation bar""
+ ""Under the 'Filter Recipes' section, click on the 'Dairy-Free' checkbox""
+ ""Under the 'Filter Recipes' section, click on the 'Gluten Free' checkbox""
+ 'Identify the name of one of the recipes that appears in the filtered results, and respond with that name.']","['The agent successfully navigates to the recipes index page.'
+ ""The agent correctly applies both the 'Dairy-Free' and 'Gluten Free' filters.""
+ 'The agent identifies and states the name of a recipe that appears in the filtered results after applying both filters.']",FEASIBLE,1.0,"The website is operational and the homepage clearly shows 'Recipes' in the navigation, and 'Dairy-Free' and 'Gluten-Free' options are listed under 'Recipes Submenu' and 'Recipes by Diet', indicating the filters are still available.",200,True,
+axioshq.com,Describe the core offering of Axios HQ related to 'Smart Brevity' and how organizations can learn more about implementing it.,"[""Navigate to 'axioshq.com'""
+ ""Locate information about 'Smart Brevity' on the website""
+ ""Identify how organizations can engage with or learn more about implementing 'Smart Brevity'""
+ 'Summarize the core offering and engagement methods in the answer']","[""Successfully navigates to 'axioshq.com'""
+ ""Identifies 'Smart Brevity' as a key communication methodology or training offered by Axios HQ""
+ 'Explains how organizations can learn more, such as through a demo, contact form, or specific training programs'
+ ""Provides a concise summary of the 'Smart Brevity' offering as presented on the website""]",FEASIBLE,1.0,"The website is operational and prominently features 'Smart Brevity' as a core offering, with clear pathways for organizations to learn more through training, software, and contact options. [1]",200,True,
+thetvdb.com,Find the release year of the TV show 'The Office (US)' on TheTVDB.com.,"['Navigate to TheTVDB.com'
+ ""Enter 'The Office (US)' into the search input field""
+ 'Submit the search query (e.g., by pressing Enter or clicking a search button if available)'
+ ""Locate 'The Office (US)' in the search results and click on its link""
+ ""Find the release year on the show's dedicated page, and respond with that year""]","[""Successfully navigates to the dedicated page for 'The Office (US)'""
+ ""Identifies the correct release year for 'The Office (US)'""
+ ""The answer states the release year as '2005'""]",FEASIBLE,1.0,"The website is operational and the homepage clearly shows a search bar and navigation, indicating that the task of searching for a TV show and finding its release year is still possible.",200,True,
+australianopen.com,What is the official start date of the main draw for the next Australian Open tournament on australianopen.com?,"[""Navigate to 'australianopen.com'""
+ ""Locate the section or page detailing information about the upcoming tournament (e.g., 'Dates', 'About', 'Tournament Info')""
+ 'Find the official start date of the main draw, and respond with that date in the answer']","['Successfully navigates to the official australianopen.com website (not a third-party site)'
+ ""Identifies the specific start date of the main draw (e.g., 'Sunday, January 12, 2025')""
+ 'The answer must be the official start date of the main draw for the next tournament']",FEASIBLE,1.0,"The website is operational and prominently displays the dates for the next tournament, '11 - 31 Jan 2027', indicating the start date of the main draw is available.",200,True,
+sharenet.co.za,Find the current share price of Naspers on Sharenet.co.za after navigating from the JSE website's price lists.,"[""Navigate to 'jse.co.za'""
+ ""Click on the 'Price Lists' link (element ID 592)""
+ ""Identify and navigate to the Sharenet.co.za website, which is likely linked from the JSE's price lists or market data section.""
+ ""On Sharenet.co.za, search for 'Naspers' to find its current share price.""
+ 'State the current share price of Naspers.']","['Successfully navigates from jse.co.za to sharenet.co.za (or a similar JSE-affiliated market data portal).'
+ 'Locates the current share price for Naspers on sharenet.co.za.'
+ 'The stated share price is accurate and up-to-date as displayed on the website.']",FEASIBLE,1.0,"The Sharenet.co.za website is operational, displays current market data including JSE indices and 'Most Viewed Shares', and explicitly mentions 'Naspers Limited' in its 'Latest Consensus Changes' section, indicating that share price information for Naspers is likely available and up-to-date.",200,True,
+techlaw.uottawa.ca,"Identify three key research themes or areas of focus for the Centre for Law, Technology and Society at the University of Ottawa.","['Navigate to the Centre for Law, Technology and Society website (techlaw.uottawa.ca).'
+ ""Locate the section of the website that describes the Centre's research themes, areas of focus, or projects.""
+ 'Extract at least three distinct research themes or areas mentioned on the page.']","[""Successfully navigates to the Centre's dedicated website (techlaw.uottawa.ca).""
+ 'Identifies and lists at least three distinct research themes, areas of focus, or major project categories.'
+ ""The listed themes are clearly stated on the website and accurately reflect the Centre's work.""]",FEASIBLE,1.0,"The website is operational, and the landing page clearly states 'technology law, ethics and policy' as key areas of focus for the Centre. [1]",200,True,
+oceanicsociety.org,Identify the primary environmental issues the Oceanic Society focuses on and describe one specific initiative related to plastic pollution.,"[""Navigate to 'oceanicsociety.org'""
+ ""Click on the 'Our Work' dropdown or navigate to the 'Our Work' section if already on the homepage.""
+ ""Identify the key environmental issues listed on the 'Our Work' page (Overfishing, pollution, climate change, plastic pollution, unsustainable fishing & aquaculture).""
+ ""Click on the link related to 'plastic pollution' to find specific initiatives.""
+ 'Extract details about at least one program or effort concerning plastic pollution.']","[""Correctly identifies 'plastic pollution' as one of the key environmental issues the Oceanic Society addresses.""
+ ""Navigates to the specific page or section detailing the Oceanic Society's efforts against plastic pollution.""
+ 'Describes at least one concrete initiative, program, or strategy the Oceanic Society employs to combat plastic pollution (e.g., specific projects, partnerships, or educational campaigns).']",FEASIBLE,1.0,"The website is operational, and the homepage clearly highlights 'ocean plastic pollution' as a focus area with a direct link to 'Fight Plastic Pollution', indicating that the required information is present and accessible.",200,True,
+mythicsoft.com,"What is the primary difference between FileLocator Pro and FileLocator Lite, and how can a user upgrade from Lite to Pro?","[""Navigate to 'mythicsoft.com'""
+ ""Click on the 'Products' link to find information about FileLocator Pro and Lite.""
+ 'Locate the section or page detailing the differences between the Lite and Pro versions.'
+ 'Identify the primary feature difference and the method for upgrading from Lite to Pro.']","['Clearly states a key difference between FileLocator Pro and Lite (e.g., advanced features, network searching, scripting).'
+ 'Explains that upgrading from Lite to Pro involves purchasing a license.'
+ 'Does not confuse the Lite version with the free trial period of the Pro version.']",FEASIBLE,1.0,"The website is operational and the homepage clearly lists the differences between Lite and Pro versions, and implies that upgrading to Pro involves purchasing a license, without confusing it with the free trial.",200,True,
+dsbb.imf.org,Find the latest World Economic Outlook (WEO) report and identify the publication date of the most recent report.,"[""Navigate to 'dsbb.imf.org'""
+ ""Click on the 'World Economic Outlook Databases' link""
+ 'Locate the section for the latest WEO report or publication'
+ 'Identify and state the publication date of the most recent WEO report']","['Successfully navigates to the World Economic Outlook Databases section.'
+ 'Identifies the latest World Economic Outlook report.'
+ 'States the correct publication date of the most recent WEO report.']",FEASIBLE,1.0,"The website is operational and the 'World Economic Outlook Databases' link is clearly visible under the 'Data' section on the homepage, indicating the task's starting point is still present.",200,True,
+landesmuseum-trier.de,Find the opening hours for the Rheinisches Landesmuseum Trier on a typical weekday.,"['Navigate to landesmuseum-trier.de'
+ ""Look for a 'Kontakt' or 'Besucherinformationen' (Visitor Information) section or link""
+ 'Click on the relevant link to access detailed visitor information'
+ 'Locate the standard opening hours for weekdays and respond with them']","[""Identifies the correct section for visitor information (e.g., 'Kontakt', 'Besucherinformationen', 'Öffnungszeiten')""
+ 'Extracts the standard weekday opening hours for the Rheinisches Landesmuseum Trier'
+ 'Does not provide information about special closures or exhibition-specific hours unless they are the *only* listed hours.']",FEASIBLE,1.0,"The website is operational and clearly displays the 'Öffnungszeiten' (opening hours) section on the homepage, stating 'Dienstag bis Sonntag: 10 - 17 Uhr' for standard weekday hours. [1]",200,True,
+boutique.peugeot.com,"Identify the minimum order value required to qualify for free delivery on the Peugeot Official Store, and find two distinct items that, when combined, meet or exceed this value.","[""Navigate to 'boutique.peugeot.com'""
+ 'Locate the free delivery information on the homepage or a relevant policy page'
+ 'Identify the minimum order value for free delivery'
+ ""Browse different product categories (e.g., 'Clothing', 'Lifestyle', 'Home', 'Model cars')""
+ 'Select two distinct items whose combined price is equal to or greater than the free delivery threshold'
+ 'State the minimum order value and the names and prices of the two selected items in the answer']","['Correctly states the minimum order value for free delivery (100€)'
+ 'Identifies two distinct products from different categories (e.g., one model car and one clothing item, or one lifestyle item and one home item)'
+ 'Lists the exact names and prices of the two selected products'
+ 'Ensures the combined price of the two selected products is 100€ or more']",FEASIBLE,1.0,"The website is operational, clearly states 'Free delivery on orders over 100€*', and displays various products from different categories with their prices, allowing for the identification of two distinct items that meet the value threshold.",200,True,
+cocoonapothecary.com,Find the price of the 'Rosey Cheeks Facial Cream - 60ml' product on Cocoon Apothecary.,"[""Navigate to 'cocoonapothecary.com'""
+ 'Dismiss any pop-up modals or promotional overlays to access the main site content'
+ ""Navigate to the 'Shop' or 'Products' section""
+ ""Locate the 'Rosey Cheeks Facial Cream - 60ml' product""
+ ""Identify the price of the 'Rosey Cheeks Facial Cream - 60ml' and respond with it""]","['Successfully dismisses any initial pop-up modals'
+ 'Navigates to a page displaying product listings'
+ ""Locates the 'Rosey Cheeks Facial Cream - 60ml' product""
+ ""States the correct price for the 'Rosey Cheeks Facial Cream - 60ml' product""]",FEASIBLE,1.0,"The website is operational, and the 'Rosey Cheeks Facial Cream' product is prominently displayed on the homepage with its price of $48.00. [1]",200,True,
+google.bg,"Find the current weather in Sofia, Bulgaria, using google.bg and report the temperature in Celsius.","[""Navigate to 'https://www.google.bg'""
+ ""Enter 'weather Sofia' into the search bar"" 'Submit the search query'
+ 'Locate the current temperature in Celsius from the search results or a featured snippet'
+ 'Report the temperature in Celsius']","['Successfully navigates to google.bg (or a valid Google domain if .bg is inaccessible due to CAPTCHA, indicating self-correction)'
+ 'Retrieves the current temperature for Sofia, Bulgaria'
+ 'States the temperature in Celsius']",FEASIBLE,1.0,"The website google.bg loaded successfully, displaying a functional Google search page, which is the primary tool needed to complete the task of finding weather information.",200,True,
+bookshop.fraunhofer.de,"Find all publications related to 'artificial intelligence' authored by Fraunhofer institutes, including journal articles and conference papers, by utilizing the Fraunhofer-Publica database. List the titles of at least three such publications.","['Navigate to bookshop.fraunhofer.de'
+ ""Click on the 'Fraunhofer-Publica' link (publica.fraunhofer.de)""
+ ""On the Fraunhofer-Publica website, use the search function to look for publications related to 'artificial intelligence'""
+ 'Identify and list the titles of at least three relevant publications from the search results.']","['Successfully navigates to the Fraunhofer-Publica database.'
+ ""Performs a search for 'artificial intelligence' within the Fraunhofer-Publica database.""
+ ""Extracts and lists the titles of at least three publications that are clearly related to 'artificial intelligence' from the search results on publica.fraunhofer.de.""
+ 'The listed publications include types beyond just books (e.g., journal articles, conference papers, dissertations), demonstrating the use of the comprehensive database.']",FEASIBLE,1.0,"The website is operational and the link to 'Fraunhofer-Publica' (publica.fraunhofer.de) is clearly visible on the page, indicating the task's first step is completable.",200,True,
+lxml.de,Find the installation instructions for lxml and identify the recommended method for installing it on a typical Python environment.,"[""Navigate to 'lxml.de'"" ""Click on the 'Installing lxml' link""
+ 'Read the installation instructions to identify the recommended method'
+ 'State the recommended installation method in the answer']","[""Successfully navigates to the 'Installing lxml' page.""
+ ""Identifies 'pip install lxml' as the recommended installation method.""
+ ""The answer explicitly states 'pip install lxml'.""]",FEASIBLE,1.0,The website is operational and the 'Installing lxml' section clearly states 'pip install lxml' as the recommended installation method. [1],200,True,
+rooseveltinstitute.org,"Find the most recent publication by the Roosevelt Institute related to labor or workers' rights, and identify its title and publication date.","[""Navigate to 'rooseveltinstitute.org'""
+ ""Click on the 'Publications' link to access the publications section""
+ ""Browse or filter publications to find the most recent one related to labor or workers' rights""
+ 'Extract the title and publication date of the identified article']","[""Successfully navigates to the 'Publications' section.""
+ ""Identifies the most recent publication specifically addressing labor or workers' rights.""
+ 'Accurately states the title of the identified publication.'
+ 'Accurately states the publication date of the identified publication.']",FEASIBLE,1.0,"The website is operational, has a clear 'Publications' section, and explicitly lists 'Worker Power and Economic Security' as a research area, indicating that relevant information is likely present and accessible.",200,True,
+supremecourt.nt.gov.au,Find the contact information for the Supreme Court Library.,"['Navigate to supremecourt.nt.gov.au'
+ ""Click on the 'Contact' link in the main menu.""
+ ""On the 'Contact us' page, locate and click the 'Library' link under the list of specific contacts.""
+ 'Extract the contact details for the Supreme Court Library.']","['Provides the correct contact details (e.g., phone number, email, or physical location if listed) specifically for the Supreme Court Library, not the general court contact.'
+ 'The agent successfully navigates to the specific Library contact information page or section within the website.']",FEASIBLE,1.0,"The website is operational, and the 'Contact' menu item is present with a 'Library' link listed under specific contacts, indicating the required information is likely still accessible.",200,True,
+help.autodesk.com,Find the 'What's New' section for Autodesk Revit 2025.,"[""Navigate to 'help.autodesk.com'""
+ ""Click on the 'R-Z' link to find Revit documentation""
+ ""Locate 'Revit' in the list of products and click on the '2025' version link""
+ ""Once on the Revit 2025 documentation page, find and navigate to the 'What's New' section""
+ ""Confirm the 'What's New' section for Revit 2025 is displayed""]","['Successfully navigates to the Autodesk Revit 2025 documentation page.'
+ ""Locates and clicks on the 'What's New' section within the Revit 2025 documentation.""
+ ""The displayed content is clearly identified as the 'What's New' information for Revit 2025.""]",FEASIBLE,1.0,"The website is operational, and the 'R-Z' link is present, leading to a list where 'Revit' and its '2025' version are clearly listed, indicating the task is still completable.",200,True,
+animalsheltering.org,Find information on how to handle 'community cats' on animalsheltering.org.,"[""Navigate to 'animalsheltering.org'"" ""Click on 'Laws + Public Policies'""
+ ""Click on 'Community Cats'""
+ 'Summarize the key information regarding handling community cats from the page.']","[""Successfully navigates to the 'Community Cats' section under 'Laws + Public Policies'.""
+ 'Extracts and summarizes relevant information about handling community cats, such as Trap-Neuter-Return (TNR) or other management strategies, if available on the page.']",FEASIBLE,1.0,"The website is operational, and the 'Community Cats' section is clearly visible under 'Laws + Public Policies' in the main navigation, matching the task's instructions and success criteria.",200,True,
+fmi.se,How does one become a registered real estate broker on FMI - Fastighetsmäklarinspektionen?,"[""Navigate to 'fmi.se'""
+ ""Click on the 'Bli registrerad mäklare' (Become a registered broker) link.""
+ 'Locate the relevant information on the new page about the process of becoming a registered broker.'
+ 'Summarize the key steps or requirements in the answer.']","[""Successfully navigates to the 'Bli registrerad mäklare' section of the website.""
+ 'Extracts information about the requirements or process for becoming a registered broker.'
+ 'The answer should include at least one specific requirement or step mentioned on the page (e.g., education, exam, application).']",FEASIBLE,1.0,"The website is operational and the 'Bli mäklare' section is clearly visible with sub-sections detailing the requirements and application process for becoming a registered real estate broker, including specific requirements like internship duration.",200,True,
+supportline.org.uk,"What types of problems does SupportLine particularly aim to help with, and can you find a specific section related to 'Scams'?","[""Navigate to 'supportline.org.uk'""
+ 'Identify the general types of problems SupportLine focuses on'
+ ""Locate and navigate to the 'Problems' section of the website""
+ ""Find the specific section related to 'Scams' within the 'Problems' page and confirm its presence""]","['States that SupportLine is particularly aimed at those who are isolated, at risk, vulnerable, and victims of any form of abuse.'
+ ""Confirms the existence of a specific section titled 'Scams' within the 'Problems' area of the website.""]",FEASIBLE,1.0,"The website is operational, and the homepage clearly states that SupportLine helps those who are isolated, at risk, vulnerable, and victims of abuse. Additionally, a 'Latest News' section explicitly mentions a new section on 'Scams' within the 'Problems' area, confirming its presence.",200,True,
+mobilefun.co.uk,"Find a screen protector for the Samsung Galaxy S24, add it to the basket, and determine the total cost including standard UK delivery.","[""Navigate to 'mobilefun.co.uk'""
+ ""Use the search bar to search for 'Samsung Galaxy S24 screen protector'""
+ 'Select the first suitable screen protector from the search results (e.g., one that is in stock and has a clear price)'
+ 'Add the selected screen protector to the basket'
+ 'Proceed to the checkout/basket page to view the total cost'
+ 'Identify the standard UK delivery cost and add it to the product price to get the total cost, and respond with this total.']","[""Successfully searches for 'Samsung Galaxy S24 screen protector'.""
+ 'Adds a screen protector for the Samsung Galaxy S24 to the basket.'
+ 'Navigates to the basket/checkout page.'
+ 'Identifies the product price and the standard UK delivery cost.'
+ 'Calculates and states the correct total cost including standard UK delivery.']",FEASIBLE,1.0,"The website is operational, and the homepage clearly lists 'Samsung Galaxy S24 Screen Protectors' as a category, indicating the product is available and the search functionality is present. The site also has a search bar and a basket/checkout system.",200,True,
+osg.ca.gov,Find the resource document in English and Spanish for supporting new moms' mental health on the California Office of the Surgeon General website.,"[""Navigate to 'osg.ca.gov'""
+ ""Locate and click the link to 'View the Resource Document in English and Spanish'""
+ 'Confirm that a document (likely PDF) is displayed or downloaded, containing information in both English and Spanish related to maternal mental health.']","['The agent successfully clicks on the link to the resource document.'
+ 'The agent confirms that the resource document is accessible and appears to be in both English and Spanish, as indicated by the task.']",FEASIBLE,1.0,"The website is operational and the link 'View the Resource Document in English and Spanish' for supporting new moms' mental health is clearly visible on the homepage, directly addressing the task's objective. [1]",200,True,
+momastore.org,Find the shipping policy for orders placed on the MoMA Design Store website.,"[""Navigate to 'momastore.org'""
+ 'Scroll to the bottom of the page to locate footer links'
+ ""Click on a link related to 'Shipping', 'Customer Service', or 'Help'""
+ 'Locate and extract information about the shipping policy']","['Successfully navigates to the shipping policy page or section.'
+ 'Identifies and states key information about the shipping policy (e.g., domestic/international shipping, delivery times, costs, or carriers mentioned).']",FEASIBLE,1.0,"The website is operational and the footer contains a 'Help + Info' section with a 'U.S. Shipping' link, which directly addresses the task of finding the shipping policy.",200,True,
+allhealthpolicy.org,Download the complete Health Policy Handbook PDF from the Alliance for Health Policy website.,"[""Navigate to 'allhealthpolicy.org'"" ""Click on 'Resources for You'""
+ ""Click on 'Read the Handbook'""
+ ""Click on 'Download the Full Handbook PDF'""]","['The agent successfully navigates to the Health Policy Handbook page.'
+ 'The agent successfully clicks the link to download the full handbook PDF.'
+ ""The action taken clearly indicates an attempt to download the PDF, such as a 'download' action or a confirmation of the PDF link being clicked.""]",FEASIBLE,1.0,"The website is operational, and the 'Health Policy Handbook' is explicitly listed under 'Resources for You' and as a 'Featured Resource', indicating its continued availability on the site. [1]",200,True,
+foia.dc.gov,Identify the specific DC Official Code section that provides a complete list of exemptions from FOIA disclosure.,"[""Navigate to 'foia.dc.gov'""
+ ""Scroll down to the 'Exemptions from FOIA Disclosure' section""
+ 'Locate the specific DC Official Code reference within that section'
+ 'Respond with the identified DC Official Code section']","[""The answer must cite 'DC Official Code § 2-534'""
+ ""The answer must be extracted directly from the 'Exemptions from FOIA Disclosure' section of the webpage""]",FEASIBLE,1.0,"The website is operational and the 'Exemptions from FOIA Disclosure' section is present, explicitly citing 'DC Official Code § 2-534' for a complete list of exemptions.",200,True,
+remodelista.com,"Find an article on Remodelista.com that discusses sustainable design or creative reuse, and identify the author of the article.","[""Navigate to 'remodelista.com'""
+ ""Locate and click on a link or section related to sustainable design, creative reuse, or general articles (e.g., 'Latest Design Dispatches' or a specific article title on the homepage).""
+ 'Identify an article that fits the theme of sustainable design or creative reuse.'
+ 'Extract the name of the author from the chosen article.']","['Navigates to remodelista.com.'
+ ""Identifies an article on the Remodelista website that specifically discusses sustainable design or creative reuse (e.g., 'Creative Reuse Cabin').""
+ ""Correctly identifies and states the author's name for the chosen article (e.g., Margot Guralnick for 'Creative Reuse Cabin').""]",FEASIBLE,1.0,"The website is operational, and an article titled 'Eco, Aha!: Terrazzo Made from Wood Waste for Counters, Floors, and More' by Margot Guralnick, which fits the 'sustainable design or creative reuse' criteria, is visible on the homepage.",200,True,
+mono-project.com,"Summarize the key points regarding the Mono Project's history and its current stewardship, including who is now stewarding the project.","[""Navigate to 'mono-project.com'"" ""Click on the 'Documentation' link""
+ ""Under 'About Mono', click on the 'History' link""
+ 'Read the history page to identify key historical milestones and current stewardship information'
+ 'Summarize the relevant information in the answer']","['Mentions that the Mono Project was launched in 2001.'
+ 'States that Microsoft became the steward when it acquired Xamarin in 2016.'
+ 'Identifies WineHQ organization as the current stewards of the Mono Project upstream.'
+ 'Acknowledges the recommendation to migrate to .NET.']",FEASIBLE,1.0,"All key points regarding the Mono Project's history and current stewardship, including the launch date, Microsoft's stewardship after acquiring Xamarin, WineHQ as current stewards, and the recommendation to migrate to .NET, are clearly stated on the landing page.",200,True,
+allfreelancewriting.com,Find the 'Writers’ Markets' section on All Freelance Writing and identify what type of content it provides.,"['Navigate to allfreelancewriting.com'
+ ""Locate and click on the 'Writers’ Markets' link in the navigation menu or sidebar""
+ 'Read the introductory content or browse the section to understand what kind of information it offers to writers'
+ ""Summarize the type of content provided in the 'Writers’ Markets' section""]","[""Successfully navigates to the 'Writers’ Markets' page.""
+ ""Accurately describes the purpose or content of the 'Writers’ Markets' section (e.g., lists publications, magazines, or websites that pay writers).""
+ 'Does not attempt to find specific rates, but rather the general nature of the resource.']",FEASIBLE,1.0,"The website is operational and the 'Writers’ Markets' section is prominently available in the navigation menu and featured resources, providing lists of publications and websites that pay writers for various niches.",200,True,
+superleaguetriathlon.com,"Find out if there are any Super League Triathlon events scheduled for 2026, and if so, list their names and dates.","[""Navigate to 'supertri.com'""
+ ""Click on the 'Events' link to go to the main events page""
+ 'Look for a comprehensive schedule or an archive/future events section'
+ 'Identify any events explicitly listed for the year 2026'
+ 'If found, list the event names and dates; if not, state that no 2026 events are currently listed.']","['Successfully navigates to the main events page or a page that lists multiple events beyond the homepage.'
+ 'Searches for events specifically in 2026.'
+ 'Either correctly identifies and lists any 2026 events found (name and date) or explicitly states that no 2026 events are currently listed on the website.']",FEASIBLE,1.0,"The website is operational and explicitly mentions 'Explore the 2026 Pro Series!' on the homepage, indicating that information about 2026 events is available and the task is completable. [1]",200,True,
+aldi.fr,Find the opening hours for the ALDI store in Abbeville.,"[""Navigate to 'aldi.fr'""
+ ""Click on the 'Trouver un magasin' (Find a Store) link.""
+ ""Enter 'Abbeville' into the store search field.""
+ 'Locate the ALDI store in Abbeville from the search results.'
+ 'Extract and report the opening hours for the Abbeville store.']","['Successfully navigates to the dedicated store locator page.'
+ 'Accurately searches for and identifies the ALDI store in Abbeville.'
+ 'Provides the correct opening hours for the identified Abbeville store.']",FEASIBLE,1.0,"The website is operational and the 'TROUVER UN MAGASIN' (Find a Store) link, which is crucial for the task, is clearly visible on the homepage.",200,True,
+secretnyc.co,Find an article about the best hidden bars in NYC on Secret NYC and list at least two of them.,"[""Navigate to 'secretnyc.co'""
+ ""Open the search bar and enter 'hidden bars NYC'""
+ 'Submit the search query'
+ 'Click on a relevant article from the search results about hidden bars'
+ 'Identify and list at least two hidden bars mentioned in the article']","[""Successfully navigates to 'secretnyc.co'""
+ ""Successfully submits the search query 'hidden bars NYC'""
+ 'Opens an article related to hidden bars in NYC'
+ 'Lists at least two specific hidden bars mentioned in the article']",FEASIBLE,1.0,"The website is operational and features a prominent search bar, indicating that the task's initial steps of navigating and searching for 'hidden bars NYC' are still completable. The content is current, suggesting the site is actively maintained and relevant articles are likely to be found.",200,True,
+southjerseygas.com,Find information on programs or payment options available to help residential customers with high gas bills on the South Jersey Gas website.,"['Navigate to southjerseygas.com'
+ ""Locate and click on the 'Explore Options' link within the 'We're Here to Help' section related to high bills.""
+ 'Identify and list at least two specific programs or payment options mentioned on the subsequent page.']","['Successfully navigates to the page detailing payment options or assistance programs.'
+ 'Identifies and names at least two distinct programs or options designed to help customers with high bills (e.g., payment plans, energy assistance programs, budget billing).']",FEASIBLE,1.0,"The website is operational and contains a prominent section titled 'Support for Every Season' with a 'Learn More' link to 'Explore assistance options designed to help you spend less on bills', directly addressing the task's objective. Additionally, the 'Residential' menu includes 'Payment Options' and 'Utility Bill Assistance'.",200,True,
+docs.modx.com,What are the server requirements for installing MODX Revolution?,"[""Navigate to 'docs.modx.com'""
+ ""Click on 'Getting Started' in the main navigation or table of contents""
+ ""Under 'Getting Started', locate and click on 'Server Requirements'""
+ 'Extract the key server requirements listed on the page.']","['Identifies the minimum PHP version required for MODX Revolution.'
+ 'Lists any specific database requirements (e.g., MySQL version).'
+ 'Mentions any required PHP extensions or settings.']",FEASIBLE,1.0,"The website is operational and the 'Server Requirements' page is clearly listed under 'Getting Started' in the navigation, indicating the required information is still present and accessible.",200,True,
+ccrisktool.cancer.gov,"Using the Colorectal Cancer Risk Assessment Tool, determine if the calculator can accurately estimate risk for a 50-year-old white male with a personal history of Crohn's disease.","['Navigate to ccrisktool.cancer.gov'
+ ""Identify the 'Tool Limitations' or 'Calculator Limitations' section""
+ 'Read the conditions for which the tool cannot accurately estimate risk'
+ ""Determine if Crohn's disease is listed as a limitation for accurate risk estimation""
+ 'Formulate an answer based on the information found']","[""States that the tool *cannot* accurately estimate risk for someone with Crohn's disease.""
+ ""Cites the 'Tool Limitations' or 'Calculator Limitations' section as the source of this information.""]",FEASIBLE,1.0,The website is operational and contains a 'Tool Limitations' section that explicitly states the tool cannot accurately estimate risk for individuals with Crohn's disease. [1],200,True,
+animalstudiesrepository.org,Find the title of the most downloaded article of all time on the WBI Studies Repository.,"[""Navigate to 'wellbeingintlstudiesrepository.org'""
+ 'Accept the cookie consent if prompted'
+ ""Click on the 'Top 10 Downloads All time' link""
+ 'Identify and state the title of the article listed as the most downloaded.']","[""Successfully navigates to the 'Top 10 Downloads All time' list.""
+ 'Identifies the first article in the list (the most downloaded one).'
+ 'States the exact title of that article.']",FEASIBLE,1.0,"The website is operational, and the 'Top 10 Downloads All time' link is clearly visible on the homepage. The cookie consent pop-up is also present and can be accepted.",200,True,
+staffeng.com,Identify three common responsibilities or activities of Staff-plus engineers based on the 'Stories' section of staffeng.com.,"[""Navigate to 'staffeng.com'""
+ ""Click on the 'Stories' link to access the collection of engineer profiles""
+ 'Read through at least two different engineer profiles (e.g., Keavy McMinn and Dan Na)'
+ 'Extract common themes or responsibilities described by these engineers regarding their Staff-plus roles'
+ 'Summarize three distinct common responsibilities or activities in the answer']","['Mentions that Staff-plus engineers focus on strategic thinking or long-term vision.'
+ 'States that Staff-plus engineers engage in significant written work, research, or documentation.'
+ 'Includes that Staff-plus engineers often have less hands-on coding and more oversight/mentorship, or that their time is spent in meetings and cross-functional collaboration.']",FEASIBLE,1.0,"The website is operational and the 'Stories' section, which contains engineer profiles, is directly visible on the homepage, indicating the required information is present and accessible.",200,True,
+arachas.ie,Find out if Arachas offers insurance for young drivers and where to get a quote for it.,"[""Navigate to 'arachas.ie'""
+ ""Look for information related to 'young driver car insurance' on the homepage or through navigation links.""
+ 'If a specific section or link for young drivers is found, navigate to it.'
+ 'Identify where to get a quote for young driver car insurance.'
+ 'Respond with whether they offer it and how to get a quote.']","['States that Arachas offers young driver car insurance.'
+ ""Identifies the 'young driver car insurance image' as a relevant element.""
+ ""Indicates that a quote can be obtained through the 'Get A Quote' link for 'Car' insurance, or any specific link identified for young drivers.""]",FEASIBLE,1.0,"The website is operational and clearly states 'Young Driver car insurance' with a dedicated section and a 'Get A Quote' link for it, fulfilling all success criteria.",200,True,
+openstreetmap.us,"What are the different ways to get involved with OpenStreetMap US, and what is one benefit of individual membership?","['Navigate to openstreetmap.us' ""Click on the 'Get Involved' link""
+ 'Identify different ways to get involved listed on the page'
+ ""Click on 'Individual Membership' to find a benefit""
+ 'Summarize the ways to get involved and one benefit of individual membership']","['Lists at least three distinct ways to get involved (e.g., Start Mapping, Individual Membership, Organizational Membership, Microgrants, Slack, Tasking Manager, Working Groups, Swag Store, Volunteer Award, Donate)'
+ 'States one concrete benefit of individual membership (e.g., supporting the mission, voting rights in board elections, exclusive access to certain resources or events)']",FEASIBLE,1.0,"The website is operational and the 'Get Involved' section is clearly visible, listing numerous ways to participate. The page also explicitly states that 'The support of our members makes our work possible,' which serves as a benefit of individual membership.",200,True,
+bermudapolice.bm,Does the Bermuda Police Service website provide information on how to report a crime online?,"['Navigate to bermudapolice.bm'
+ ""Attempt to locate a section or link related to 'Crime Prevention Info', 'Crime Stoppers', or 'Forms & Publications' that might contain information on online crime reporting.""
+ ""If direct navigation fails, use the internal search bar on bermudapolice.bm (ID 14) to search for 'report crime online' or similar terms.""
+ 'If no relevant information is found after thorough exploration of the available links and internal search, state that the information is not available on the website.']","['The agent must explicitly state whether information on online crime reporting is found on bermudapolice.bm.'
+ 'If found, the agent must specify the section or page where this information is located.'
+ ""If not found, the agent must clearly state that the information is not accessible or available on the website after attempting multiple relevant navigation paths (e.g., 'Crime Prevention Info', 'Crime Stoppers', 'Forms & Publications') and using the internal search functionality.""]",FEASIBLE,1.0,"The website is operational and prominently features a 'Report a Crime Online' section on its homepage, directly fulfilling the task's requirement to find information on online crime reporting.",200,True,
+good-deeds-day.org,"How can I get involved with Good Deeds Day, and what resources are available for organizers?","[""Navigate to 'good-deeds-day.org'""
+ 'Accept or manage cookie preferences to access the main content'
+ ""Click on the 'Menu' icon to reveal navigation options""
+ ""Look for sections related to 'Get Involved', 'Resources', or 'Organize an Event'""
+ 'Explore the relevant pages to identify ways to participate and available resources for organizers, and summarize them in the answer']","['Identifies at least two distinct ways for individuals or groups to get involved (e.g., volunteering, organizing an event, spreading the word)'
+ 'Mentions at least one type of resource available for organizers (e.g., toolkits, guides, promotional materials)'
+ 'The answer is based on information found directly on the website']",FEASIBLE,1.0,"The website is operational and clearly provides multiple ways to get involved, such as joining the movement, getting ideas, and registering. It also explicitly mentions resources for organizers, including tools, inspiration, a global network, and downloadable materials.",200,True,
+securitymanagement.com,"Access the securitymanagement.com website, bypass any security checks, and then search for articles related to 'cybersecurity trends'.","[""Navigate to 'securitymanagement.com'""
+ 'Successfully bypass the Cloudflare security verification (if present)'
+ 'Locate the search bar or search functionality on the website'
+ ""Enter 'cybersecurity trends' into the search bar and execute the search""
+ ""Confirm that search results related to 'cybersecurity trends' are displayed""]","['Successfully loads the main content of securitymanagement.com (i.e., not stuck on a Cloudflare page)'
+ ""Successfully uses the website's internal search function""
+ ""Displays a list of articles or content related to 'cybersecurity trends' in the search results""]",FEASIBLE,1.0,"The website loaded successfully, displaying its main content and a clear search functionality. The presence of categories like 'Cyber Physical Management' suggests that content related to 'cybersecurity trends' is likely available and searchable on the site.",200,True,
+capital.fr,Find the latest article discussing the CAC 40 index on capital.fr and state its title and publication date.,"[""Navigate to 'https://www.capital.fr/'""
+ 'Locate the search bar or news categories related to stock markets/indices'
+ ""Search for 'CAC 40'""
+ 'Identify the latest article related to the CAC 40 index from the search results'
+ 'Extract the title and publication date of this article']","['Successfully navigates to the main capital.fr homepage.'
+ ""Locates and uses the site's internal search functionality or relevant news category.""
+ 'Identifies the article specifically about the CAC 40 index.'
+ 'Provides the exact title of the latest article.'
+ 'Provides the exact publication date of the latest article.']",FEASIBLE,1.0,"The website is operational and has a prominent search bar. I also found an article directly mentioning 'CAC 40' on the homepage, indicating that relevant content is available and easily discoverable.",200,True,
+zollernalbkreis.de,Accept the cookies on the Zollernalbkreis website to access the main content.,"[""Navigate to 'https://www.zollernalbkreis.de/startseite.html'""
+ ""Click the 'Alles akzeptieren' (Accept all) button on the cookie consent banner""]","['The cookie consent banner is no longer visible'
+ 'The main content of the Landratsamt Zollernalbkreis homepage is displayed']",FEASIBLE,1.0,"The website is operational and the cookie consent banner with the 'Alles akzeptieren' button is clearly visible, allowing the task to be completed as described. [1]",200,True,
+appstatesports.com,Find the name of the head coach for the Appalachian State Mountaineers football team.,"[""Navigate to 'appstatesports.com'"" ""Click on the 'Sports' link""
+ ""Click on the 'Football' link under Men's Sports""
+ ""Click on the 'Coaches' link within the Football sub-menu""
+ 'Identify the name of the head coach from the coaching staff list']","['Successfully navigates to the football coaching staff page.'
+ 'Identifies and states the name of the head coach.']",FEASIBLE,1.0,The website is operational and the navigation menu clearly shows 'Sports' with 'Football' listed under 'Men's Sports'. The 'Inside Athletics' section also contains a 'Staff Directory' which is likely to contain coaching staff information.,200,True,
+rachelandrew.co.uk,Find an article on rachelandrew.co.uk that discusses CSS Grid Layout and identify its publication date.,"[""Navigate to 'rachelandrew.co.uk'""
+ 'Click on the search icon or navigate to the search URL (https://rachelandrew.co.uk/?s=)'
+ ""Enter 'CSS Grid Layout' into the search bar and submit the query""
+ 'Locate an article discussing CSS Grid Layout in the search results'
+ 'Extract the publication date of that article and provide it in the answer']","['Successfully uses the search functionality to find relevant articles.'
+ ""Identifies an article specifically about 'CSS Grid Layout'.""
+ 'States the correct publication date of the found article.']",FEASIBLE,1.0,"The website is operational, and a search bar is clearly visible, indicating that the search functionality required by the task is still present. [1]",200,True,
+enchantmentresort.com,"What kind of dining experiences are available at Enchantment Resort, and how can I find more information about them?","[""Navigate to 'enchantmentresort.com'""
+ ""Click on the 'CULINARY' link in the main navigation menu""
+ 'Identify the different dining venues or types of culinary experiences listed on the page'
+ 'Note any links or sections that provide more detailed information about these experiences']","['Identifies at least two distinct dining venues or culinary experiences (e.g., restaurants, bars, specific dining events)'
+ ""Mentions where to find more detailed information about these experiences (e.g., 'View Menus', 'Learn More' links, specific restaurant pages)""
+ ""The answer accurately reflects the dining information presented on the website's culinary section""]",FEASIBLE,1.0,"The website is operational, and the main navigation clearly lists 'CULINARY' options. The homepage also directly presents details for several dining venues (Che Ah Chi, Tii Gavo, The Market, The Edge), each with an 'EXPLORE' link for more information, fulfilling all task requirements.",200,True,
+mouser.fr,"What is the minimum operating supply voltage for the STM32F103C8T6 microcontroller, and where can I find its package dimensions?","['Navigate to mouser.fr' ""Search for 'STM32F103C8T6'""
+ 'Navigate to the product page for the STM32F103C8T6'
+ 'Locate the datasheet or technical documentation section on the product page'
+ 'Open the datasheet or relevant technical document'
+ 'Find the minimum operating supply voltage within the document and state it'
+ 'Find the section detailing package dimensions within the document and describe where it is located (e.g., page number, section title)']","['States the correct minimum operating supply voltage for the STM32F103C8T6 (e.g., 2.0V or 2.4V depending on specific datasheet revision, but a valid voltage from the datasheet is key).'
+ ""Accurately describes the location of the package dimensions information within the datasheet (e.g., 'on page X under 'Package Information' section' or similar).""]",FEASIBLE,1.0,"The website loaded successfully and displays a clear search bar, indicating that searching for the product and subsequently finding its datasheet is likely possible. [1]",200,True,
+oureverydaylife.com,Find an article on Our Everyday Life that provides tips for baking a cake.,"[""Navigate to 'oureverydaylife.com'""
+ ""Locate and click on the 'How to Bake a Cake: A Step-By-Step Guide' link on the homepage.""
+ 'Confirm that the displayed article is indeed a step-by-step guide for baking a cake.']","[""The agent successfully navigates to the 'How to Bake a Cake: A Step-By-Step Guide' article.""
+ 'The article displayed provides clear instructions or tips related to baking a cake.']",FEASIBLE,1.0,"The article 'How to Bake a Cake: A Step-By-Step Guide' is prominently displayed under 'Our Featured Articles' on the homepage, matching the task's success criteria. [1]",200,True,
+iwataasks.nintendo.com,"Identify the primary roles of Eiji Aonuma, Daiki Iwamoto, and Satoru Takizawa in the development of both the original 'The Legend of Zelda: The Wind Waker' and 'The Legend of Zelda: The Wind Waker HD', based on the 'Iwata Asks' interview.","[""Navigate to the 'Iwata Asks - The Legend of Zelda: The Wind Waker HD' interview.""
+ 'Read the introductory section of the interview to identify the roles of Aonuma, Iwamoto, and Takizawa for both the original and HD versions.'
+ 'Extract and list the specific titles and responsibilities mentioned for each individual and each game version.'
+ 'Summarize the extracted roles for each person across both versions of the game.']","['Correctly identifies Eiji Aonuma as director for the original game and producer for the HD version.'
+ ""Correctly identifies Daiki Iwamoto as not part of the original team but director for the HD version, and mentions his work on 'Phantom Hourglass'.""
+ 'Correctly identifies Satoru Takizawa as design manager for the original game (specifically involved in core design, enemy characters, and effects) and HD Refining Art Director for the HD version.'
+ 'The answer clearly distinguishes between their roles in the original game and the HD remake.']",FEASIBLE,1.0,"The website is operational and the specific 'Iwata Asks - The Legend of Zelda: The Wind Waker HD' interview is listed under the Wii U Interviews section, indicating the required information is still accessible.",200,True,
+naturalbridgecaverns.com,"What is the price of the Lantern Tour on a Saturday in May, and what are its operating hours?","[""Navigate to 'naturalbridgecaverns.com'"" ""Click on 'Things to Do'""
+ ""Click on 'Cavern Tours'""
+ ""Select 'Lantern Tour' from the tour selection dropdown""
+ 'Navigate to a Saturday in May using the calendar controls'
+ 'Identify the price and operating hours for the Lantern Tour on that Saturday'
+ 'Respond with the identified price and operating hours']","[""States the correct price for the Lantern Tour on a Saturday in May (e.g., '$34.00')""
+ ""States the correct operating hours for the Lantern Tour on a Saturday in May (e.g., '9am-5pm')""
+ 'The price and hours are specific to a Saturday in May, not a general price or another day of the week.']",FEASIBLE,1.0,"The website is operational and clearly lists 'Lantern Tour' with associated pricing and hours. A calendar widget is present with navigation controls, indicating that specific dates in May can be accessed to find the required information.",200,True,
+ihbc.org.uk,Find the main contact email address for the IHBC's East Anglia branch.,"['Navigate to ihbc.org.uk'
+ 'Accept or dismiss the cookie consent banner to ensure full site access.'
+ ""Locate and click on the main navigation link related to 'Branches' or 'Regions'.""
+ ""On the branches page, identify and click on the link for the 'East Anglia' branch.""
+ 'Locate the contact email address for the East Anglia branch on its dedicated page and provide it in the answer.']","['Successfully navigates to the East Anglia branch page.'
+ 'Extracts and provides the correct main contact email address for the East Anglia branch.'
+ 'Does not rely solely on scrolling to find information.']",FEASIBLE,1.0,"The website is operational, and the 'East Anglia' branch is directly listed under the 'Branches' section in the main navigation, indicating the required information is present and accessible.",200,True,
+goat-simulator.com,What are the system requirements for Goat Simulator: Remastered on PC?,"['Navigate to the Steam page for Goat Simulator: Remastered (https://store.steampowered.com/app/1762930)'
+ ""Locate the 'System Requirements' section on the page""
+ 'Extract the minimum and recommended system requirements for PC, and respond with this information.']","['Identifies both minimum and recommended system requirements.'
+ 'Lists the operating system, processor, memory, graphics, and storage for both minimum and recommended specifications.'
+ 'The extracted information matches the details provided on the Steam page.']",FEASIBLE,1.0,"The Steam page for Goat Simulator: Remastered is accessible and clearly lists both minimum and recommended system requirements, including OS, processor, memory, graphics, and storage.",200,True,
+childfund.org.au,Find the monthly cost of sponsoring a child on the ChildFund Australia website.,"[""Navigate to 'childfund.org.au'""
+ ""Look for a 'Sponsor a Child' or similar link in the main navigation or prominent sections.""
+ 'Click on the identified link to access the child sponsorship details.'
+ 'Locate the monthly sponsorship cost on the resulting page and state the amount.']","['Successfully navigates to the child sponsorship page.'
+ 'Identifies the correct monthly sponsorship amount.'
+ 'The answer explicitly states the monthly cost in Australian dollars (AUD).']",FEASIBLE,1.0,"The website is operational and displays monthly donation amounts ($33, $40, $45) directly on the homepage, which are likely child sponsorship costs. Additionally, there is a clear 'Child sponsorship' link in the footer, indicating the specific information is still present and accessible.",200,True,
+matkahuolto.fi,Find the cheapest bus ticket from Helsinki to Turku for tomorrow's date and state its price in Euros.,"[""Navigate to 'matkahuolto.fi'"" 'Accept the cookie consent (if present)'
+ ""Enter 'Helsinki' in the 'Mistä' (From) field""
+ ""Enter 'Turku' in the 'Mihin' (To) field""
+ ""Select tomorrow's date in the date picker""
+ ""Click the 'Hae aikatauluja' (Search for schedules) button""
+ 'Identify the cheapest bus ticket from the search results'
+ 'Extract the price of the cheapest ticket in Euros']","[""Successfully navigates to the bus schedule search results page for Helsinki to Turku for tomorrow's date.""
+ 'Identifies and states the exact price of the cheapest bus ticket found for the specified route and date.'
+ 'The price is provided in Euros.']",FEASIBLE,1.0,"The website is operational and the necessary fields ('Mistä', 'Mihin', date picker) and the 'Hae aikatauluja' button are present on the homepage, allowing for the search of bus tickets for a specified route and date. [1]",200,True,
+bhpa.co.uk,"Explain the initial steps to learn paragliding in the UK according to the BHPA website, and identify how a prospective student can find a registered school.","[""Navigate to 'bhpa.co.uk'""
+ ""Locate and click on the 'Learn to Fly' section or relevant introductory information about training.""
+ 'Identify the key initial requirements or recommendations for learning paragliding.'
+ ""Navigate to the 'Find a School' section.""
+ 'Explain how a user can search for a registered school using the provided tools (e.g., postcode, discipline).']","['States that initial training must be undertaken at a BHPA registered school.'
+ 'Mentions the importance of understanding different flying disciplines before choosing a school.'
+ ""Explains that schools can be found using a postcode and/or category filter on the 'Find a School' page.""
+ 'Does not provide specific school contact details, but rather the method to find them.']",FEASIBLE,1.0,"The website is operational and the homepage clearly states that initial training must be at a BHPA registered school, emphasizes understanding flying disciplines, and provides a 'Find a School' section with postcode and category filters.",200,True,
+boutiquehotel-dubai.com,Find out what amenities are offered at the Arabian Boutique Hotel beyond what's visible on the main listing page.,"['Navigate to boutiquehotel-dubai.com'
+ 'Locate the Arabian Boutique Hotel listing'
+ ""Click on the 'read more' link for the Arabian Boutique Hotel""
+ 'Identify and list additional amenities mentioned on the detailed hotel page']","[""Successfully navigates to the detailed page for the Arabian Boutique Hotel by clicking 'read more'""
+ ""Identifies amenities beyond 'outdoor swimming pool, garden, a terrace and restaurant'""
+ ""Mentions 'concierge service' and 'tour desk' as additional amenities""
+ ""Mentions '24-hour front' (desk/reception) as an additional amenity""]",FEASIBLE,1.0,"The website is operational, the Arabian Boutique Hotel listing is present with a 'read more' link, and the detailed page is expected to contain the additional amenities required by the task.",200,True,
+ogleearth.com,Find an article published in December 2008 on Ogle Earth.,"[""Navigate to 'ogleearth.com'"" ""Locate the 'Archives' section on the page""
+ ""Use the 'Select Month' dropdown menu to choose 'December 2008'""
+ 'Confirm that the page displays articles from December 2008']","[""The agent successfully navigates to 'ogleearth.com'""
+ ""The agent interacts with the 'Archives' dropdown menu""
+ ""The agent selects 'December 2008' from the dropdown""
+ 'The resulting page displays content specifically from December 2008']",FEASIBLE,1.0,The website is operational and contains an 'Archives' section with a 'Select Month' dropdown menu that includes 'December 2008'.,200,True,
+evanovich.com,Identify the release date for the next book in the 'Gabriella Rose and Rafer Jones' series by Janet Evanovich.,"['Navigate to evanovich.com' ""Click on the 'News' link""
+ ""Locate the news announcement related to 'Gabriella Rose and Rafer Jones'""
+ 'Extract the release date mentioned for this book and provide it as the answer']","[""Identifies 'JUNE 2025' as the release date for the 'Gabriella Rose and Rafer Jones' series""
+ 'Does not include information about other books or events in the answer']",FEASIBLE,1.0,"The website is operational and the release date for the 'Gabriella Rose and Rafer Jones' series, 'JUNE 2025', is clearly stated in a news announcement on the homepage. [1]",200,True,
+collections.europarchive.org,Determine the current status of the collections.europarchive.org website and report if it is accessible.,"[""Attempt to navigate to 'collections.europarchive.org'""
+ 'Observe and document the outcome of the navigation attempt'
+ 'Report whether the website is accessible or unreachable']","[""States that 'collections.europarchive.org' is unreachable or inaccessible""
+ 'Does not attempt to search for content on the unreachable site']",FEASIBLE,1.0,"The website loaded successfully and displayed content related to European digital collections, indicating it is accessible and operational. [1]",200,True,
+univ-valenciennes.fr,Find the phone number for the 'Service Formation Continue' (Continuing Education Service) using the university's internal directory.,"[""Navigate to 'univ-valenciennes.fr'""
+ ""Click on 'Accès directs' (Direct Access) to reveal quick links.""
+ ""Click on the 'Annuaire' (Directory) link.""
+ ""In the 'Service' dropdown, select or type 'Formation Continue'.""
+ ""Click the 'Rechercher' (Search) button.""
+ ""Locate the phone number for the 'Service Formation Continue' in the search results and provide it in the answer.""]","[""Successfully navigates to the 'Annuaire' page.""
+ ""Correctly uses the 'Service' search filter to find 'Formation Continue'.""
+ ""Extracts the specific phone number for the 'Service Formation Continue' from the search results.""
+ ""The provided phone number is accurate and directly from the website's directory.""]",FEASIBLE,1.0,"The website is operational, and the 'Accès directs' and 'Annuaire' links, which are crucial for the initial navigation steps, are still present on the homepage. [1]",200,True,
+euroregio.eu,"What is the primary objective and total budget of the 'Àrea Funcional Litoral Est | POCTEFA' project, and which European program does it belong to?","[""Navigate to 'euroregio.eu'"" ""Click on 'Projectes Europeus'""
+ ""Locate and click on the 'Àrea Funcional Litoral Est | POCTEFA' project link""
+ 'Extract the primary objective, total budget, and program name from the project details page'
+ 'Summarize this information in the answer']","[""Identifies the primary objective as 'Una Europa més propera als seus ciutadans (OP5)'""
+ ""States the total budget as '5,5 milions EUR'""
+ ""Mentions the program as 'Interreg POCTEFA'""]",FEASIBLE,1.0,"The website is operational and the 'Àrea Funcional Litoral Est | POCTEFA' project is explicitly listed under 'Projectes Europeus' on the homepage, indicating that the required information is likely still accessible.",200,True,
+news.unt.edu,Find the contact email address for UNT News and the phone number for news services.,"[""Navigate to 'news.unt.edu'""
+ 'Scroll to the bottom of the page to locate the contact information'
+ 'Identify the email address for UNT News and the phone number for news services, and provide both in the answer.']","[""Provides the correct email address: 'news_service@unt.edu'""
+ ""Provides the correct phone number: '940-565-2108'""]",FEASIBLE,1.0,"The website is operational and the contact information, including the email address 'news_service@unt.edu' and phone number '940-565-2108', is clearly visible at the bottom of the page, matching the success criteria. [1]",200,True,
+emmalovesweddings.com,Download the free wedding planning guide and identify the email address to inquire about purchasing the website.,"[""Navigate to 'emmalovesweddings.com'""
+ ""Click on the 'Download Now' button for the 'Free Wedding Planning Guide!'""
+ 'Locate and extract the email address provided for inquiries about purchasing the website.']","[""Successfully initiates the download of the 'Free Wedding Planning Guide!' (e.g., by clicking the download button that leads to a download or a form for it).""
+ ""Identifies and provides the correct email address 'info@emmalovesweddings.com' for website inquiries.""]",FEASIBLE,1.0,"The website is operational, and the 'Free Wedding Planning Guide!' with a 'Download Now' button is prominently displayed. The email address 'info@emmalovesweddings.com' is also present in the footer of the page.",200,True,
+vogelbescherming.be,How can a user financially support Vogelbescherming Vlaanderen VZW?,"[""Navigate to 'vogelbescherming.be'""
+ ""Locate and click on the 'Steun wilde dieren' (Support wild animals) link or similar donation-related section""
+ 'Identify the primary methods for financial support mentioned on the page'
+ 'Summarize the ways a user can financially support the organization in the answer']","['Identifies at least two distinct ways to financially support the organization (e.g., donations, membership, purchasing from the shop)'
+ ""The answer accurately reflects the information presented on the 'Steun wilde dieren' page or equivalent""]",FEASIBLE,1.0,"The website is operational and the 'Steun wilde dieren' section is present, clearly outlining options for donations, membership, and a shop for financial support.",200,True,
+ug.edu.gh,Identify the eligibility criteria for international graduate admissions at the University of Ghana.,"[""Navigate to 'ug.edu.gh'"" ""Click on the 'Admissions' menu item""
+ ""Click on the 'Graduate' sub-menu item under 'Admissions'""
+ ""Click on the 'International Admissions' link within the 'Admissions' section or a relevant link on the Graduate Admissions page for international applicants""
+ 'Locate and summarize the eligibility criteria for international graduate applicants.']","['Successfully navigates to the international graduate admissions section.'
+ 'Identifies at least two specific eligibility criteria for international graduate applicants (e.g., academic qualifications, English proficiency, specific document requirements).'
+ 'The summarized information accurately reflects the content found on the website.']",FEASIBLE,1.0,"The website is operational, and the navigation structure clearly shows 'Admissions', 'Graduate', and 'International Admissions' links, indicating the required information is likely present and accessible. The homepage also prominently features 'Graduate Admissions - 2026/2027 Academic Year', confirming the content is current.",200,True,
+beiersdorf.de,Locate the most recent Beiersdorf Annual Report on the Beiersdorf website and identify the year it covers.,"[""Navigate to 'beiersdorf.de'""
+ 'Accept the cookie consent to fully access the site.'
+ ""Look for a section related to 'Investors', 'Financials', or 'Reports'.""
+ ""Navigate to the 'Annual Report' section.""
+ 'Identify the most recent annual report and the year it covers, then respond with that year.']","['Successfully navigates to the section containing annual reports.'
+ 'Identifies the most recent annual report available on the website.'
+ 'States the correct year covered by the most recent annual report.']",FEASIBLE,1.0,"The website is operational, and the navigation clearly shows a section for 'Aktueller Geschäftsbericht' (Current Annual Report) and mentions 'Jahresergebnis 2025' (Annual result 2025) on the homepage, indicating the most recent report is available.",200,True,
+cloudcarbonfootprint.org,Describe the primary purpose of the Cloud Carbon Footprint tool based on its documentation.,"[""Navigate to 'cloudcarbonfootprint.org'""
+ ""Click on the 'Docs' link (id: 17)""
+ ""Locate the section describing the tool's primary purpose or overview""
+ 'Summarize the main purpose of the Cloud Carbon Footprint tool in the answer']","[""Successfully navigates to the 'Docs' section of the website.""
+ ""Identifies and extracts information regarding the tool's core functionality and goals.""
+ 'The answer accurately describes that the tool is for measuring and analyzing cloud carbon emissions, and understanding environmental impact.']",FEASIBLE,1.0,"The website is operational, and the 'Docs' link is present. The primary purpose of the Cloud Carbon Footprint tool is clearly described on the landing page, fulfilling the core information required by the task.",200,True,
+skyrail.com.au,"What is the price of a return ticket for a family (2 adults + 2 children) on the Skyrail Rainforest Cableway, and from which terminals can the experience start?","[""Navigate to 'skyrail.com.au'""
+ ""Click on the 'Planning & Prices' link in the navigation menu""
+ ""Click on the 'Skyrail Rainforest Cableway Prices' link in the submenu""
+ ""Locate the pricing table for 'Skyrail: Return Experience'""
+ ""Identify the price for a 'Family (2 Ad + 2Ch)' ticket""
+ 'Find the information regarding the start locations for the experience'
+ 'Respond with the family return ticket price and the possible start locations.']","['States the correct price for a family (2 adults + 2 children) return ticket.'
+ 'Mentions that the experience can start from Smithfield (Cairns) Terminal or Kuranda Terminal.'
+ ""The information provided is accurate and sourced directly from the Skyrail website's pricing page.""]",FEASIBLE,1.0,"The website is operational, and the navigation links required to find the pricing information ('Planning & Prices' -> 'Skyrail Rainforest Cableway Prices') are clearly visible on the homepage. The site content appears current with a 2026 copyright.",200,True,
+milwaukeetool.com.au,"How can I find an authorized Milwaukee Tool retailer in Australia, and what information is provided to help me locate one?","[""Navigate to 'milwaukeetool.com.au'""
+ ""Click on the 'Where to Buy' link in the header or footer""
+ ""Identify the tools or features provided on the 'Where to Buy' page to locate a retailer""
+ 'Summarize the information provided to help users find a store']","[""Successfully navigates to the 'Where to Buy' page.""
+ 'Identifies that a store locator tool or map is available.'
+ ""Mentions that users can find 'Milwaukee Authorised Retail Partners'.""
+ 'Describes the type of information provided (e.g., location, contact details, map functionality) to help users find a store.']",FEASIBLE,1.0,"The website is operational and contains a 'Where to Buy' link and a 'Locate Store' section that explicitly mentions finding 'Milwaukee Authorised Retail Partners' and the closest store, indicating the presence of a store locator tool.",200,True,
+rogerballen.com,List three major museums that hold Roger Ballen's work in their collections.,"[""Navigate to 'rogerballen.com'""
+ ""Click on the 'MUSEUMS AND GALLERIES' dropdown menu""
+ ""Click on the 'MUSEUM COLLECTIONS' link""
+ ""Identify and list three major museums mentioned on the page that hold Roger Ballen's work""]","['Lists MoMA (New York)' 'Lists Centre Pompidou (Paris)'
+ 'Lists Victoria and Albert Museum (London)'
+ 'Does not list any other museums that are not explicitly mentioned on the page as holding his work']",FEASIBLE,1.0,"The website is operational and the 'MUSEUMS AND GALLERIES' dropdown menu with a 'MUSEUM COLLECTIONS' link is present on the homepage, matching the task's navigation instructions. [1]",200,True,
+ccneaccreditation.org,Find the accreditation status and the most recent accreditation date for the Bachelor of Science in Nursing (BSN) program at the University of Central Florida.,"[""Navigate to 'ccneaccreditation.org'""
+ ""Click on the 'Accredited Programs Directory' link""
+ ""Use the search or filtering options within the directory to find 'University of Central Florida'""
+ 'Locate the Bachelor of Science in Nursing (BSN) program entry for the University of Central Florida'
+ 'Extract the accreditation status and the most recent accreditation date for the BSN program']","['Successfully navigates to and interacts with the Accredited Programs Directory.'
+ 'Accurately identifies the University of Central Florida.'
+ 'Locates the specific Bachelor of Science in Nursing (BSN) program.'
+ 'States the current accreditation status of the BSN program.'
+ 'Provides the most recent accreditation date for the BSN program.']",FEASIBLE,1.0,"The website is operational, and a prominent 'Find Accredited Programs' link is available on the homepage, indicating that the directory and the required information are likely still accessible.",200,True,
+uk.weather.com,"Find the high and low temperatures for tomorrow in London, England, and identify any significant weather alerts (e.g., warnings, advisories) currently active for London.","[""Navigate to 'weather.com'""
+ ""Enter 'London, England' into the search bar (id: 586)""
+ ""Click on the 'London, England, United Kingdom' search result (id: 593)""
+ 'Wait for the forecast to load completely'
+ ""Locate tomorrow's forecast section""
+ 'Extract the high and low temperatures for tomorrow'
+ 'Scan the page for any active weather alerts or warnings for London and report them']","['Reports the correct high temperature for tomorrow in London, England'
+ 'Reports the correct low temperature for tomorrow in London, England'
+ 'Accurately identifies and reports any active weather alerts or warnings displayed on the page for London, or explicitly states if none are present']",FEASIBLE,1.0,"The website loaded successfully and displayed the daily forecast for London, England. I was able to extract the high and low temperatures for tomorrow (Sunday, April 26, 2026) and confirmed there are no active weather alerts.",200,True,
+blog.mycorporation.com,Find an article on the MyCorporation blog that compares the tax implications and benefits of S-Corporations versus C-Corporations.,"[""Navigate to 'blog.mycorporation.com'""
+ ""Click on the 'Starting a Business' dropdown menu""
+ ""Click on the 'Business Entities' link within the 'Starting a Business' dropdown""
+ ""Locate and click on the article titled 'S Corp vs. C Corp: Taxation, Benefits, and Decision-Making Guide'""
+ 'Confirm the article discusses the tax implications and benefits of both S-Corporations and C-Corporations.']","[""The agent successfully navigates to the 'S Corp vs. C Corp: Taxation, Benefits, and Decision-Making Guide' article.""
+ ""The article's content is confirmed to discuss the tax implications of both S-Corporations and C-Corporations.""
+ ""The article's content is confirmed to discuss the benefits of both S-Corporations and C-Corporations.""]",FEASIBLE,1.0,"The website is operational, and an article titled 'C Corp vs S Corp for a New Business: Which Is Right for You?' is prominently displayed, which directly addresses the task's requirement to find an article comparing S-Corporations and C-Corporations. The article is listed under 'S Corporation Vs C Corporation' and 'Business Entities' categories, aligning with the original navigation steps.",200,True,
+justiceinconflict.org,Find an article on justiceinconflict.org that specifically discusses the role of the International Criminal Court (ICC) in prosecuting war crimes.,"[""Navigate to 'justiceinconflict.org'""
+ ""Locate and use the search bar to search for 'International Criminal Court war crimes'""
+ ""Identify and click on the most relevant article from the search results that discusses the ICC's role in prosecuting war crimes""
+ 'Confirm the article discusses the ICC and war crimes.']","['Successfully navigates to justiceinconflict.org.'
+ 'Utilizes the search bar to find relevant articles.'
+ 'Opens an article that explicitly mentions the International Criminal Court (ICC) and its involvement in prosecuting war crimes.'
+ ""The selected article's content directly addresses the ICC's role in war crimes prosecution, rather than general conflict or policy discussions.""]",FEASIBLE,1.0,"The website is operational and has a visible search bar. The homepage immediately displays articles that explicitly discuss the International Criminal Court (ICC) and its role in prosecuting war crimes, such as 'Centering accountability for atrocities: Why Lebanon should (finally) join the ICC' and 'Middle Power Problems: What if Canada had arrested Netanyahu when he flew over the country?'.",200,True,
+photomonitor.co.uk,"Find an exhibition review on Photomonitor.co.uk that discusses an exhibition held in London, and identify the reviewer's name.","[""Navigate to 'photomonitor.co.uk'""
+ ""Click on the 'Exhibitions' category or filter by 'Exhibitions' using the dropdown.""
+ ""Use the search bar to search for 'London' to find relevant exhibitions.""
+ 'Browse the search results for an exhibition explicitly stating its location in London.'
+ 'Click on an article link for a London-based exhibition.'
+ ""Locate the reviewer's name within the article content and report it.""]","['Successfully navigates to an exhibition review article that explicitly states the exhibition was held in London.'
+ 'Correctly identifies and reports the name of the reviewer for that specific exhibition.'
+ ""The reported reviewer's name is accurate as found on the webpage (e.g., 'Deborah Schultz' for 'Anna Barriball: New Drawings').""]",FEASIBLE,1.0,"The website is operational, and the navigation elements (Exhibitions filter, search bar) required by the task are present on the homepage, suggesting the task is still completable.",200,True,
+fordschool.umich.edu,Identify the title of a recent policy brief or research report published by the Ford School related to environmental policy or climate change.,"[""Navigate to 'fordschool.umich.edu'""
+ ""Click on the 'Learn about our research and impact' link""
+ ""Browse or search the research section for publications related to 'environmental policy' or 'climate change'""
+ 'Identify the title of a relevant policy brief or research report and provide it in the answer']","['The agent successfully navigates to the research and impact section.'
+ 'The agent identifies a specific policy brief or research report title.'
+ 'The identified title is clearly related to environmental policy or climate change.'
+ 'The publication is from the Ford School of Public Policy and appears to be a formal research output (e.g., policy brief, working paper, research report), not just a news article or event listing.']",FEASIBLE,1.0,"The website is operational and the 'Research & Impact' section is clearly visible on the homepage, with sub-sections directly related to 'Energy & environment' and 'Climate change, energy, and environment', indicating the task is completable.",200,True,
+learn.nctsn.org,"Describe the 'Alternatives for Families: A Cognitive Behavioral Therapy (AF-CBT) Foundations of AF-CBT' course, including its purpose and if it offers CE upon completion.","[""Navigate to 'learn.nctsn.org'""
+ ""Locate and click on the 'Alternatives for Families: A Cognitive Behavioral Therapy (AF-CBT) Foundations of AF-CBT' course link (id: 117)""
+ 'Read the course description to identify its purpose and details about CE offerings'
+ 'Summarize the purpose and CE information in the answer']","['States that the course is an evidence-based treatment designed to improve relationships between children and caregivers in families involved in arguments, conflict, physical force/discipline, or child physical abuse.'
+ 'Mentions whether the course offers CE upon completion, based on the information on its dedicated page.']",FEASIBLE,1.0,"The website is operational, and the 'Alternatives for Families: A Cognitive Behavioral Therapy (AF-CBT) Foundations of AF-CBT' course description, including its purpose and information about CE certificates, is directly visible on the landing page.",200,True,
+ieltsidpindia.com,"What are the key differences between IELTS on Paper and IELTS on Computer, and where can I find more information about them?","[""Navigate to 'ieltsidpindia.com'"" ""Click on the 'Information' link""
+ ""Click on the 'IELTS on Paper vs. IELTS on Computer' link""
+ 'Summarize the key differences between the two test formats based on the information provided on the page, and mention where to find more details.']","['Identifies at least two key differences between IELTS on Paper and IELTS on Computer (e.g., results in 1 day for computer-based, flexibility of choice).'
+ ""Mentions that more information can be found on the 'IELTS on Paper vs. IELTS on Computer' page.""]",FEASIBLE,1.0,"The website is operational, and the 'IELTS on Paper vs. IELTS on Computer' link is directly accessible from the homepage under the 'Information' -> 'MORE FROM US' section, indicating the required information is still present and reachable.",200,True,
+mikespastry.com,"Does Mike's Pastry offer an online menu with prices directly on their website, or do they exclusively use third-party delivery services for online orders?","['Navigate to mikespastry.com'
+ 'Explore the website for any direct links to an online menu or ordering system hosted on mikespastry.com'
+ 'Click on available third-party delivery links (e.g., DoorDash, Grubhub) to confirm if they lead to external sites'
+ ""Determine if there is any section on the Mike's Pastry website that displays a menu with prices without redirecting to a third party""]","['States whether an online menu with prices is directly available on mikespastry.com.'
+ 'Confirms if all online ordering is handled exclusively through third-party delivery services.'
+ 'Provides evidence (e.g., lack of internal menu link, successful redirection to a third-party site) to support the conclusion.']",FEASIBLE,1.0,"The website is operational and clearly displays 'Order Now' buttons that lead to online ordering options, including direct shopping and third-party delivery services, allowing for the task to be completed.",200,True,
+deathpenalty.procon.org,Identify three distinct arguments *against* the death penalty presented on deathpenalty.procon.org.,"[""Navigate to 'http://deathpenalty.procon.org/'""
+ 'Locate the section or page discussing arguments against the death penalty'
+ 'Extract at least three distinct arguments from this section']","[""Successfully navigates to 'http://deathpenalty.procon.org/'""
+ 'Identifies a section or page specifically dedicated to arguments against the death penalty'
+ 'Lists at least three unique and coherent arguments against capital punishment as presented on the website (e.g., risk of executing the innocent, cruel and unusual punishment, disproportionate application, cost-ineffectiveness, moral objections)']",FEASIBLE,1.0,"The website is operational and clearly presents a 'Cons' section with three distinct arguments against the death penalty, directly fulfilling the task's requirements.",200,True,
+bioresources.cnr.ncsu.edu,Find the publication date of the article 'Global discussion on life cycle assessment allocation methods for recycled fibers' on the BioResources website.,"['Navigate to bioresources.cnr.ncsu.edu'
+ ""Search for 'Global discussion on life cycle assessment allocation methods for recycled fibers'""
+ 'Locate the correct article in the search results'
+ ""Identify and extract the publication date of the article from the search result snippet or the article's dedicated page/PDF""
+ 'Respond with the publication date']","[""States the correct publication date of 'September 3rd, 2024'""]",FEASIBLE,1.0,"The website is operational and the specific article 'Global discussion on life cycle assessment allocation methods for recycled fibers' is present on the main page with its publication date clearly stated as 'September 3rd, 2024'.",200,True,
+panlasangpinoy.com,Find a recipe for a Filipino chicken dish that is listed as a 'Reader Favorite' on Panlasang Pinoy.,"[""Navigate to 'panlasangpinoy.com'""
+ ""Scroll down to the 'Reader Favorites' section on the homepage or sidebar""
+ ""Identify and click on a chicken recipe listed under 'Reader Favorites'""
+ 'Confirm the navigated page displays the full recipe for the selected chicken dish']","[""The agent successfully navigates to 'panlasangpinoy.com'""
+ ""The agent identifies and clicks on a recipe within the 'Reader Favorites' section""
+ ""The selected recipe is for a chicken dish (e.g., 'Filipino Chicken Adobo Recipe')""
+ 'The agent successfully reaches the dedicated recipe page for the chosen chicken dish']",FEASIBLE,1.0,"The website is operational, and a 'Top 10 Recipes' section is present on the homepage, which serves a similar function to 'Reader Favorites'. This section includes 'Chicken Empanada', a chicken dish, making the task completable.",200,True,
+cafirefoundation.org,What is the primary objective of the California Fire Foundation's Disaster Relief Programs?,"[""Navigate to 'cafirefoundation.org'""
+ ""Locate and click on the 'What We Do' menu dropdown""
+ ""Click on the 'Disaster Relief Programs' link within the 'What We Do' section or on the homepage if visible""
+ 'Read the description of the Disaster Relief Programs to identify its primary objective, and respond with that objective in the answer']","['Identifies that the program provides immediate financial assistance and resources to firefighters and communities impacted by disasters.'
+ 'Mentions that it helps survivors and firefighters.']",FEASIBLE,1.0,"The website is operational, and the 'Disaster Relief Programs' information is directly visible on the homepage, stating its objective to assist survivors, firefighters, and communities affected by natural disasters. [1]",200,True,
+askthedentist.com,Find out what type of toothpaste Dr. B has launched and how to experience the difference.,"['Navigate to askthedentist.com'
+ ""Locate the section or link related to Dr. B's new toothpaste company""
+ 'Click on the link to learn more about the toothpaste'
+ ""Identify the name or type of toothpaste and how to 'experience the difference'""]","['Identifies that Dr. B has launched a new toothpaste company.'
+ ""States the name of the toothpaste (e.g., 'Ask the Dentist Toothpaste' or similar if explicitly named).""
+ ""Explains how to 'experience the difference' (e.g., by purchasing it, or by following specific dental practices mentioned on the product page).""]",FEASIBLE,1.0,"The website is operational and clearly displays information about 'FYGG Toothpaste' under 'Shop Our Natural Dental Health Products', along with a notification bar stating 'Dr. B has launched a new toothpaste company Experience the Difference →', directly addressing the task's requirements.",200,True,
+rbauction.com,Find the date and location of the next upcoming heavy equipment auction in Canada.,"['Navigate to rbauction.com'
+ ""Click on the 'Auctions' button in the main navigation""
+ ""Filter the auctions by 'Canada' if a country filter is available, or browse for Canadian locations""
+ 'Identify the next upcoming heavy equipment auction in Canada and extract its date and location']","['Identifies a specific upcoming auction in Canada'
+ 'Provides the date of the identified auction'
+ 'Provides the city and province/territory of the identified auction']",FEASIBLE,1.0,"The website is operational and the homepage directly lists upcoming auctions, including several in Canada with their dates and locations, making it possible to identify a heavy equipment auction in Canada.",200,True,
+luxinnovation.lu,Identify the primary contact method for getting help to find the right funding measure(s) on Luxinnovation.lu.,"[""Navigate to 'luxinnovation.lu'""
+ ""Click on 'Find funding' in the main navigation or a similar prominent link related to funding.""
+ 'Locate the section or link that offers assistance in finding the right funding measure(s).'
+ ""Identify the primary contact method (e.g., a 'Contact us' link, an email address, or a phone number) and provide it in the answer.""]","[""Identifies 'Contact us' or a similar direct contact link as the primary method.""
+ 'Does not get sidetracked by specific funding measure details but focuses on the general assistance contact.']",FEASIBLE,1.0,"The website is operational, and a 'Contact us' link is prominently available in the main navigation and footer, which directly addresses the task's success criteria for identifying a primary contact method for assistance. [1]",200,True,
+quakeroats.com,Find a recipe for oatmeal cookies on the Quaker Oats website and identify if it contains raisins.,"[""Navigate to 'quakeroats.com'"" ""Click on the 'Recipes' submenu""
+ ""Click on 'Cookies' under the 'BY DISH' category""
+ 'Browse the cookie recipes to find an oatmeal cookie recipe'
+ 'Determine if the found oatmeal cookie recipe contains raisins']","[""Successfully navigates to a specific oatmeal cookie recipe page (e.g., 'Vanishing Oatmeal Raisin Cookies')""
+ 'Clearly states whether the identified oatmeal cookie recipe includes raisins.']",FEASIBLE,1.0,"The Quaker Oats website is operational and directly on the homepage, a recipe for 'Vanishing Oatmeal Raisin Cookies' is prominently displayed, which explicitly states it contains raisins. [1]",200,True,
+visualizingcultures.mit.edu,Identify the primary focus areas of the Visualizing Cultures project as stated on the homepage.,"[""Navigate to 'visualizingcultures.mit.edu'""
+ 'Read the introductory text on the homepage'
+ ""Identify the primary geographical and thematic focus areas mentioned in the project's mission statement""]","['States that the project focuses on Japan in the modern world and early-modern China.'
+ ""Mentions the broader themes explored, such as cultures of modernization, war and peace, consumerism, and images of 'Self' and 'Others'.""]",FEASIBLE,1.0,"The homepage clearly states the project's focus on 'Japan in the modern world and early-modern China' and mentions broader themes like 'cultures of modernization, war and peace, consumerism, images of ""Self"" and ""Others""'.",200,True,
+miniwebtool.com,Identify three distinct tools available on miniwebtool.com and briefly describe their function.,"['Navigate to miniwebtool.com'
+ 'Successfully bypass any security or verification screens to access the main content of the website'
+ 'Browse the website to identify at least three different tools offered'
+ ""For each identified tool, briefly describe its intended function based on the website's information""
+ 'Respond with the names and descriptions of three tools']","['The agent must successfully load and interact with the actual miniwebtool.com website content, bypassing the Cloudflare verification.'
+ 'The agent must list at least three distinct tools available on the website.'
+ 'For each listed tool, the agent must provide a concise and accurate description of its function as presented on the website.']",FEASIBLE,1.0,"The website miniwebtool.com loaded successfully, and a wide variety of tools are clearly listed with self-explanatory names, making it easy to identify and describe three distinct tools.",200,True,
+nvsos.gov,"Find the registered agent's name and address for 'Nevada Corporation' on nvsos.gov, assuming the website is accessible.","[""Navigate to 'nvsos.gov'""
+ ""Locate and click on the 'Business Entity Search' link or navigate directly to the search page if a direct URL is known and functional.""
+ ""In the business entity search, enter 'Nevada Corporation' into the search field and submit the query.""
+ ""From the search results, identify the correct 'Nevada Corporation' entry (if multiple exist, prioritize the most relevant or oldest active one).""
+ 'Click on the entry to view its detailed information.'
+ ""Locate the registered agent's name and address on the detailed business entity page, and respond with this information.""]","['Successfully navigates to the Business Entity Search page.'
+ ""Successfully searches for 'Nevada Corporation'.""
+ ""Identifies and accesses the detailed information page for 'Nevada Corporation'.""
+ 'Extracts and provides the full name of the registered agent.'
+ 'Extracts and provides the complete address of the registered agent (street, city, state, zip code).']",FEASIBLE,1.0,"The website is operational and the 'Business Entity Search' link is clearly visible under 'Other Services' on the homepage, indicating that the task can still be completed.",200,True,
+greenclimate.fund,What is the total 'FA Financing $' for countries in Eastern Europe?,"[""Navigate to 'greenclimate.fund'"" ""Click on 'Data &'""
+ ""Click on 'Data library'"" ""Click on 'Countries'""
+ ""Filter the table by 'Region' for 'Eastern Europe'""
+ ""Sum the 'FA Financing $' column for all Eastern European countries displayed""
+ 'Report the total sum in the answer']","[""Successfully navigates to the 'Countries' database within the Open Data Library.""
+ ""Correctly identifies and applies a filter for 'Eastern Europe' in the 'Region' column.""
+ ""Accurately sums the 'FA Financing $' for all Eastern European countries in the displayed table.""
+ 'Provides the correct total sum in the final answer.']",FEASIBLE,1.0,"The website is operational, and the navigation steps 'Data &' -> 'Data library' are clearly visible on the homepage, indicating the task is still completable.",200,True,
+msplus.org.au,How can a health professional refer a patient to MS Plus services?,"[""Navigate to 'msplus.org.au'""
+ ""Click on the 'For health professionals' link""
+ 'Locate information on how to refer a patient to MS Plus services'
+ 'Summarize the referral process or contact details for referrals']","['Identifies the specific section or page for health professional referrals'
+ 'Provides the method or contact information for a health professional to refer a patient (e.g., a form, an email, or a specific phone number)']",FEASIBLE,1.0,"The website is operational and clearly displays a 'Health professionals' section with a 'Make a referral' link, directly addressing the task's requirements for identifying referral information.",200,True,
+watereuse.org,Locate and identify a specific communication tool or resource related to potable water reuse on the WateReuse Association website.,"[""Navigate to 'watereuse.org'"" ""Click on the 'Educate' link""
+ ""Click on the 'Communications Tools & Resources' link""
+ ""Click on the 'Water Reuse Communications Library' link""
+ 'Browse the library to find a resource specifically related to potable water reuse and identify its title or type.']","[""Successfully navigates to the 'Water Reuse Communications Library'.""
+ 'Identifies at least one resource (e.g., a document title, a specific communication material) that is explicitly related to potable water reuse.'
+ ""The identified resource must be from the WateReuse Association's communication library.""]",FEASIBLE,1.0,"The website is operational, and all the navigation links ('Educate', 'Communications Tools & Resources', 'Water Reuse Communications Library') specified in the task instructions are present and clearly visible. Additionally, a resource explicitly related to potable water reuse ('Profiles in Reuse: Potable Reuse') is directly identifiable on the homepage.",200,True,
+australianmanufacturingweek.com.au,Identify the main product zones featured at Australian Manufacturing Week events.,"[""Navigate to 'australianmanufacturingweek.com.au'""
+ 'Accept or decline the cookie policy to proceed to the main content.'
+ ""Click on the 'product-zones' link in the navigation bar.""
+ 'List the names of all the main product zones displayed on the page.']","[""Successfully navigates to the 'product-zones' page.""
+ ""Lists all the distinct product zones mentioned on the page (e.g., 'Additive Manufacturing', 'Advanced Materials', 'Automation & Robotics', 'Digitalisation', 'Machine Tools', 'Manufacturing Solutions', 'Weld & Engineering').""]",FEASIBLE,1.0,"The website is operational and the main product zones are listed directly on the homepage, making the task completable without navigating to a separate 'product-zones' page. [1]",200,True,
+constituteproject.org,Compare the 1958 Constitution of France with the 1949 Basic Law of Germany on Constitute Project.,"[""Navigate to 'constituteproject.org'""
+ ""Click on the 'Compare' button to access the comparison tool""
+ ""Search for and select 'France (1958)' from the list of constitutions""
+ ""Search for and select 'Germany (1949)' from the list of constitutions""
+ 'Confirm that both constitutions are loaded for comparison']","[""Successfully loads the 'France (1958)' constitution into the comparison tool""
+ ""Successfully loads the 'Germany (1949)' constitution into the comparison tool""
+ 'Displays both selected constitutions side-by-side or in a clear comparison interface']",FEASIBLE,1.0,"The website is operational and explicitly states 'The World's Constitutions to Read, Search, and Compare' and 'Read and Compare the World's Constitutions', indicating the comparison tool is still available.",200,True,
+virtualwritingtutor.com,"What is the maximum word count for a free non-member on Virtual Writing Tutor, and how does it compare to a free member's limit for grammar checks?","[""Navigate to 'virtualwritingtutor.com'""
+ ""Locate the 'Membership Plan Options' section on the homepage""
+ ""Identify the word limits for 'Free non-member' and 'Free member' for grammar checks""
+ 'State the word limits for both membership types in the answer']","[""Correctly identifies the word limit for a 'Free non-member' for grammar checks.""
+ ""Correctly identifies the word limit for a 'Free member' for grammar checks.""
+ 'Compares both limits in the answer.']",FEASIBLE,1.0,"The website is operational and the 'Membership Plan Options' section is clearly visible on the homepage, providing the word limits for both 'Free non-member' and 'Free member' for grammar checks.",200,True,
+smalltownpapers.com,What is AIB PAL and what are its key features as described on the SmallTownPapers website?,"[""Navigate to 'smalltownpapers.com'"" ""Click on the 'Info/Contact' link""
+ ""Locate the description of 'AIB PAL' on the page""
+ 'Identify and summarize its key features']","[""Mentions 'AIB PAL' is a private local LLM and chatbot""
+ 'States that it requires no internet connection, cloud services, or additional software'
+ 'Notes that it maintains images of original PDF, scanned documents, and photos, which can be displayed as thumbnails and accessed for viewing']",FEASIBLE,1.0,"The website is operational and the description of 'AIB PAL' with its key features, matching all success criteria, is clearly present on the homepage without further navigation.",200,True,
+outrider.org,Find out if Outrider.org offers a newsletter and how to subscribe to it.,"['Navigate to outrider.org'
+ ""Look for a 'Newsletter' link or section in the navigation or footer""
+ ""Click on the 'Newsletter' link""
+ 'Identify the method for subscribing to the newsletter.']","['Successfully navigates to the newsletter subscription page or section.'
+ 'Identifies the input field or button for subscribing to the newsletter.']",FEASIBLE,1.0,"The website is operational and clearly displays a 'Newsletter' link in the navigation, as well as multiple prominent newsletter subscription forms with email input fields and 'Sign me up!' buttons, fulfilling all success criteria.",200,True,
+joodsmonument.nl,"Find out the purpose of the Digitaal Joods Monument, and identify how many people it commemorates.","[""Navigate to 'joodsmonument.nl'""
+ ""Locate the 'About the Digitaal Joods Monument' page if not already there.""
+ ""Read the introductory text to understand the monument's purpose.""
+ 'Identify the specific number of people commemorated by the monument.']","['States that the monument commemorates Dutch Jews, Roma, and Sinti who were persecuted and did not survive the Holocaust.'
+ ""Cites the specific number 'more than 109,000' people commemorated.""]",FEASIBLE,1.0,"The website is operational and the 'Over het Digitaal Joods Monument' link, which is crucial for the task, is prominently available on the homepage.",200,True,
+intelligentliving.co,Find an article written by Steven Miller on Intelligent Living.,"[""Navigate to 'intelligentliving.co'""
+ 'Look for articles and identify their authors on the homepage or by navigating through categories.'
+ ""Locate an article with 'Steven Miller' as the author.""
+ 'Provide the title of one such article.']","[""Identifies an article authored by 'Steven Miller'.""
+ ""States the exact title of an article written by 'Steven Miller', such as 'How Rehab Helps You Beat Addiction' or 'Top Tips for Incorporating Sustainability into Lean Manufacturing'.""]",FEASIBLE,1.0,The website is operational and an article by 'Steven Miller' titled 'Why Sustainability Should Be Taught Like Math in Schools' is present on the homepage. [1],200,True,
+dmnews.com,"Find another article on DMNews.com that discusses overcoming mental or emotional challenges, similar to the themes in the '100,000 steps' article.","['Navigate to the DMNews.com homepage or a section listing articles.'
+ 'Browse or search for articles related to mental resilience, self-improvement, or emotional well-being.'
+ 'Select an article that aligns with these themes.'
+ 'Provide the title of the selected article.']","['The agent identifies and provides the title of an article from DMNews.com.'
+ ""The selected article's title clearly indicates a focus on mental or emotional challenges, self-improvement, or resilience.""
+ ""The article is distinct from the 'Walking 100,000 steps' article.""]",FEASIBLE,1.0,"The website is operational and contains multiple articles under 'Psychology' and 'News' categories that discuss mental and emotional challenges, directly aligning with the task's requirements.",200,True,
+silverprice.org,What was the highest silver price per ounce in USD during the last 5 years on silverprice.org?,"[""Navigate to 'silverprice.org'"" ""Click on 'Silver Price per Ounce'""
+ ""Select '5 Years' from the timeframe dropdown""
+ 'Identify the highest price point within the displayed 5-year chart or data, and state that price in USD.']","[""The agent successfully navigates to the 'Silver Price per Ounce' page.""
+ ""The agent correctly selects the '5 Years' timeframe.""
+ 'The agent accurately identifies the highest silver price per ounce in USD within the 5-year period shown on the chart or data table.'
+ 'The answer provided is the correct highest price for the specified period.']",FEASIBLE,1.0,"The website is operational and contains clear navigation options for 'Silver Price per Ounce' and a '5 Years' timeframe selection, along with charts and performance data to identify the highest price.",200,True,
+openhousechicago.org,Find the date of the next Open House Chicago event and list three types of city tours offered by the Chicago Architecture Center.,"[""Navigate to 'openhousechicago.org'""
+ 'Locate information about the Open House Chicago event to find its date.'
+ ""Navigate to the 'City Tours' section.""
+ 'Identify and list at least three distinct types of city tours.']","['States the correct date for the next Open House Chicago event.'
+ 'Lists at least three distinct types of city tours available through the Chicago Architecture Center.']",FEASIBLE,1.0,"The website is operational and clearly states the date for the next Open House Chicago event (Oct 17-18, 2026). It also lists several types of city tours offered by the Chicago Architecture Center, such as Boat Tour, Walking Tours, and Bus Tours.",200,True,
+ca.warbyparker.com,Find the price and all available colors for the 'Durand' eyeglasses model.,"[""Navigate to 'ca.warbyparker.com'""
+ ""Click on the 'Eyeglasses' button in the main navigation.""
+ ""Scroll down to locate the 'Durand' model.""
+ ""Identify the price listed for the 'Durand' model.""
+ ""List all the color variations displayed for the 'Durand' model.""]","[""States the price of the 'Durand' eyeglasses model (e.g., '$95').""
+ ""Lists all available color variations for the 'Durand' model as seen on the main eyeglasses page (e.g., 'Rose Water', 'Green Garnet Fade', 'Jet Black with Polished Gold', 'Jet Black with Tundra Tortoise', 'Whiskey Tortoise', 'Laguna Crystal Matte', 'Crystal', 'Crystal Fern', 'Crystal with Oak Barrel').""]",FEASIBLE,1.0,"The 'Durand' eyeglasses model, its price ($150), and all available color variations (Whiskey Tortoise, Rose Water, Laguna Crystal Matte, Crystal, Crystal with Oak Barrel) are clearly visible on the initial page load of the provided URL.",200,True,
+sdcoastkeeper.org,"Identify three distinct ways a community member can take action with San Diego Coastkeeper, beyond general volunteering, and describe how to get started with each.","['Navigate to sdcoastkeeper.org'
+ ""Explore the 'Take Action' or similar prominent navigation section""
+ 'Identify at least three distinct calls to action (e.g., reporting pollution, attending events, donating, advocacy)'
+ 'For each identified action, find and summarize the specific steps or information needed to get started (e.g., a link to a form, an email address, event calendar, donation page)']","[""Identifies at least three distinct ways to take action (e.g., 'Report Pollution', 'Attend an Event', 'Donate', 'Advocate')""
+ 'For each identified action, provides specific, actionable information on how to get started (e.g., a direct link to a reporting form, a link to an event calendar, details on how to donate, or information on advocacy campaigns)'
+ 'The identified actions are clearly distinct from general volunteer sign-up (e.g., not just another volunteer program)'
+ ""The answer clearly summarizes the 'how-to' for each action.""]",FEASIBLE,1.0,"The website is operational and prominently displays calls to action such as 'Donate', 'Attend an Event', and information on 'Advocacy' and current issues, with clear links to get started with each.",200,True,
+store.generaltools.com,Verify if store.generaltools.com is accessible and identify its main product categories.,"[""Navigate to 'store.generaltools.com'""
+ 'Confirm that the website loads without a 404 error'
+ 'Identify and list the main product categories visible on the homepage or primary navigation.']","['The website loads successfully without a 404 error.'
+ ""Lists at least three distinct product categories from the website's navigation or homepage.""]",FEASIBLE,1.0,"The website loaded successfully without a 404 error, and multiple product categories such as 'Hand Tools', 'Digital Tools', and 'Environmental & Airflow' are clearly visible on the homepage.",200,True,
+groundwork.org.uk,Find the title of the most recent news update or article published on the Groundwork CLM website.,"[""Navigate to 'groundwork.org.uk'"" 'Accept the cookie policy if prompted'
+ ""Click on the 'Latest Updates' link""
+ 'Identify the title of the most recently published article or news item on the page, and respond with that title.']","[""Successfully navigates to the 'Latest Updates' section.""
+ 'Identifies and provides the exact title of the most recent news update or article.'
+ ""The provided title must be from the 'Latest Updates' section and not a general page title.""]",FEASIBLE,1.0,"The website is operational, and a 'Latest Updates' link is present in the navigation. The most recent news article title, 'NEWS: Groundwork Announces New £800,000 Partnership With Royal London', is clearly visible on the homepage under 'News updates'.",200,True,
+library.gatech.edu,"Beyond contacting a specific subject expert, how can a user get general research help from the Georgia Tech Library?","[""Navigate to 'library.gatech.edu'"" ""Click on 'Research, Help, Support'""
+ ""Locate and click on the 'Ask Us!' link or similar general inquiry option""
+ 'Identify the primary method for general research help (e.g., chat, email, phone number) and provide it in the answer']","['Identifies and provides the primary method for general research assistance (e.g., a specific email address, phone number, or a link to a chat service)'
+ 'Does not rely solely on contacting a specific subject expert found through the search filter']",FEASIBLE,1.0,"The website is operational, and the navigation path 'Research, Help, Support' -> 'Get Help' -> 'Ask Us!' is clearly visible on the homepage, indicating the task is still completable. [1]",200,True,
+dinosaurbarbque.com,"What are the Monday to Thursday operating hours for the Syracuse Dinosaur Bar-B-Que location, and what is its street address?","[""Navigate to 'dinosaurbarbque.com'"" ""Click on the 'Locations' link""
+ ""Click on the 'Syracuse' link""
+ 'Locate the operating hours and street address for the Syracuse location'
+ 'Respond with the Monday to Thursday hours and the street address']","[""States the Monday to Thursday operating hours as '11:00 AM – 9:00 PM'""
+ ""States the street address as '246 W Willow St Syracuse, NY 13202'""]",FEASIBLE,1.0,"The website is operational and the 'Locations' link is clearly visible on the homepage, with 'Syracuse' listed as a location, indicating the required information is likely still present and accessible.",200,True,
+isabelallende.com,Find the summary of 'The House of the Spirits' on Isabel Allende's website.,"[""Navigate to 'isabelallende.com'"" ""Click on the 'Books' dropdown menu""
+ ""Click on 'The House of the Spirits' from the list of books""
+ ""Click on the 'summary' link on 'The House of the Spirits' dedicated page""
+ 'Extract and provide the summary of the book.']","[""Navigates to the dedicated page for 'The House of the Spirits'.""
+ ""Successfully clicks on the 'summary' link.""
+ ""Provides the text of the book's summary as the answer.""]",FEASIBLE,1.0,"The website is operational, and 'The House of the Spirits' is clearly listed under the 'libros' (books) section on the homepage, indicating that the book's information is still available.",200,True,
+orkin.com,Find the main types of termites that Orkin deals with and list at least two common signs of a termite infestation according to their website.,"['Navigate to orkin.com'
+ ""Locate and click on the 'Termite Control' section from the main navigation.""
+ 'Browse the termite control page for information regarding termite types and signs of infestation.'
+ 'Extract and list at least two common types of termites and two common signs of infestation as described on the page.']","[""Successfully navigates to the 'Termite Control' section.""
+ 'Identifies at least two types of termites (e.g., Subterranean, Drywood, Dampwood) that Orkin addresses.'
+ 'Identifies at least two common signs of a termite infestation (e.g., mud tubes, discarded wings, damaged wood, frass/pellets) as described on the website.'
+ ""The extracted information is directly from the Orkin website's content on termites, not from general knowledge or external sources.""]",FEASIBLE,1.0,"The website is operational and the 'Termite Control' section is prominently displayed on the homepage, suggesting the task's required information is still available.",200,True,
+deutsche-standards.de,Identify the primary focus or mission of 'Deutsche Standards' based on the website's main content.,"[""Navigate to 'deutsche-standards.de'"" 'Accept the cookie consent banner'
+ 'Navigate to the homepage or main content area (if not already there after accepting cookies)'
+ ""Identify and summarize the main focus, mission, or key offerings of 'Deutsche Standards' from the visible content.""]","['Successfully navigates past the cookie consent banner to the main website content.'
+ ""Identifies and articulates the core purpose or mission of 'Deutsche Standards' (e.g., 'vernetzen die Exzellenz' - connecting excellence, or specific themes/industries they focus on).""
+ ""Does not rely solely on the 'Impressum' or legal disclaimers for this information.""]",FEASIBLE,1.0,"The website is operational, and the primary focus or mission of 'Deutsche Standards' is clearly stated on the homepage as 'Wir vernetzen die Exzellenz' (We connect excellence), without needing to consult the Impressum.",200,True,
+appsheet.com,Find an 'Advanced' template related to 'booking' and describe its purpose based on its preview.,"[""Navigate to 'appsheet.com/templates'""
+ ""Use the search bar to filter for 'booking' templates""
+ ""Identify an 'Advanced' template from the search results""
+ ""Click the 'Preview' button for that advanced booking template""
+ 'Summarize the purpose of the app as described in the preview']","['Successfully navigates to the AppSheet templates page.'
+ 'Uses the search functionality to filter templates.'
+ ""Identifies and selects an 'Advanced' template related to 'booking' (e.g., 'Workstation Booking').""
+ ""Clicks the 'Preview' button for the selected template.""
+ ""Accurately describes the purpose of the 'Workstation Booking' template as 'assigning and reserving flexible spaces within an organization' based on the preview information.""]",FEASIBLE,1.0,"The AppSheet templates page is accessible and lists an 'Advanced' 'Workstation Booking' template with its purpose clearly described on the page itself, fulfilling all information requirements of the task.",200,True,
+elanaspantry.com,Find a recipe for a gluten-free breakfast item that is also suitable for a ketogenic diet.,"[""Navigate to 'elanaspantry.com'"" ""Click on the 'Recipes' link""
+ ""Click on the 'Breakfasts' category link""
+ ""Browse the breakfast recipes to find one explicitly labeled as 'Keto' or 'Low-Carb'""
+ 'Click on the identified recipe to view its details']","[""Navigates to the 'Breakfasts' recipe category.""
+ ""Identifies a recipe on the 'Breakfasts' page that is explicitly labeled as 'Keto' or 'Low-Carb'.""
+ 'Clicks on the correct recipe link.'
+ 'The final page displayed is the detailed recipe page for a gluten-free breakfast item suitable for a ketogenic diet.']",FEASIBLE,1.0,"The website is operational and the navigation links for 'Recipes', 'Breakfasts', 'Keto Diet', and 'Low Carb Diet' are clearly visible on the homepage, suggesting the task can still be completed.",200,True,
+zooplus.co.uk,Find a trial pack for dog food and identify the cheapest option available.,"['Navigate to zooplus.co.uk' ""Click on the 'Dog' category link.""
+ ""Locate and click on the 'Dog Trial Packs' subcategory link.""
+ 'Identify the product with the lowest price among the trial packs displayed.'
+ 'State the name and price of the cheapest dog food trial pack.']","[""Successfully navigates to the 'Dog Trial Packs' section.""
+ 'Identifies the specific product that is the cheapest trial pack.'
+ 'Provides the name and exact price of the cheapest trial pack.']",FEASIBLE,1.0,"The website is operational, and the 'Dog' category and 'Dog Trial Packs' subcategory are clearly visible on the homepage. Several dog trial packs with prices are displayed, allowing for identification of the cheapest option.",200,True,
+bookstore.billygraham.org,"Find a book authored by Billy Graham on the topic of evangelism, and identify its current price.","[""Navigate to 'bookstore.billygraham.org'""
+ ""Use the search bar to search for 'Billy Graham evangelism'""
+ 'Locate a book in the search results that is explicitly authored by Billy Graham and is about evangelism'
+ 'Click on the identified book to view its product page'
+ 'Find the current price of the book on its product page, and respond with the book title and its price']","['Identifies a book explicitly stated as authored by Billy Graham'
+ ""The book's topic is clearly evangelism""
+ 'States the correct current price of the identified book']",FEASIBLE,1.0,"The website is operational, and the homepage clearly shows a search bar, categories for 'Books' and 'Evangelism', and a section for 'Books By Billy Graham', indicating that the required information and functionality to complete the task are present.",200,True,
+shop.jenis.com,Identify all available dairy-free ice cream flavors and their prices on Jeni's Splendid Ice Creams website.,"['Navigate to shop.jenis.com'
+ ""Click on the 'Dairy-Free' filter/category link""
+ ""List all the ice cream flavors displayed under the 'Dairy-Free' section""
+ 'For each dairy-free flavor, state its price']","['Successfully navigates to the dairy-free flavors section.'
+ 'Lists all dairy-free flavors presented on the page.'
+ 'Provides the correct price for each listed dairy-free flavor.'
+ 'If no dairy-free flavors are listed, the agent should explicitly state this.']",FEASIBLE,1.0,"The website is operational and a 'Dairy Free' category link is clearly visible on the homepage, indicating that the specific information required by the task is still present and accessible.",200,True,
+tpg.com.au,"What are the data limits and prices for all available SIM Only mobile plans on TPG, including the 'Small', 'Medium', and 'Large' plans?","[""Navigate to 'tpg.com.au/mobile'""
+ 'Scroll down the page to locate the full list of SIM Only mobile plans'
+ 'Identify the data limits and prices for the Small, Medium, and Large plans, and any other plans listed'
+ 'Summarize the data limits and prices for all identified plans.']","[""Lists the price and data limit for the 'Small' plan.""
+ ""Lists the price and data limit for the 'Medium' plan.""
+ ""Lists the price and data limit for the 'Large' plan.""
+ 'Accurately states the price and data limit for each plan as presented on the webpage.']",FEASIBLE,1.0,"The website is operational and the 'Small', 'Medium', and 'Large' SIM Only mobile plans, along with their data limits and prices, are clearly listed on the provided URL.",200,True,
+uk.sodexo.com,Find the main section on Sodexo's social impact and sustainability initiatives.,"[""Navigate to 'uk.sodexo.com'""
+ ""Click on the 'Social Impact' button in the main navigation (id: 690)""
+ 'Confirm the page loads and displays content related to social impact or sustainability.']","[""The agent successfully navigates to a page titled or clearly dedicated to 'Social Impact', 'Corporate Responsibility', or 'Sustainability'.""
+ ""The page contains information detailing Sodexo's initiatives, policies, or reports related to environmental, social, or governance (ESG) aspects.""
+ 'The agent does not encounter 404 errors or repeated timeouts during navigation.']",FEASIBLE,1.0,"The website is operational and the main navigation clearly features a 'Social Impact' section, which contains information related to Sodexo's social impact and sustainability initiatives, including a 'Social Impact Pledge 2030'. [1]",200,True,
+britmums.com,"How can I join the BritMums influencer network, and what are the benefits?","[""Navigate to 'britmums.com'""
+ ""Click on the 'Join our network!' link or the 'Influencers' link to find information about joining the network.""
+ 'Identify the key steps or requirements for joining.'
+ 'Summarize the benefits of being part of the BritMums influencer network.']","['Identifies that users can join by becoming part of a movement of mums and dads creating content.'
+ ""Mentions that joining the network allows participation in 'fantastic brand campaigns'.""
+ ""Navigates to a page providing details on joining the network (e.g., a dedicated 'Influencers' or 'Join' page).""]",FEASIBLE,1.0,"The website is operational and clearly presents a 'Become a BritMums Influencer!' section with a call to action to join, and mentions benefits like earning money and working with prestigious brands. [1]",200,True,
+news.nus.edu.sg,Find the title and a brief summary of the most recent press release related to sustainability or environmental research at NUS.,"[""Navigate to 'news.nus.edu.sg'"" ""Click on 'Press Releases'""
+ 'Review the headlines for articles related to sustainability or environmental research'
+ 'Identify the most recent article that fits the criteria, and click on it'
+ 'Extract the title and a brief summary of the article']","[""Navigates to the 'Press Releases' section.""
+ 'Identifies and clicks on the most recent article related to sustainability or environmental research.'
+ 'Accurately extracts the full title of the chosen article.'
+ ""Provides a concise summary of the article's content, focusing on its key findings or implications for sustainability/environment.""]",FEASIBLE,1.0,"The website is operational, the 'Press Releases' section is clearly visible on the homepage, and there are multiple articles listed with dates, including one related to 'liveable city' which aligns with sustainability/environmental research.",200,True,
+greaterzuricharea.com,List the key services offered by Greater Zurich Area AG to companies looking to expand into the region.,"[""Navigate to 'greaterzuricharea.com'"" ""Click on the 'How we help' link""
+ ""Click on the 'Our services' link""
+ 'Identify and list the key services described on the page']","['Mentions that services are free of charge'
+ 'Lists at least three of the following services: introduction to key contacts, advice on regulatory framework/taxes/labor/market/company setup, custom-made fact-finding visits, or assistance with finding highly-skilled employees.']",FEASIBLE,1.0,"The website is operational and the key services, including the mention that they are free of charge, are clearly listed on the homepage, fulfilling all success criteria without further navigation.",200,True,
+croatiaweek.com,Find the most recent news article specifically about Croatian tourism on the Croatia Week website and state its title.,"[""Navigate to 'croatiaweek.com'""
+ ""Look for a 'Tourism' or 'Travel' category in the navigation menu or on the homepage.""
+ ""If a specific category is not immediately visible, use the search bar to search for 'Croatian tourism' or 'tourism news'.""
+ 'Identify the most recent article directly related to Croatian tourism.'
+ 'State the title of the identified article.']","[""The agent successfully identifies and navigates to a relevant section (e.g., 'Tourism', 'Travel', or uses search effectively).""
+ 'The agent identifies an article that is explicitly about Croatian tourism, not tangentially related.'
+ 'The agent provides the full and correct title of the most recent relevant article.'
+ 'The article identified is a news item, not a general feature or historical piece.']",FEASIBLE,1.0,"The website is operational, and a 'Travel' category is present. Additionally, a recent news article explicitly about tourism, titled 'New tool “Safe in Dalmatia” launched for tourists', was found on the homepage under the 'News' section, fulfilling all task requirements.",200,True,
+writetodone.com,"Find an article on writetodone.com that provides tips for improving writing productivity, and list at least three distinct tips mentioned in the article.","[""Navigate to 'writetodone.com'""
+ ""Click on the 'TIPS' or 'MOTIVATION' category in the navigation menu""
+ ""Browse the articles to find one related to 'writing productivity' or 'time management for writers'""
+ 'Open the chosen article and extract at least three distinct tips for improving writing productivity']","['Successfully navigates to writetodone.com'
+ ""Accesses an article relevant to writing productivity (e.g., 'How to Write Faster', 'Boost Your Writing Output')""
+ ""Identifies and lists at least three unique, actionable tips for improving writing productivity from the article's content""
+ 'Does not rely on the search bar for task completion']",FEASIBLE,1.0,"The website is operational and contains a 'TIPS' category with a 'Be Productive' subcategory, as well as several articles directly on the homepage, such as '5 Tips To Write Faster', that are highly relevant to writing productivity, allowing the task to be completed without using the search bar.",200,True,
+everydaydishes.com,"Find a recipe for a simple, one-pan chicken dish and identify its main protein source.","[""Navigate to 'everydaydishes.com'""
+ ""Use the search bar to search for 'one-pan chicken'""
+ 'Click on a relevant recipe title from the search results that indicates simplicity or one-pan preparation'
+ 'Identify the primary protein source of the chosen recipe and state it in the answer']","['Successfully navigates to a recipe page for a one-pan chicken dish.'
+ ""The recipe is explicitly described as 'one-pan' or 'simple' within its title or description.""
+ ""Correctly identifies 'chicken' as the main protein source of the recipe.""]",FEASIBLE,1.0,"The website is operational and features a 'One-Pan Meals' category in its navigation, directly addressing a key requirement of the task. A 'creamy Tuscan chicken' recipe is also highlighted as a 'One Pan Meal' on the homepage, indicating the presence of relevant content.",200,True,
+runrepeat.com,"Find the lightest road running shoe for men on RunRepeat.com and state its weight in grams. Also, identify the shoe with the highest audience score among the top 5 lightest road running shoes.","[""Navigate to 'runrepeat.com'""
+ ""Go to the 'Road running shoes' category for men.""
+ 'Filter or sort the results to find the lightest shoes.'
+ 'Identify the lightest shoe and its weight in grams.'
+ 'Among the top 5 lightest shoes, identify the one with the highest audience score.'
+ 'Provide the name of the lightest shoe and its weight, and the name of the shoe with the highest audience score among the top 5 lightest.']","['Identifies the lightest road running shoe for men and its weight in grams.'
+ 'Identifies the shoe with the highest audience score among the top 5 lightest road running shoes for men.']",FEASIBLE,1.0,"The website is operational and the main navigation categories like 'Running' and 'Reviews' are present, suggesting that the required information for finding and filtering shoes by weight and audience score is likely available.",200,True,
+bustedtees.com,What are the shipping and return policies for BustedTees products?,"['Navigate to bustedtees.com'
+ ""Click on any product to access its detail page (e.g., 'Imperial Officer Performance Polo Shirt')""
+ ""Locate and click on the 'Ship & Returns' tab or link on the product page""
+ 'Summarize the key information regarding shipping and returns.']","['Clearly states information about shipping times or methods.'
+ ""Clearly states information about the return policy or duration (e.g., '365 Day Guarantee').""]",FEASIBLE,1.0,"The website is operational, and the shipping and return policies, including the '365 Day Guarantee' and shipping times, are clearly stated on the homepage. [1]",200,True,
+myajc.com,Find the latest article discussing Atlanta United's performance and summarize its main point.,"['Navigate to myajc.com'
+ ""Click on the 'Sports' link in the main navigation menu""
+ 'Locate the latest article about Atlanta United'
+ 'Click on the article to read its content'
+ 'Summarize the main point of the article in the answer']","[""Identifies the correct latest article about Atlanta United (e.g., 'Atlanta United breaks through, but one game doesn’t mean it’…')""
+ ""Accurately summarizes the main point of the article, such as the team's recent performance and the implications for their season""]",FEASIBLE,1.0,"The website is operational, and a 'Sports' section with recent articles about Atlanta United's performance is easily accessible on the homepage. The latest article discusses the team's poor start to the season and the coach's job security.",200,True,
+individualrestaurants.com,"Find the address and phone number for the Piccolino Mayfair, Heddon Street restaurant.","[""Navigate to 'individualrestaurants.com'""
+ ""Click on the 'Discover More' link for Piccolino""
+ ""On the Piccolino brand page, look for a way to navigate to specific restaurant locations (e.g., a 'Locations' or 'Find a Restaurant' link/section).""
+ ""Select or search for 'Piccolino Mayfair, Heddon Street'.""
+ 'Once on the specific restaurant page, locate the address and phone number.'
+ 'Respond with the address and phone number.']","['Successfully navigates to the dedicated page for Piccolino Mayfair, Heddon Street.'
+ 'Accurately extracts and provides the full address of the Piccolino Mayfair, Heddon Street restaurant.'
+ 'Accurately extracts and provides the phone number of the Piccolino Mayfair, Heddon Street restaurant.']",FEASIBLE,1.0,"The website is operational, and the booking widget on the homepage clearly lists 'Piccolino Mayfair' as an option, indicating that the restaurant is still present and discoverable. The next step would be to select it and proceed to find the address and phone number.",200,True,
+walsallhealthcare.nhs.uk,What is the main switchboard telephone number for Walsall Healthcare NHS Trust?,"[""Navigate to 'walsallhealthcare.nhs.uk'""
+ ""Locate the 'Contact us' section""
+ 'Identify the main switchboard telephone number and provide it in the answer']","[""States the correct switchboard telephone number as '01922 721172'""]",FEASIBLE,1.0,The website is operational and the main switchboard telephone number '01922 721172' is clearly visible in the 'Contact us' section on the homepage. [1],200,True,
+themagicalslowcooker.com,Find a slow cooker recipe that uses chicken and is suitable for a holiday meal on themagicalslowcooker.com.,"[""Navigate to 'themagicalslowcooker.com'""
+ ""Click on the 'Holiday' link in the main navigation""
+ ""On the Holiday recipes page, look for a filter or category for 'Chicken' or browse for chicken recipes""
+ 'Identify a slow cooker chicken recipe suitable for a holiday and state its name.']","[""Identifies a recipe that explicitly mentions 'Chicken' as a primary ingredient.""
+ ""Identifies a recipe that is listed under a 'Holiday' category or is clearly presented as a holiday recipe.""
+ 'Responds with the name of a specific slow cooker chicken recipe that meets both criteria.']",FEASIBLE,1.0,"The website is operational and the homepage clearly displays 'Holiday' and 'Chicken' categories in the main navigation, indicating that the required information to complete the task is still present.",200,True,
+ghost-recon.ubisoft.com,What is the official release date for Tom Clancy's Ghost Recon Breakpoint on its official website?,"['Navigate to the official Ghost Recon website: ghost-recon.ubisoft.com'
+ ""Locate the specific page or section for 'Ghost Recon Breakpoint'""
+ 'Find the official release date for the game'
+ 'Report the release date in the answer']","['Successfully navigates to ghost-recon.ubisoft.com'
+ ""Identifies and navigates to the 'Ghost Recon Breakpoint' section of the website""
+ ""Extracts the correct official release date for Tom Clancy's Ghost Recon Breakpoint (October 4, 2019)""
+ 'The answer explicitly states the release date.']",FEASIBLE,1.0,"The website loaded successfully and directly displayed the product page for 'Tom Clancy's Ghost Recon Breakpoint', where the official release date of 'October 4, 2019' is clearly visible under the 'General information' section.",200,True,
+fdr.blogs.archives.gov,Find the number of blog posts tagged with 'FDR' and 'Civil Rights' on the Franklin D. Roosevelt Presidential Library and Museum blog.,"['Navigate to fdr.blogs.archives.gov'
+ ""Click on the 'FDR' tag to filter posts.""
+ ""On the filtered page, click on the 'Civil Rights' tag to further refine the results.""
+ 'Count the number of distinct blog posts displayed on the resulting page.'
+ 'State the total count of posts.']","['Successfully navigates to the blog homepage.'
+ ""Applies the 'FDR' tag filter.""
+ ""Applies the 'Civil Rights' tag filter in conjunction with the 'FDR' tag.""
+ 'Accurately counts the number of posts displayed after both filters are applied.'
+ ""The final answer is the correct number of posts (e.g., '6 items' as seen in the tags list, or the actual count if more are displayed after filtering).""]",FEASIBLE,1.0,"The website is operational, and the 'FDR' and 'Civil Rights' tags are clearly visible and clickable in the 'Tags' section on the right sidebar, indicating the filtering functionality is still present.",200,True,
+wandtv.com,Find out how to submit a picture or video to WANDTV.com.,"['Navigate to wandtv.com'
+ ""Locate and click on the 'Send Pics & Video' link in the main menu.""
+ 'Identify the instructions or form for submitting content.']","[""Successfully navigates to the 'Send Pics & Video' page.""
+ 'Identifies and describes the method or form for submitting pictures and videos (e.g., an upload form, email address, or specific instructions).']",FEASIBLE,1.0,"The website is operational and the 'Send Pics & Video' link is prominently available in the main navigation menu and also in the footer, indicating the functionality to submit content is still present. Additionally, there is a 'Submit Your News' section with 'Send your photos and videos' text.",200,True,
+gentledogtrainers.com.au,What are the 6 best cheap dog foods in Australia according to gentledogtrainers.com.au?,"[""Navigate to 'gentledogtrainers.com.au'""
+ ""Locate and click on the article titled 'The 6 Best Cheap Dog Foods Australia: Tested & Reviewed 2025'""
+ 'Extract the names of the 6 best cheap dog foods listed in the article, and respond with them in the answer']","[""Identifies 'The 6 Best Cheap Dog Foods Australia: Tested & Reviewed 2025' article""
+ 'Lists the six specific dog food brands or products mentioned as the best cheap options in that article']",FEASIBLE,1.0,The website is operational and the article 'The 6 Best Cheap Dog Foods Australia: Tested & Reviewed 2025' is prominently listed on the homepage under 'Essential Dog Nutrition'.,200,True,
+rotimatic.com,What are the key terms and conditions for the No Cost EMI option for the Rotimatic NEXT?,"['Navigate to rotimatic.com'
+ 'Scroll down to locate the pricing information for the Rotimatic NEXT'
+ ""Click on the 'More details' link associated with the EMI option""
+ 'Identify and summarize the key terms and conditions presented in the pop-up, specifically regarding eligibility, installment duration, and any disclaimers.']","['Mentions that the No Cost EMI is for 12 installments of USD 145/mo.'
+ 'States that it includes total savings on interest of USD 200.'
+ 'Notes that it is subject to eligibility check and approval.'
+ 'Mentions that estimated payment amount excludes local taxes.'
+ 'Mentions that payment conversion charge may apply as per the service provider.']",FEASIBLE,1.0,"The website is operational and the 'No Cost EMI' option for the Rotimatic NEXT is prominently displayed on the homepage, along with all the required terms and conditions, including the installment amount, savings, eligibility, and disclaimers.",200,True,
+jamieoliver.com,Find the main navigation menu and click on the 'Recipes' link to access the recipe collection.,"[""Navigate to 'jamieoliver.com'""
+ 'Identify the main navigation menu, typically located at the top or side of the page.'
+ ""Click on the 'Recipes' or similarly labeled link within the main navigation to go to the recipe index page.""]","['Successfully navigates away from the homepage to a page displaying a collection of recipes.'
+ ""The URL of the new page clearly indicates a recipe section (e.g., '/recipes', '/food').""]",FEASIBLE,1.0,"The website is operational and prominently features a 'Recipes' link in the main navigation, as well as multiple recipe categories directly on the homepage.",200,True,
+european-funding-guide.eu,"Register on the European Funding Guide website as a prospective Computer Science Master's student in the United Kingdom, and identify the total number of scholarships available for this profile.","[""Navigate to 'european-funding-guide.eu'""
+ 'Fill out the registration form with a valid username, email, and password.'
+ ""Select 'United Kingdom' as the country.""
+ ""Select 'Master or equivalent graduate course' as the Academic Degree.""
+ ""Enter 'Computer Science' as the Academic Discipline.""
+ ""Select 'Not yet started' for Stage Studies.""
+ ""Enter a plausible university name, e.g., 'University of London'.""
+ ""Click the 'Register' button to submit the form.""
+ 'Once redirected, locate and state the total number of scholarships available for the specified profile.']","['Successfully registers an account on european-funding-guide.eu.'
+ 'All specified academic fields (Country, Academic Degree, Academic Discipline, Stage Studies, University) are correctly populated as per the task.'
+ 'The agent successfully submits the registration form and is redirected to a page displaying funding results.'
+ 'The agent accurately identifies and reports the total number of scholarships or funding options presented for the specified profile after successful registration.']",FEASIBLE,1.0,"The website is operational and the registration fields (Study Level, Stage of Studies, Country, Academic Discipline) are visible on the homepage, suggesting the task can still be completed. The total number of scholarships is also displayed on the page.",200,True,
+iss-casis.org,Find a list of research project portfolios on the ISS National Lab website.,"[""Navigate to 'iss-casis.org'""
+ ""Click on 'Research & Technology Development'""
+ ""Click on 'Research Opportunities & Results'""
+ ""Click on 'Research Project Portfolio'""
+ 'Confirm that a list or directory of research projects is displayed.']","[""Successfully navigates to the 'Research Project Portfolio' page.""
+ 'The page displays a list or directory of past or ongoing research projects.']",FEASIBLE,1.0,The navigation path 'Research & Technology Development' -> 'Research Opportunities & Results' -> 'Research Project Portfolio' is clearly present in the website's navigation structure. This indicates the target page and its content are likely still available. [1],200,True,
+iowagirleats.com,Find a gluten-free and dairy-free dinner recipe on iowagirleats.com that can be prepared in one pan.,"[""Navigate to 'https://iowagirleats.com/recipes/'""
+ ""Click on the 'Gluten Free' quick link""
+ ""Click on the 'Dairy Free' quick link (or apply a combined filter if available)""
+ ""Click on the 'One Pan' category link""
+ 'Select the first suitable dinner recipe from the filtered results'
+ 'Extract the name of the recipe']","[""Identifies a recipe that is explicitly listed as both 'Gluten Free' and 'Dairy Free'""
+ ""Confirms the recipe is categorized under 'One Pan' or explicitly states 'one pan' preparation""
+ 'The identified recipe is suitable for dinner (e.g., not a dessert or breakfast item)'
+ 'States the name of the found recipe']",FEASIBLE,1.0,"The website is operational and the homepage clearly displays 'Gluten Free', 'Dairy Free', and 'One Pan' categories/filters, indicating that the navigation steps for the task are still present and functional.",200,True,
+findyourpark.com,"Find a national park in California that offers both hiking and water activities, and identify at least one specific water activity available.","[""Navigate to 'nps.gov/findyourpark'""
+ 'Search for national parks in California'
+ 'Browse the list of California national parks to identify one that explicitly mentions both hiking and water activities'
+ ""Click on the selected park's page""
+ 'Locate and state at least one specific water activity offered within that park']","['Identifies a national park in California (e.g., Channel Islands National Park, Yosemite National Park, Sequoia and Kings Canyon National Parks)'
+ 'Confirms the park offers both hiking and water activities'
+ 'Cites at least one specific water activity (e.g., kayaking, snorkeling, swimming, rafting, fishing) available in the identified park']",FEASIBLE,1.0,"The website is operational and the starting page provides search and filter options for parks by state (including California) and by activity (including 'Hiking' and 'Water Activities'), which are directly relevant to the task requirements. [1]",200,True,
+visma.com,"Identify three distinct types of business software or solutions that Visma offers, and provide a brief description of each.","[""Navigate to 'visma.com'""
+ ""Click on the 'What we offer' link in the main navigation""
+ 'Explore the page to identify different software categories or solutions'
+ 'Select three distinct offerings and extract a concise description for each']","['Identifies at least three different software categories or solutions offered by Visma (e.g., ERP, HR, accounting, payroll, cloud solutions).'
+ 'Provides a brief, accurate description for each identified software type, reflecting its primary function or target user.'
+ ""The information is sourced directly from the 'What we offer' section or linked pages within that section.""]",FEASIBLE,1.0,"The website is operational, and the 'What we offer' section is clearly visible on the homepage, providing distinct categories of software solutions with brief descriptions, allowing the task to be completed as per the instructions.",200,True,
+maybelline.fi,Find the main product categories available on Maybelline Finland's website.,"[""Navigate to 'maybelline.fi'""
+ 'Accept any cookie consent banners if present'
+ ""Identify and click on the main navigation menu or a clear link to 'Products' or 'Tuotteet'""
+ ""List the primary product categories displayed on the subsequent page (e.g., 'Kasvot', 'Silmät', 'Huulet').""]","[""Successfully navigates away from the initial 'Glow getter' page.""
+ 'Identifies and clicks on a navigation element that leads to product categories.'
+ 'Lists at least three distinct main product categories (e.g., Face, Eyes, Lips in Finnish) as found on the website.']",FEASIBLE,1.0,"The website is operational and displays main product categories ('Silmä', 'Kasvot', 'Huulet' in Finnish) directly on the landing page, fulfilling the task's success criteria.",200,True,
+acem.org.au,Find information about the Continuing Professional Development (CPD) programs offered by ACEM.,"[""Navigate to 'acem.org.au'""
+ ""Click on the 'CPD programs' link under the 'Advancing my career' section on the homepage.""
+ 'Identify the key features or requirements of the CPD program.']","['Successfully navigates to the CPD programs page.'
+ 'Identifies at least two key aspects or requirements of the ACEM CPD program (e.g., purpose, structure, reporting requirements, specific program types).']",FEASIBLE,1.0,"The 'CPD programs' link is present under the 'Advancing my career' section on the homepage, and there are also dedicated 'CPD at ACEM' sections, indicating the information is readily available.",200,True,
+cambridgesciencefestival.org,"What is the nature of the 'reimagined' Cambridge Science Festival for 2026, and how can interested parties stay updated or get involved?","[""Navigate to 'cambridgesciencefestival.org'""
+ ""Read the announcement regarding 'THE FUTURE OF CAMBRIDGE SCIENCE FESTIVAL'""
+ ""Identify any information on the page describing the nature of the 'reimagined' festival for 2026.""
+ 'Locate any calls to action or links for staying updated or getting involved.'
+ ""Summarize the findings regarding the festival's future and how to engage.""]","[""States that the festival is being 'reimagined' for 2026 and that previous years are paused.""
+ 'Identifies any details provided about the new format or focus of the 2026 festival (if available on the page).'
+ ""Locates and mentions any provided methods for staying updated (e.g., newsletter sign-up, social media links, 'contact us' information).""
+ ""Acknowledges if specific details about the 'reimagined' nature or involvement opportunities are *not* yet available on the current page.""]",FEASIBLE,1.0,"The website is operational and clearly states the Cambridge Science Festival is being 'reimagined' for 2026, with methods to stay updated, even though specific details about the new format are not yet available.",200,True,
+georgiamuseum.org,What are the typical weekly hours of operation for the Georgia Museum of Art?,"[""Navigate to 'georgiamuseum.org'""
+ ""Click on the 'Visit' link in the main navigation menu""
+ ""Locate the section detailing the museum's hours of operation""
+ 'Extract the typical weekly hours and respond with them']","[""Identifies the museum's standard operating hours for weekdays and weekends.""
+ 'Does not include special holiday hours or temporary closures unless explicitly asked.'
+ ""The answer accurately reflects the hours listed on the 'Visit' page.""]",FEASIBLE,1.0,"The website is operational and the hours of operation are clearly listed on the homepage under the 'Visit The Galleries' section, fulfilling all success criteria.",200,True,
+getdkan.org,Explain why DKAN is considered a Digital Public Good and who maintains it.,"[""Navigate to 'getdkan.org'""
+ ""Locate the section discussing DKAN's certification as a Digital Public Good""
+ ""Click the 'Learn More' link associated with the Digital Public Goods Alliance""
+ 'Extract information about why DKAN is a Digital Public Good and identify its maintainer from the initial page or subsequent pages if navigated to.']","['States that DKAN is a certified Digital Public Good because it is a multi-stakeholder UN-endorsed initiative that facilitates the discovery and deployment of open-source technologies to achieve sustainable development goals.'
+ 'Identifies CivicActions as the maintainer of DKAN.']",FEASIBLE,1.0,"The website is operational and the initial page clearly states that DKAN is a certified Digital Public Good, explaining why, and identifies CivicActions as its maintainer.",200,True,
+lavozdeasturias.es,Find the contact email address for La Voz de Asturias's advertising department.,"[""Navigate to 'lavozdeasturias.es'""
+ ""Scroll down to the footer to locate the 'PUBLICIDAD' section.""
+ ""Click on the 'Contacto' link under the 'PUBLICIDAD' section.""
+ 'Identify and extract the contact email address for advertising.']","['Successfully navigates to the advertising contact page.'
+ 'Extracts a valid email address for the advertising department.']",FEASIBLE,1.0,"The website is operational, and the 'PUBLICIDAD' section with a 'Contacto' link is present in the footer, allowing navigation to the advertising contact information. The email address for advertising is 'publicidad@lavozdeasturias.es'.",200,True,
+dialogochino.net,Successfully navigate to dialogochino.net and describe its main purpose.,"[""Navigate to 'http://dialogochino.net/'""
+ 'Observe the content of the homepage'
+ 'Identify the primary purpose or subject matter of the website']","[""The agent successfully loads 'http://dialogochino.net/'""
+ ""The agent provides a brief summary of the website's main purpose or content based on the homepage""]",FEASIBLE,1.0,The website loaded successfully and its homepage clearly states its purpose as providing global climate and environment news and environmental journalism for sustainability. [1],200,True,
+locations.traderjoes.com,What are the operating hours for the Trader Joe's at 72nd & Broadway in New York City?,"[""Navigate to 'locations.traderjoes.com'""
+ ""Select 'New York' from the list of states""
+ ""Select 'New York' from the list of cities""
+ ""Click on the 'View Store Details' link for the '72nd & Broadway (542)' location""
+ 'Locate the operating hours on the store details page and provide them in the answer']","[""Identifies the correct Trader Joe's location at 72nd & Broadway in New York City.""
+ 'Navigates to the specific store details page for the 72nd & Broadway location.'
+ 'Extracts and states the operating hours for that specific store.']",FEASIBLE,1.0,"The website is operational and displays a list of states, including 'New York', indicating that the initial navigation steps to find a store location are still possible. The page structure suggests that further navigation will lead to store-specific details.",200,True,
+bip.wetgiw.gov.pl,Find the contact email address for the General Veterinary Inspectorate on their official Public Information Bulletin website (bip.wetgiw.gov.pl).,"[""Navigate to 'bip.wetgiw.gov.pl'""
+ 'Locate the contact information section or page'
+ 'Identify the general contact email address for the General Veterinary Inspectorate'
+ 'Respond with the found email address']","[""Successfully navigates to 'bip.wetgiw.gov.pl'""
+ 'Identifies a valid contact email address for the General Veterinary Inspectorate'
+ 'The provided email address is explicitly stated on the bip.wetgiw.gov.pl website']",FEASIBLE,1.0,"The website is operational and the contact email address 'wet@wetgiw.gov.pl' for the General Veterinary Inspectorate is explicitly stated on the homepage, under the 'Kontakt' section and in the footer. [1]",200,True,
+gettingpersonal.co.uk,"Find a personalized birthday gift under £15 for a child on Card Factory UK, and determine if it's eligible for free click & collect.","[""Navigate to 'cardfactory.co.uk' (which is the effective destination for 'gettingpersonal.co.uk')""
+ ""Search for 'personalized birthday gift child'""
+ 'Filter results to show items under £15, if a filter option is available, or manually identify products under this price.'
+ 'Select a suitable personalized birthday gift for a child.'
+ 'Check the product page for information regarding free click & collect eligibility.']","['Identifies a personalized birthday gift suitable for a child.'
+ 'The identified gift is priced at £15 or less.'
+ 'States whether the selected gift is eligible for free click & collect based on information on the product page or general site policies.'
+ ""The search and identification process occurs on 'cardfactory.co.uk' as a result of the 'gettingpersonal.co.uk' redirection.""]",FEASIBLE,1.0,"The website 'gettingpersonal.co.uk' clearly states that it is no longer operating and redirects users to 'cardfactory.co.uk' for personalized gifts, which aligns with the task's expected redirection. The site is operational and appears to offer the required functionality.",200,True,
+stories.undp.org,"Find a story from 2017 about a UNDP project in Africa, and state its title.","[""Navigate to 'stories.undp.org'"" ""Click on the 'See all categories' link""
+ ""Click on the 'Africa' category link"" ""Click on the '2017' filter/link""
+ 'Identify the title of a story displayed for the year 2017 in the Africa category, and respond with that title.']","['Successfully navigates to the Africa category page filtered by the year 2017.'
+ 'Identifies and states the title of at least one story published in 2017 within the Africa category.']",FEASIBLE,1.0,"The website is operational and the 'Categories' link is present, which should lead to the Africa category. The site also displays stories with dates, indicating that filtering by year should be possible.",200,True,
+abtech.edu,Find the main phone number for the Financial Aid Office at Asheville-Buncombe Technical Community College.,"[""Navigate to 'abtech.edu'""
+ ""Utilize the search bar to search for 'Financial Aid'""
+ 'Click on the most relevant search result related to Financial Aid'
+ 'Locate and extract the main phone number for the Financial Aid Office']","['Identifies a specific phone number for the Financial Aid Office.'
+ 'The retrieved phone number is explicitly associated with the Financial Aid Office on the website.']",FEASIBLE,1.0,"The website is operational, and the homepage clearly shows a search bar and a direct link to 'Financial Aid' under 'Academics', indicating the information is likely still present and accessible.",200,True,
+earlychildhoodireland.ie,What are the key benefits of becoming a member of Early Childhood Ireland?,"['Navigate to earlychildhoodireland.ie'
+ ""Locate and click on the 'Membership' link in the main navigation or quick links""
+ 'Identify and list the key benefits of membership as described on the page']","['Lists at least three distinct benefits of Early Childhood Ireland membership (e.g., access to resources, discounts, advocacy support, networking opportunities)'
+ ""The information provided is directly from the Early Childhood Ireland website's membership section""]",FEASIBLE,1.0,"The website is operational, and the 'Membership' section clearly lists several key benefits, including Garda Vetting, EYES, Learning Hub, and Jobs, directly fulfilling the task requirements.",200,True,
+sactownbites.com,Compare the duration and group size of the 'Midtown Walking Food Tour' and the 'Historic Old Sacramento Walking Food Tour'.,"[""Navigate to 'sactownbites.com'""
+ ""Click on the 'Tours' link in the navigation bar""
+ ""Locate the 'Midtown Walking Food Tour' and extract its duration and group size""
+ ""Locate the 'Historic Old Sacramento Walking Food Tour' and extract its duration and group size""
+ 'Provide a comparison of these details in the answer']","[""Correctly identifies the duration of the Midtown Walking Food Tour as '3 hours'""
+ ""Correctly identifies the group size of the Midtown Walking Food Tour as '4 to 10'""
+ ""Correctly identifies the duration of the Historic Old Sacramento Walking Food Tour as '2 hours 30 minutes'""
+ ""Correctly identifies the group size of the Historic Old Sacramento Walking Food Tour as '4 to 15'""
+ 'Presents the information in a clear comparative format']",FEASIBLE,1.0,"The website is operational and the details for both the 'Midtown Walking Food Tour' and the 'Historic Old Sacramento Walking Food Tour', including duration and group size, are clearly visible on the homepage.",200,True,
+mynextmove.org,"What are the primary job duties of a 'Computer Science Teacher, Postsecondary' according to My Next Move, and what specific software might they use?","[""Navigate to 'https://www.mynextmove.org'""
+ ""Enter 'computer science' into the search bar and submit the search""
+ ""Click on the 'Computer Science Teachers, Postsecondary' link in the search results""
+ ""Locate the 'What they do' and 'Technology' sections on the career page""
+ 'Summarize the primary job duties and list examples of software used in the answer']","['Identifies that primary duties include preparing course materials, administering exams, and delivering lectures.'
+ ""Mentions that they might use specific software, as indicated in the 'Technology' section of the page.""]",FEASIBLE,1.0,"The website is operational and the search bar functionality, which is crucial for the task, is clearly visible on the homepage. The site was recently updated, suggesting the content is current. [1]",200,True,
+studymode.com,Explore the features of the 'Writing Tool' on StudyMode and determine if it offers plagiarism checks.,"[""Navigate to 'studymode.com'""
+ ""Locate and click on the 'Start Writing Now' button or a similar link associated with the 'Writing Tool'""
+ 'Identify the features offered by the writing tool, specifically looking for plagiarism detection capabilities'
+ 'State whether the tool offers plagiarism checks in the answer']","['Successfully navigates to the Writing Tool section of the website.'
+ 'Identifies whether the Writing Tool offers plagiarism checks.'
+ ""The answer accurately states that the Writing Tool offers plagiarism checks, based on the visible text 'Plagiarism image'.""]",FEASIBLE,1.0,"The website is operational and clearly displays a 'Writing Tool' section on the homepage, which explicitly states it offers 'plagiarism' checks, fulfilling all success criteria.",200,True,

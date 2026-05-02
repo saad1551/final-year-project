@@ -238,8 +238,8 @@ def run_mock_rl_training(
     if algorithm == "sb3_ppo":
         # Use SB3 PPO trainer
         try:
-            from rl_sb3_ppo import SB3PPOTrainer
-            from rl_sb3_config_examples import get_config as get_sb3_config
+            from experimental.rl_sb3_ppo import SB3PPOTrainer
+            from experimental.rl_sb3_config_examples import get_config as get_sb3_config
             
             config = get_sb3_config(sb3_preset)
             config.learning_rate = 1e-4  # Override for mock testing

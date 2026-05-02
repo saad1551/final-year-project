@@ -26,7 +26,7 @@ from pipeline_in_steps import (
     is_stop_action,
     save_screenshot,
 )
-from judge_integration import judge_trajectory, print_judgment
+from src.judge_integration import judge_trajectory, print_judgment
 
 
 def load_model_with_checkpoint(checkpoint_dir: str):
@@ -339,7 +339,7 @@ def run_eval_trajectory(task_data: dict, model, tokenizer):
                 break
 
             print("Executing action...")
-            from utils import BrowserStatus
+            from src.utils import BrowserStatus
 
             status = client.action(predicted_action.function_calls)
             if status == BrowserStatus.ERROR:

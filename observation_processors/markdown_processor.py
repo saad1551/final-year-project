@@ -6,7 +6,7 @@ from observation_processors.pii_tools import (
     scrubadub_clean
 )
 
-from utils import (
+from src.utils import (
     BrowserStatus,
     safe_call
 )

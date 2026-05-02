@@ -16,15 +16,17 @@ This repository contains the code, data, and analysis artifacts for a final-year
 
 ```
 .
-├── pipeline_in_steps.py       # main training script (PPO/GRPO/REINFORCE + LoRA)
-├── rl_trainer.py              # RL algorithm implementations
-├── judge_integration.py       # Vertex AI Gemini judge wrapper
-├── evaluate_checkpoint.py     # held-out evaluation
-├── sample_feasible_tasks.py   # feasibility audit (Section 3)
-├── client.py                  # browser session client
-├── training_logger.py         # per-trajectory CSV logger
-├── observability.py           # per-step JSON observability
-├── utils.py
+├── pipeline_in_steps.py       # main training entry point (PPO + LoRA)
+├── evaluate_checkpoint.py     # held-out evaluation entry point
+├── sample_feasible_tasks.py   # feasibility audit entry point (Section 3)
+│
+├── src/                       # internal modules — imported as `src.<name>`
+│   ├── rl_trainer.py          # RL algorithm implementations
+│   ├── judge_integration.py   # Vertex AI Gemini judge wrapper
+│   ├── client.py              # browser session client
+│   ├── training_logger.py     # per-trajectory CSV logger
+│   ├── observability.py       # per-step JSON observability
+│   └── utils.py               # shared utilities
 │
 ├── tests/                     # test suites
 │   ├── test.py

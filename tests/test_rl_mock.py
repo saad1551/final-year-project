@@ -209,10 +209,10 @@ def run_mock_rl_training(
     """
     
     # Import and configure RL trainer
-    import rl_trainer
+    from src import rl_trainer
     rl_trainer.DEBUG_RL = debug
-    
-    from rl_trainer import OnPolicyTrainer, RLConfig
+
+    from src.rl_trainer import OnPolicyTrainer, RLConfig
     
     print("=" * 60)
     print("MOCK RL TRAINING TEST")

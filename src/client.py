@@ -5,7 +5,7 @@ from configs.browser_config import (
     FunctionCall,
 )
 
-from utils import (
+from src.utils import (
     BrowserStatus,
     safe_call,
     ServerError

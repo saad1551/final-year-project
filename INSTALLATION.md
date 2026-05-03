@@ -28,6 +28,9 @@ pip install -r requirements.txt
 # Install the local insta package (provides judge prompts, configs)
 pip install -e .
 
+# Fetch the InSTA train split (~102 MB; the test split ships with the repo)
+python data/download.py
+
 # Optional: only if running browser sessions locally
 playwright install chromium
 cd javascript/server && npm install && cd ../..
@@ -85,7 +88,7 @@ rsync -avz \
   --exclude='eval_results/' --exclude='visualization_output/' \
   --exclude='feasibility_results/feasibility_check_2026*.json' \
   --exclude='javascript/server/node_modules/' \
-  ./ saadashraf@<VM_EXTERNAL_IP>:final-year-project/
+  ./ <VM_USERNAME>@<VM_EXTERNAL_IP>:final-year-project/
 
 # (Or use gcloud compute scp --recurse if you can't get rsync's -e wrapper to work.)
 ```
@@ -93,7 +96,7 @@ rsync -avz \
 ### Set up the VM environment
 
 ```bash
-gcloud compute ssh fyp-train-l4 --zone=us-east4-c
+gcloud compute ssh <INSTANCE_NAME> --zone=<ZONE>
 cd ~/final-year-project
 bash gcp/setup_vm.sh
 ```
@@ -165,6 +168,19 @@ huggingface-cli login --token <your_hf_token>
 ```
 
 The base model `btrabucco/Insta-Qwen3-1.7B-SFT` is public, so this is purely a "no warning, faster downloads" thing.
+
+### Launch a training run
+
+```bash
+# All env vars optional; defaults are sane (500 trajectories, save every 25,
+# output to checkpoints_feasible/, screenshots disabled).
+NUM_TRAJECTORIES=500 \
+CHECKPOINT_DIR=checkpoints_feasible \
+TRAIN_CSV=feasibility_results/feasible_sample_20260324_195836.csv \
+bash gcp/launch_training.sh
+```
+
+This launches a detached `tmux` session named `fyp-train`. Attach with `tmux attach -t fyp-train`, detach with `Ctrl-b d`. Per-trajectory CSV log streams to `training_logs/training_log_<ts>.csv`. The `gcp/launch_training.sh` header documents every overridable env var.
 
 ---
 

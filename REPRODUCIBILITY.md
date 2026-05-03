@@ -1,9 +1,9 @@
 # Reproducibility
 
-This document gives the exact commands to reproduce each experiment in `report/main.md`. Three sections, one per experiment:
+This document gives the exact commands to reproduce each experiment. Three sections, one per experiment:
 
 1. **Section 3 — Feasibility audit** (Figure 1)
-2. **Section 4 — Continued training** (training run + checkpoints)
+2. **Section 4 — RL training** (training run + checkpoints)
 3. **Section 4.5 — Held-out evaluation** (Table 1, Figure 3)
 
 All commands assume you have followed `INSTALLATION.md`. For sections 2 and 3, a GCP VM with an L4 (or T4 — slightly slower) GPU is required.
@@ -82,11 +82,11 @@ Both read `GEMINI_API_KEY` or `GOOGLE_API_KEY` from the environment.
 
 ---
 
-## 2. Section 4 — Continued training
+## 2. Section 4 — RL training
 
 ### Inputs
 
-- A LoRA adapter to warm-start from. We used `checkpoints/checkpoint_trajectory_600/` from a prior training round. Training from `btrabucco/Insta-Qwen3-1.7B-SFT` directly (no warm-start) is also supported — point `RESUME_FROM` at any LoRA checkpoint.
+- The base SFT model: `btrabucco/Insta-Qwen3-1.7B-SFT` (auto-downloaded on first run).
 - The feasibility-filtered training task CSV: `feasibility_results/feasible_sample_20260324_195836.csv` (2,068 tasks).
 - A Vertex-AI-enabled GCP project (for the judge during RL rollouts).
 - An L4 (or T4) GPU VM provisioned per `INSTALLATION.md`.
@@ -102,11 +102,9 @@ screen -S watchdog -dm bash ~/final-year-project/gcp/playwright_watchdog.sh
 
 # Launch training. Defaults: 500 trajectories, save every 25, ref-KL every 5,
 # min_reward=0.0, screenshots disabled, output to checkpoints_feasible/.
-RESUME_DATASET_IDX=0 \
 NUM_TRAJECTORIES=500 \
 CHECKPOINT_DIR=checkpoints_feasible \
 MIN_REWARD=0.0 \
-RESUME_FROM=checkpoints/checkpoint_trajectory_600 \
 TRAIN_CSV=feasibility_results/feasible_sample_20260324_195836.csv \
 bash gcp/launch_training.sh
 ```
@@ -123,12 +121,14 @@ tail -f ~/final-year-project/training_logs/training_log_*.csv
 
 Estimated runtime: **~30 hours** for 500 trajectories on an L4 (varies with website-load latency, model improvement over time).
 
-### Continue training from a saved checkpoint
+### Resume training after interruption
+
+If training is interrupted (preemption, manual stop, crash), you can resume from the last saved checkpoint:
 
 ```bash
-# After the first 500 trajectories have completed, e.g. trajectory 1000 target:
-RESUME_FROM=checkpoints_feasible/checkpoint_trajectory_500 \
-NUM_TRAJECTORIES=1000 \
+# E.g. if checkpoint_trajectory_300 is the latest one saved, target 500 total:
+RESUME_FROM=checkpoints_feasible/checkpoint_trajectory_300 \
+NUM_TRAJECTORIES=500 \
 CHECKPOINT_DIR=checkpoints_feasible \
 MIN_REWARD=0.0 \
 bash gcp/launch_training.sh
@@ -154,10 +154,9 @@ python scripts/monitor_training.py \
 
 ### Inputs
 
-- The three checkpoints to compare:
+- The two checkpoints to compare:
   - `btrabucco/Insta-Qwen3-1.7B-SFT` (Base SFT, no LoRA — auto-loaded by `evaluate_checkpoint.py --compare`)
-  - `checkpoints/checkpoint_trajectory_600/` (RL-on-raw)
-  - `checkpoints_feasible/checkpoint_trajectory_500/` (RL-on-filtered)
+  - `checkpoints_feasible/checkpoint_trajectory_300/` (RL-on-filtered)
 - The held-out test CSV: `feasibility_results/feasible_sample_20260424_124844.csv` (200 feasibility-filtered tasks).
 - Same Vertex-AI/Gemini setup as training.
 - An L4/T4 GPU VM.
@@ -170,14 +169,17 @@ cd ~/final-year-project
 # Watchdog should already be up; if not:
 screen -S watchdog -dm bash ~/final-year-project/gcp/playwright_watchdog.sh
 
-# Filtered-only eval (~30h):
-bash eval/run_full_eval.sh
-
-# OR include the small unfiltered validation experiment (~+7h):
-RUN_UNFILTERED=1 N_UNFILTERED=30 bash eval/run_full_eval.sh
+# Run the filtered held-out eval (~20h on an L4):
+python evaluate_checkpoint.py \
+  --checkpoint_dir checkpoints_feasible/checkpoint_trajectory_300 \
+  --dataset feasibility_results/feasible_sample_20260424_124844.csv \
+  --sample_size 100 --seed 42 --compare \
+  --output_dir eval_results/run_<timestamp>
 ```
 
-The script runs 4 invocations of `evaluate_checkpoint.py` (or 2 if unfiltered is disabled), one per (checkpoint × test set) cell-pair. Same seed=42 across all invocations so cross-checkpoint comparisons are paired.
+`--compare` runs the LoRA-adapted checkpoint and the base SFT model on the same task set in sequence. Same seed across both arms means the per-task comparisons are paired. Two output files are produced under `--output_dir`:
+- `checkpoint_results_<ts>.json` — RL-on-filtered trajectories
+- `base_results_<ts>.json` — Base SFT trajectories
 
 ### Analyze and render Table 1 + Figure 3
 
@@ -187,19 +189,14 @@ python eval/analyze_eval_results.py \
 # -> stdout: Markdown Table 1 with means and 95% bootstrap CIs
 # -> writes eval_results/run_<ts>/summary.md   (paste-ready into the report)
 # -> writes eval_results/run_<ts>/summary.csv  (data for downstream plotting)
-# -> writes eval_results/run_<ts>/figure3.{png,pdf}  (grouped bar chart)
+# -> writes eval_results/run_<ts>/figure3.{png,pdf}  (bar chart)
 ```
 
 The analyzer computes:
 - Per-cell mean ± 95% bootstrap CI (10,000 resamples) for reward and success
-- Paired Wilcoxon p-values on per-task reward differences
-- McNemar p-values on per-task binary success indicators
-- Mean delta-reward bootstrap CIs for the four key comparisons:
-  - RL-on-raw vs Base SFT (per eval set)
-  - RL-on-filtered vs Base SFT (per eval set)
-  - RL-on-filtered vs RL-on-raw (per eval set) — the **incremental cleaning attribution**
-
-If the unfiltered invocations are absent (default), the table collapses to filtered-only columns automatically.
+- Paired Wilcoxon p-value on per-task reward differences
+- McNemar p-value on per-task binary success indicators
+- Mean delta-reward with 95% bootstrap CI for the headline comparison: RL-on-filtered vs Base SFT.
 
 ---
 
@@ -208,9 +205,8 @@ If the unfiltered invocations are absent (default), the table collapses to filte
 | Experiment | Compute | Wall time | Approx \$ on GCP |
 |---|---|---|---|
 | §3 Feasibility audit (2,598 tasks) | CPU + Vertex API | ~6h | ~\$5 |
-| §4 Continued training (500 trajectories) | 1× L4 + Vertex API | ~30h | ~\$25 |
-| §4.5 Held-out eval (filtered only) | 1× L4 + Vertex API | ~30h | ~\$25 |
-| §4.5 Held-out eval (+ unfiltered validation) | 1× L4 + Vertex API | +7h | +\$5 |
+| §4 RL training (500 trajectories) | 1× L4 + Vertex API | ~30h | ~\$25 |
+| §4.5 Held-out eval (Base SFT vs RL-on-filtered, 100 tasks each via `--compare`) | 1× L4 + Vertex API | ~20h | ~\$15 |
 
 All on-demand prices in `us-east4-c` as of April 2026. Spot pricing is ~3× cheaper but preemption-prone for L4 in busy zones.
 
@@ -219,9 +215,9 @@ All on-demand prices in `us-east4-c` as of April 2026. Spot pricing is ~3× chea
 - **Trajectory-level RL is not deterministic** under the same seed because (a) the LLM samples actions with `temperature=0.7` + `top_p=0.9`, (b) live websites change state between visits.
 - **Vertex Gemini judge calls are not deterministic** even with `temperature=0.5` (the judge has its own internal sampling).
 - **Bootstrap CIs** in `analyze_eval_results.py` use seed 0 internally so the *post-hoc analysis* of a fixed result file is reproducible.
-- **`SEED=42` everywhere** controls only task selection (which 200 tasks land in your eval slice), not the trajectories themselves.
+- **`SEED=42` everywhere** controls only task selection (which 100 tasks land in your eval slice), not the trajectories themselves.
 
-For these reasons, exact reproduction of our point estimates is not expected. Reproduction of the *direction and magnitude* of the effects (RL-on-filtered > RL-on-raw > Base SFT, with ~2× success rate gain) should hold.
+For these reasons, exact reproduction of our point estimates is not expected. Reproduction of the *direction and magnitude* of the effect (RL-on-filtered > Base SFT) should hold.
 
 ## Citation
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# Orchestrate the 3 x 2 = 6-cell held-out evaluation described in
-# report/main.md §4.5.
+# Orchestrate the 3 x 2 = 6-cell held-out evaluation.
 #
 # 3 checkpoints:
 #   - Base SFT (loaded automatically by --compare; it's the LoRA's base)

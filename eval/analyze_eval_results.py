@@ -1,9 +1,9 @@
 """
 Analyze the JSON outputs of run_full_eval.sh.
 
-Builds the 3-row x 2-column table from §4.5 of report/main.md, with mean,
-95% bootstrap CIs, paired Wilcoxon p-values for reward, and McNemar p-values
-for binary success rate.
+Builds the held-out evaluation summary table with mean, 95% bootstrap CIs,
+paired Wilcoxon p-values for reward, and McNemar p-values for binary
+success rate.
 
 Inputs (per --run_dir):
   inv1_filtered_base_and_raw/

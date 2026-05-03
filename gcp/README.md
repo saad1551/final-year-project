@@ -1,6 +1,6 @@
 # GCP training scripts
 
-Scripts to provision a single T4 spot VM, run continued LoRA training on the 2,068 feasible-train tasks, and tear it down. All paths assume the project lives at `~/final-year-project` on the VM.
+Scripts to provision a single T4 spot VM, run PPO + LoRA RL training on the 2,068 feasible-train tasks, and tear it down. All paths assume the project lives at `~/final-year-project` on the VM.
 
 ## Order of operations
 

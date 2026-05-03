@@ -69,7 +69,7 @@ class MockTokenizer:
         self.eos_token_id = 0
         self.vocab_size = 32000
     
-    def __call__(self, text, return_tensors="pt", truncation=True, max_length=8192):
+    def __call__(self, text, return_tensors="pt", truncation=True, max_length=8192, **kwargs):
         # Simulate tokenization - create fake token IDs
         num_tokens = min(len(text) // 4, max_length)  # Rough approximation
         num_tokens = max(num_tokens, 10)  # At least 10 tokens

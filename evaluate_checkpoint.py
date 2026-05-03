@@ -443,8 +443,13 @@ def print_summary(results: list):
         print(f"{i+1:<4} {s:<9} {e:<9} {sc:<12} {r['num_steps']:<6} {instr}")
 
 
-def _run_tasks(task_rows, model, tokenizer, label=""):
-    """Run eval trajectories for a list of task row dicts and return results."""
+def _run_tasks(task_rows, model, tokenizer, label="", incremental_save_path=None):
+    """Run eval trajectories for a list of task row dicts and return results.
+
+    If `incremental_save_path` is provided, the partial results JSON is
+    rewritten after every task. That way a kill mid-loop preserves whatever
+    has completed so far — no eval data is lost on early termination.
+    """
     results = []
     total = len(task_rows)
     for i, task_row in enumerate(task_rows):
@@ -461,6 +466,14 @@ def _run_tasks(task_rows, model, tokenizer, label=""):
             print(f"\n--- Task {i+1} Complete: {result['num_steps']} steps ---")
         else:
             print(f"\n--- Task {i+1} FAILED ---")
+
+        # Incremental save — overwrite the same path with the running results.
+        # Cheap (one JSON dump per task) and idempotent with the final save.
+        if incremental_save_path:
+            try:
+                save_results(results, incremental_save_path)
+            except Exception as e:
+                print(f"[warn] incremental save failed: {e}")
     return results
 
 
@@ -564,10 +577,13 @@ if __name__ == "__main__":
     # Evaluate checkpoint
     # ------------------------------------------------------------------ #
     tokenizer, checkpoint_model = load_model_with_checkpoint(args.checkpoint_dir)
-    checkpoint_results = _run_tasks(task_rows, checkpoint_model, tokenizer, label="[CHECKPOINT] ")
-    print_summary(checkpoint_results)
-
     checkpoint_path = os.path.join(args.output_dir, f"checkpoint_results_{timestamp}.json")
+    checkpoint_results = _run_tasks(
+        task_rows, checkpoint_model, tokenizer,
+        label="[CHECKPOINT] ",
+        incremental_save_path=checkpoint_path,
+    )
+    print_summary(checkpoint_results)
     save_results(checkpoint_results, checkpoint_path)
 
     # ------------------------------------------------------------------ #
@@ -581,10 +597,13 @@ if __name__ == "__main__":
         checkpoint_model = unload_model(checkpoint_model)
 
         tokenizer, base_model = load_base_model()
-        base_results = _run_tasks(task_rows, base_model, tokenizer, label="[BASE] ")
-        print_summary(base_results)
-
         base_path = os.path.join(args.output_dir, f"base_results_{timestamp}.json")
+        base_results = _run_tasks(
+            task_rows, base_model, tokenizer,
+            label="[BASE] ",
+            incremental_save_path=base_path,
+        )
+        print_summary(base_results)
         save_results(base_results, base_path)
 
         unload_model(base_model)

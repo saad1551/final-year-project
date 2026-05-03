@@ -64,6 +64,22 @@ python feasibility_results/sample_for_sanity_check.py
 # -> writes feasibility_results/sanity_check_sample.md (28 spot-check tasks, seed=42)
 ```
 
+### Alternative: lenient doable-task collector
+
+`filter_doable_tasks.py` and `filter_doable_tasks_eval.py` are two additional scripts that take a different approach to the same problem. They call Gemini with both the `url_context` and `google_search` tools and ask for a single binary `doable / not doable` decision instead of the strict four-way classification used above. The prompt is intentionally more permissive ("be decisive — if the website loads and the general type of action is still possible, mark it as doable"), so they produce a larger pool of accepted tasks per Gemini call.
+
+These were **not** used to produce the §3 headline (28.3% feasibility) — that number comes from `sample_feasible_tasks.py` with the strict four-way schema and confidence ≥ 0.95. The doable-task scripts are kept here as a faster, looser alternative for collecting training pools when paper-grade strictness isn't needed.
+
+```bash
+# Collect 200 doable tasks from the test split (default target):
+python filter_doable_tasks_eval.py --target 200 --output data/doable_tasks_eval.csv
+
+# Or pull a larger training pool from the train split:
+python filter_doable_tasks.py --target 2000 --output data/doable_tasks.csv
+```
+
+Both read `GEMINI_API_KEY` or `GOOGLE_API_KEY` from the environment.
+
 ---
 
 ## 2. Section 4 — Continued training

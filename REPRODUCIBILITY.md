@@ -10,6 +10,24 @@ All commands assume you have followed `INSTALLATION.md`. For sections 2 and 3, a
 
 ---
 
+## For reviewers — fastest path to running the held-out evaluation
+
+If you only want to verify our headline result (Base SFT vs RL-on-filtered on the held-out set), you do **not** need to retrain. Skip Section 2 and:
+
+1. Follow `INSTALLATION.md` Path 2 to provision a VM and set up the environment.
+2. From the repo root on the VM, run:
+   ```bash
+   bash scripts/download_checkpoint.sh    # fetches our LoRA adapter (~21 MB) from the GitHub Release
+   bash eval/run_full_eval.sh             # runs the held-out eval (~20h on an L4)
+   python eval/analyze_eval_results.py --run_dir eval_results/run_<timestamp>
+   ```
+
+The download script extracts to `checkpoints_feasible/final_checkpoint/`, which is exactly where `eval/run_full_eval.sh` expects to find the LoRA adapter. The base SFT model (the other arm of the comparison) is auto-downloaded from Hugging Face on first run.
+
+If you want to retrain from scratch and verify §4 first, follow Section 2 below before Section 3.
+
+---
+
 ## 1. Section 3 — Feasibility audit
 
 ### Inputs
@@ -156,7 +174,9 @@ python scripts/monitor_training.py \
 
 - The two checkpoints to compare:
   - `btrabucco/Insta-Qwen3-1.7B-SFT` (Base SFT, no LoRA — auto-loaded by `evaluate_checkpoint.py --compare`)
-  - A LoRA adapter checkpoint produced by §2 (defaults to `checkpoints_feasible/checkpoint_trajectory_300/`; see "Selecting which checkpoint to evaluate" below)
+  - A LoRA adapter checkpoint. Two options for getting it onto the eval VM:
+    - **Use ours** (recommended for reviewers): `bash scripts/download_checkpoint.sh` fetches it from the GitHub Release and extracts to `checkpoints_feasible/final_checkpoint/`. ~21 MB download, ~35 MB extracted.
+    - **Use one you trained yourself**: produced by §2 at `checkpoints_feasible/checkpoint_trajectory_<N>/`. See "Selecting which checkpoint to evaluate" below for picking the best one.
 - The held-out test CSV: `feasibility_results/feasible_sample_20260424_124844.csv` (200 feasibility-filtered tasks; the eval below samples 100 of them via `--sample_size 100 --seed 42`).
 - Same Vertex-AI/Gemini setup as training.
 - An L4/T4 GPU VM.

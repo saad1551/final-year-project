@@ -36,7 +36,8 @@ This repository contains the code, data, and analysis artifacts for a final-year
 ├── scripts/                   # standalone CLI helpers
 │   ├── check_progress.py      # live training-log monitor (VM-aware)
 │   ├── monitor_training.py    # render training curves from CSV
-│   └── merge_lora.py          # merge LoRA adapter into base model
+│   ├── merge_lora.py          # merge LoRA adapter into base model
+│   └── download_checkpoint.sh # fetch the held-out eval checkpoint from GitHub Releases
 │
 ├── eval/                      # held-out evaluation harness
 │   ├── run_full_eval.sh       # one-command Base SFT vs RL-on-filtered eval
@@ -73,7 +74,7 @@ This repository contains the code, data, and analysis artifacts for a final-year
 ## Getting started
 
 - **Install dependencies and verify:** see `INSTALLATION.md`.
-- **Reproduce the headline numbers:** see `REPRODUCIBILITY.md`.
+- **Reproduce the headline numbers:** see `REPRODUCIBILITY.md`. Reviewers can skip retraining: the "For reviewers" section at the top of `REPRODUCIBILITY.md` shows the fastest path to running the held-out eval against our submitted checkpoint.
 
 ## Authors
 

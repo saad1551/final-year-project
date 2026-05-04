@@ -11,7 +11,10 @@
 set -euo pipefail
 
 REPO_DIR="${REPO_DIR:-$HOME/final-year-project}"
-RL_CHECKPOINT="${RL_CHECKPOINT:-checkpoints_feasible/checkpoint_trajectory_300}"
+# Default points at the checkpoint that scripts/download_checkpoint.sh fetches
+# from the project's GitHub Release. If you trained your own checkpoint via
+# gcp/launch_training.sh, point this at e.g. checkpoints_feasible/checkpoint_trajectory_<N>
+RL_CHECKPOINT="${RL_CHECKPOINT:-checkpoints_feasible/final_checkpoint}"
 TEST_CSV="${TEST_CSV:-feasibility_results/feasible_sample_20260424_124844.csv}"
 N_TASKS="${N_TASKS:-100}"
 SEED="${SEED:-42}"

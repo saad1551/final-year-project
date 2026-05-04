@@ -10,7 +10,8 @@
 
 set -euo pipefail
 
-REPO_DIR="${REPO_DIR:-$HOME/final-year-project}"
+# Auto-detect repo root from the script's location; override with REPO_DIR=...
+REPO_DIR="${REPO_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 # Default points at the checkpoint that scripts/download_checkpoint.sh fetches
 # from the project's GitHub Release. If you trained your own checkpoint via
 # gcp/launch_training.sh, point this at e.g. checkpoints_feasible/checkpoint_trajectory_<N>

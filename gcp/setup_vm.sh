@@ -12,12 +12,22 @@
 
 set -euo pipefail
 
-REPO_DIR="${REPO_DIR:-$HOME/final-year-project}"
+# Auto-detect repo root from the script's location; override with REPO_DIR=...
+REPO_DIR="${REPO_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 
 echo "===================================================================="
 echo "VM environment setup  ($(date))"
 echo "===================================================================="
 cd "$REPO_DIR"
+
+# 0. System tools the deep-learning image doesn't ship with but we need.
+# (unzip is needed by scripts/download_checkpoint.sh; the image has curl,
+# python3, screen, tmux, git, build-essential pre-installed.)
+if ! command -v unzip >/dev/null 2>&1; then
+  echo "[setup] Installing unzip..."
+  sudo apt-get update -y >/dev/null
+  sudo apt-get install -y unzip
+fi
 
 # 1. Node.js LTS (for the Playwright JS server in javascript/server/)
 if ! command -v node >/dev/null 2>&1; then

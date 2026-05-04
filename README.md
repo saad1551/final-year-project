@@ -77,13 +77,13 @@ This repository contains the code, data, and analysis artifacts for a final-year
 
 ## Authors
 
-This project is the joint work of three final-year undergraduate students at *(TBD: institution)*:
+This project is the joint work of three final-year undergraduate students at the National University of Sciences and Technology (NUST), Pakistan:
 
 - Muhammad Saad Ashraf
 - Muhammad Salman Siddiq
 - Awais Nazir
 
-Supervisor: *(TBD)*
+Supervisor: Dr. Faisal Shafait
 
 ## Citation
 
@@ -91,11 +91,13 @@ If you use this code or build on the dataset feasibility analysis, please cite:
 
 ```bibtex
 @misc{adaptive-web-interaction-2026,
-  title  = {Adaptive Web Interaction: Leveraging Reinforcement Learning for
-            Comprehensive Action Support},
-  author = {Ashraf, Muhammad Saad and Siddiq, Muhammad Salman and Nazir, Awais},
-  year   = {2026},
-  note   = {Final-year project, (institution TBD).}
+  title        = {Adaptive Web Interaction: Leveraging Reinforcement Learning
+                  for Comprehensive Action Support},
+  author       = {Ashraf, Muhammad Saad and Siddiq, Muhammad Salman and Nazir, Awais},
+  year         = {2026},
+  howpublished = {\url{https://github.com/saad1551/final-year-project}},
+  note         = {Final-year project, National University of Sciences and Technology
+                  (NUST), Pakistan. Supervisor: Dr.\ Faisal Shafait.}
 }
 ```
 

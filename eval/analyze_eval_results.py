@@ -1,27 +1,19 @@
 """
 Analyze the JSON outputs of run_full_eval.sh.
 
-Builds the held-out evaluation summary table with mean, 95% bootstrap CIs,
-paired Wilcoxon p-values for reward, and McNemar p-values for binary
-success rate.
+Computes mean reward + success rate with 95% bootstrap CIs, plus paired
+Wilcoxon (reward) and McNemar (binary success) tests for the comparison
+RL-on-filtered vs Base SFT.
 
 Inputs (per --run_dir):
-  inv1_filtered_base_and_raw/
-      checkpoint_results_<ts>.json   <- RL-on-raw on Filtered
-      base_results_<ts>.json         <- Base SFT  on Filtered
-  inv2_filtered_rl_filtered/
-      checkpoint_results_<ts>.json   <- RL-on-filtered on Filtered
-  inv3_unfiltered_base_and_raw/
-      checkpoint_results_<ts>.json   <- RL-on-raw on Unfiltered
-      base_results_<ts>.json         <- Base SFT  on Unfiltered
-  inv4_unfiltered_rl_filtered/
-      checkpoint_results_<ts>.json   <- RL-on-filtered on Unfiltered
+  checkpoint_results_<ts>.json   <- RL-on-filtered (LoRA-adapted) trajectories
+  base_results_<ts>.json         <- Base SFT trajectories
 
 Outputs:
-  - stdout: pretty-printed Markdown table ready to paste into the report
-  - <run_dir>/summary.csv: per-cell rewards/success/CI for downstream plotting
+  - stdout: pretty-printed Markdown table
   - <run_dir>/summary.md:  same content as stdout
-  - <run_dir>/figure3.png: grouped bar chart with error bars
+  - <run_dir>/summary.csv: per-cell rewards/success/CI for downstream plotting
+  - <run_dir>/figure3.{png,pdf}: 2-bar comparison chart
 """
 
 from __future__ import annotations
@@ -30,7 +22,6 @@ import argparse
 import csv
 import json
 from pathlib import Path
-from typing import Iterable
 
 import numpy as np
 
@@ -54,7 +45,7 @@ def latest(glob_pattern: str, in_dir: Path) -> Path:
 
 
 def per_task_metrics(rows: list[dict]) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Return (rewards, successes_binary, num_steps) aligned to the row order.
+    """Return (rewards, successes_binary, num_steps).
 
     Reward is a weighted combination matching training (0.7s + 0.2e + 0.1sc).
     Tasks where the judge failed (None scores) are dropped.
@@ -90,20 +81,16 @@ def bootstrap_ci(values: np.ndarray, n: int = BOOTSTRAP_N, alpha: float = 0.05) 
 
 
 def paired_wilcoxon(a: np.ndarray, b: np.ndarray) -> float:
-    """Return p-value of a one-sided Wilcoxon signed-rank test for a > b.
-
-    Uses scipy if available, otherwise a manual paired sign-test fallback.
-    """
+    """Return one-sided Wilcoxon signed-rank p-value for a > b."""
     try:
         from scipy.stats import wilcoxon
         diff = a - b
         nz = diff[diff != 0]
         if len(nz) < 5:
             return float("nan")
-        stat, p_two = wilcoxon(nz, alternative="greater")
-        return float(p_two)
+        _, p = wilcoxon(nz, alternative="greater")
+        return float(p)
     except Exception:
-        # Sign-test fallback (very conservative)
         diff = a - b
         pos = int((diff > 0).sum())
         neg = int((diff < 0).sum())
@@ -111,8 +98,7 @@ def paired_wilcoxon(a: np.ndarray, b: np.ndarray) -> float:
         if n == 0:
             return float("nan")
         from math import comb
-        p = sum(comb(n, k) for k in range(pos, n + 1)) / (2 ** n)
-        return float(p)
+        return float(sum(comb(n, k) for k in range(pos, n + 1)) / (2 ** n))
 
 
 def mcnemar(a_succ: np.ndarray, b_succ: np.ndarray) -> float:
@@ -122,7 +108,6 @@ def mcnemar(a_succ: np.ndarray, b_succ: np.ndarray) -> float:
     n = a01 + a10
     if n == 0:
         return float("nan")
-    # Exact binomial: P(X >= a01) under p=0.5
     from math import comb
     return float(sum(comb(n, k) for k in range(a01, n + 1)) / (2 ** n))
 
@@ -145,106 +130,63 @@ def fmt_p(p: float) -> str:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run_dir", type=Path, required=True,
-                    help="Output directory used by run_full_eval.sh (contains inv1-4 subdirs)")
+                    help="Output directory used by run_full_eval.sh "
+                         "(contains checkpoint_results_*.json and base_results_*.json)")
     args = ap.parse_args()
 
     rd = args.run_dir
-    inv1 = rd / "inv1_filtered_base_and_raw"
-    inv2 = rd / "inv2_filtered_rl_filtered"
-    inv3 = rd / "inv3_unfiltered_base_and_raw"
-    inv4 = rd / "inv4_unfiltered_rl_filtered"
+    ckpt_rows = load_results(latest("checkpoint_results_*.json", rd))
+    base_rows = load_results(latest("base_results_*.json", rd))
 
-    # Filtered cells are required; unfiltered are optional (only present if
-    # RUN_UNFILTERED=1 was set in run_full_eval.sh).
-    cells: dict[tuple[str, str], list[dict]] = {
-        ("Base SFT", "Filtered"):       load_results(latest("base_results_*.json", inv1)),
-        ("RL-on-raw", "Filtered"):      load_results(latest("checkpoint_results_*.json", inv1)),
-        ("RL-on-filtered", "Filtered"): load_results(latest("checkpoint_results_*.json", inv2)),
+    # Per-task metrics. Same seed across both arms means rows are paired by index.
+    ckpt_rew, ckpt_succ, ckpt_steps = per_task_metrics(ckpt_rows)
+    base_rew, base_succ, base_steps = per_task_metrics(base_rows)
+
+    # Truncate to common length for paired comparisons (defends against one arm
+    # finishing more tasks than the other if eval was killed mid-run).
+    n = min(len(ckpt_rew), len(base_rew))
+
+    metrics = {
+        "RL-on-filtered": {
+            "n": len(ckpt_rew),
+            "reward": bootstrap_ci(ckpt_rew),
+            "success": bootstrap_ci(ckpt_succ),
+            "mean_steps": float(np.mean(ckpt_steps)) if len(ckpt_steps) else float("nan"),
+        },
+        "Base SFT": {
+            "n": len(base_rew),
+            "reward": bootstrap_ci(base_rew),
+            "success": bootstrap_ci(base_succ),
+            "mean_steps": float(np.mean(base_steps)) if len(base_steps) else float("nan"),
+        },
     }
-    has_unfiltered = inv3.exists() and inv4.exists()
-    if has_unfiltered:
-        try:
-            cells.update({
-                ("Base SFT", "Unfiltered"):       load_results(latest("base_results_*.json", inv3)),
-                ("RL-on-raw", "Unfiltered"):      load_results(latest("checkpoint_results_*.json", inv3)),
-                ("RL-on-filtered", "Unfiltered"): load_results(latest("checkpoint_results_*.json", inv4)),
-            })
-        except FileNotFoundError:
-            has_unfiltered = False
 
-    # Compute per-cell metrics (paired across checkpoints by row order — eval script uses same seed)
-    metrics: dict[tuple[str, str], dict] = {}
-    for (ckpt, eval_set), rows in cells.items():
-        rew, succ, steps = per_task_metrics(rows)
-        metrics[(ckpt, eval_set)] = {
-            "n": len(rew),
-            "reward": bootstrap_ci(rew),
-            "success_rate": bootstrap_ci(succ),
-            "mean_steps": float(np.mean(steps)) if len(steps) else float("nan"),
-            "_rew": rew,
-            "_succ": succ,
-        }
-
-    # Render the main table
-    rows = ["Base SFT", "RL-on-raw", "RL-on-filtered"]
-    cols = ["Filtered", "Unfiltered"] if has_unfiltered else ["Filtered"]
-
-    md = ["## Table 1 — held-out evaluation (mean [95% bootstrap CI])\n"]
-    if has_unfiltered:
-        md.append("| Checkpoint | Filtered Reward | Filtered Success | Unfiltered Reward | Unfiltered Success | Mean steps (Filt / Unfilt) |")
-        md.append("|---|---|---|---|---|---|")
-        for ckpt in rows:
-            f = metrics[(ckpt, "Filtered")]
-            u = metrics[(ckpt, "Unfiltered")]
-            md.append(
-                f"| **{ckpt}** | {fmt_ci(f['reward'])} | {fmt_ci(f['success_rate'])} | "
-                f"{fmt_ci(u['reward'])} | {fmt_ci(u['success_rate'])} | "
-                f"{f['mean_steps']:.1f} / {u['mean_steps']:.1f} |"
-            )
-    else:
-        md.append("| Checkpoint | Filtered Reward | Filtered Success | Mean steps |")
-        md.append("|---|---|---|---|")
-        for ckpt in rows:
-            f = metrics[(ckpt, "Filtered")]
-            md.append(
-                f"| **{ckpt}** | {fmt_ci(f['reward'])} | {fmt_ci(f['success_rate'])} | "
-                f"{f['mean_steps']:.1f} |"
-            )
+    # Markdown table
+    md = ["## Held-out evaluation (mean [95% bootstrap CI])\n",
+          "| Checkpoint | n | Reward | Success rate | Mean steps |",
+          "|---|---|---|---|---|"]
+    for ckpt in ["Base SFT", "RL-on-filtered"]:
+        m = metrics[ckpt]
+        md.append(
+            f"| **{ckpt}** | {m['n']} | {fmt_ci(m['reward'])} | "
+            f"{fmt_ci(m['success'])} | {m['mean_steps']:.1f} |"
+        )
     md.append("")
 
-    # Pairwise tests (the comparisons that go in §4.5 prose)
-    md.append("## Pairwise tests (one-sided: row > Base SFT)\n")
-    md.append("| Pair | Test set | Δreward (mean [95% CI]) | Δsuccess (pp) | Wilcoxon p | McNemar p |")
-    md.append("|---|---|---|---|---|---|")
-
-    def pair_test(a_key, b_key) -> tuple[str, str, str, str]:
-        a = metrics[a_key]
-        b = metrics[b_key]
-        rew_a, rew_b = a["_rew"], b["_rew"]
-        succ_a, succ_b = a["_succ"], b["_succ"]
-        # Truncate to common length (paired)
-        n = min(len(rew_a), len(rew_b))
-        if n == 0:
-            return "—", "—", "—", "—"
-        rew_a, rew_b = rew_a[:n], rew_b[:n]
-        succ_a, succ_b = succ_a[:n], succ_b[:n]
-        d_rew = rew_a - rew_b
-        m, lo, hi = bootstrap_ci(d_rew)
-        d_succ_pp = (succ_a.mean() - succ_b.mean()) * 100
-        return (f"{m:+.3f} [{lo:+.3f}, {hi:+.3f}]",
-                f"{d_succ_pp:+.1f}",
-                fmt_p(paired_wilcoxon(rew_a, rew_b)),
-                fmt_p(mcnemar(succ_a, succ_b)))
-
-    for ckpt in ["RL-on-raw", "RL-on-filtered"]:
-        for eval_set in cols:
-            d_rew, d_succ, p_w, p_m = pair_test((ckpt, eval_set), ("Base SFT", eval_set))
-            md.append(f"| {ckpt} vs Base SFT | {eval_set} | {d_rew} | {d_succ} | {p_w} | {p_m} |")
-    # The main attribution claim
-    for eval_set in cols:
-        d_rew, d_succ, p_w, p_m = pair_test(("RL-on-filtered", eval_set), ("RL-on-raw", eval_set))
-        md.append(f"| RL-on-filtered vs RL-on-raw | {eval_set} | {d_rew} | {d_succ} | {p_w} | {p_m} |")
-    md.append("")
+    # Pairwise test: RL-on-filtered vs Base SFT
+    if n > 0:
+        d_rew = ckpt_rew[:n] - base_rew[:n]
+        m_d, lo_d, hi_d = bootstrap_ci(d_rew)
+        d_succ_pp = (ckpt_succ[:n].mean() - base_succ[:n].mean()) * 100
+        p_w = paired_wilcoxon(ckpt_rew[:n], base_rew[:n])
+        p_m = mcnemar(ckpt_succ[:n], base_succ[:n])
+        md.append("## Headline pair (RL-on-filtered vs Base SFT, paired)\n")
+        md.append(f"- n paired           : {n}")
+        md.append(f"- Δ reward (mean CI) : {m_d:+.3f} [{lo_d:+.3f}, {hi_d:+.3f}]")
+        md.append(f"- Δ success rate     : {d_succ_pp:+.1f} percentage points")
+        md.append(f"- Wilcoxon (reward)  : p = {fmt_p(p_w)}")
+        md.append(f"- McNemar (success)  : p = {fmt_p(p_m)}")
+        md.append("")
 
     text = "\n".join(md)
     print(text)
@@ -253,41 +195,37 @@ def main():
     # CSV summary for plotting
     with (rd / "summary.csv").open("w", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["checkpoint", "eval_set", "n", "reward_mean", "reward_lo", "reward_hi",
+        w.writerow(["checkpoint", "n", "reward_mean", "reward_lo", "reward_hi",
                     "success_mean", "success_lo", "success_hi", "mean_steps"])
-        for ckpt in rows:
-            for eval_set in cols:
-                m = metrics[(ckpt, eval_set)]
-                rm, rl, rh = m["reward"]
-                sm, sl, sh = m["success_rate"]
-                w.writerow([ckpt, eval_set, m["n"], rm, rl, rh, sm, sl, sh, m["mean_steps"]])
+        for ckpt in ["Base SFT", "RL-on-filtered"]:
+            m = metrics[ckpt]
+            rm, rl, rh = m["reward"]
+            sm, sl, sh = m["success"]
+            w.writerow([ckpt, m["n"], rm, rl, rh, sm, sl, sh, m["mean_steps"]])
 
-    # Figure 3 (matplotlib, optional — skip if mpl missing)
+    # Figure 3: 2-bar comparison (success rate + reward)
     try:
         import matplotlib.pyplot as plt
-        fig, axes = plt.subplots(1, 2, figsize=(11, 4.2))
-        x = np.arange(len(rows))
-        width = 0.35
-        for ax, metric_key, title in [(axes[0], "success_rate", "Success rate (judge > 0.5)"),
+        fig, axes = plt.subplots(1, 2, figsize=(8.5, 4.2))
+        labels = ["Base SFT", "RL-on-filtered"]
+        x = np.arange(len(labels))
+        for ax, metric_key, title in [(axes[0], "success", "Success rate (judge > 0.5)"),
                                        (axes[1], "reward", "Mean reward")]:
-            for i, eval_set in enumerate(cols):
-                means = [metrics[(c, eval_set)][metric_key][0] for c in rows]
-                los = [metrics[(c, eval_set)][metric_key][1] for c in rows]
-                his = [metrics[(c, eval_set)][metric_key][2] for c in rows]
-                err = [
-                    [m - lo for m, lo in zip(means, los)],
-                    [hi - m for m, hi in zip(means, his)],
-                ]
-                ax.bar(x + (i - 0.5) * width, means, width, yerr=err,
-                       capsize=3, label=eval_set,
-                       color=("#2a9d8f" if i == 0 else "#e76f51"),
-                       edgecolor="black", linewidth=0.5)
+            means = [metrics[c][metric_key][0] for c in labels]
+            los = [metrics[c][metric_key][1] for c in labels]
+            his = [metrics[c][metric_key][2] for c in labels]
+            err = [
+                [m - lo for m, lo in zip(means, los)],
+                [hi - m for m, hi in zip(means, his)],
+            ]
+            ax.bar(x, means, 0.55, yerr=err, capsize=4,
+                   color=["#264653", "#2a9d8f"],
+                   edgecolor="black", linewidth=0.5)
             ax.set_xticks(x)
-            ax.set_xticklabels(rows, rotation=15)
+            ax.set_xticklabels(labels)
             ax.set_title(title)
             ax.grid(alpha=0.3, axis="y")
-            ax.legend(loc="upper left")
-        fig.suptitle("Held-out evaluation: 3 checkpoints × 2 test sets", fontsize=12, y=1.02)
+        fig.suptitle("Held-out evaluation (filtered, paired)", fontsize=12, y=1.02)
         fig.tight_layout()
         fig.savefig(rd / "figure3.png", dpi=200, bbox_inches="tight")
         fig.savefig(rd / "figure3.pdf", bbox_inches="tight")

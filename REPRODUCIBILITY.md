@@ -156,10 +156,45 @@ python scripts/monitor_training.py \
 
 - The two checkpoints to compare:
   - `btrabucco/Insta-Qwen3-1.7B-SFT` (Base SFT, no LoRA — auto-loaded by `evaluate_checkpoint.py --compare`)
-  - `checkpoints_feasible/checkpoint_trajectory_300/` (RL-on-filtered)
+  - A LoRA adapter checkpoint produced by §2 (defaults to `checkpoints_feasible/checkpoint_trajectory_300/`; see "Selecting which checkpoint to evaluate" below)
 - The held-out test CSV: `feasibility_results/feasible_sample_20260424_124844.csv` (200 feasibility-filtered tasks; the eval below samples 100 of them via `--sample_size 100 --seed 42`).
 - Same Vertex-AI/Gemini setup as training.
 - An L4/T4 GPU VM.
+
+### Where checkpoints live
+
+`gcp/launch_training.sh` writes LoRA adapter checkpoints to `$CHECKPOINT_DIR/checkpoint_trajectory_<N>/` (default `CHECKPOINT_DIR=checkpoints_feasible`) every `SAVE_EVERY` (default 25) trajectories. After a 500-trajectory run you have `checkpoint_trajectory_25/`, `_50/`, …, `_500/`. Each directory is a small (~70 MB) PEFT adapter — `adapter_config.json` + `adapter_model.safetensors` + tokenizer files; the base SFT weights are *not* included.
+
+If your training run was on a different machine than your eval VM, copy the chosen checkpoint directory over and place it under `<repo_root>/checkpoints_feasible/` on the eval VM, e.g.:
+
+```bash
+# On the machine where training ran:
+rsync -avz checkpoints_feasible/checkpoint_trajectory_300/ \
+  <user>@<eval-vm>:final-year-project/checkpoints_feasible/checkpoint_trajectory_300/
+```
+
+Or skip the rsync and pass the checkpoint path directly to the eval via `RL_CHECKPOINT=<absolute-or-relative-path> bash eval/run_full_eval.sh`.
+
+### Selecting which checkpoint to evaluate
+
+Two strategies, in order of decreasing rigor:
+
+1. **Best-checkpoint search (preferred).** Pick K candidate trajectory IDs (default `250 300 325`) and evaluate each on the same small held-out subset with the same seed. Compare paired rewards / success rates and pick the winner.
+
+   ```bash
+   CKPTS="250 300 325" \
+   N_TASKS=25 \
+   bash eval/best_checkpoint_search.sh
+   # -> writes eval_results/best_ckpt_search_<ts>/ckpt_<N>/checkpoint_results_<ts>.json
+   #
+   # Then analyze:
+   python eval/best_checkpoint_compare.py --run_dir eval_results/best_ckpt_search_<ts>
+   # -> prints per-checkpoint stats + pairwise paired comparisons + a recommendation
+   ```
+
+   ~6 hours for the default 3 checkpoints × 25 tasks on an L4. The output recommends the trajectory ID with the highest mean reward (ties broken by success rate) — that's the one to feed into the full eval.
+
+2. **Just use the latest.** If you don't have time for a search, evaluate the final checkpoint (e.g. `checkpoint_trajectory_500`). Caveat: late-stage RL can drift, so the latest isn't always the best.
 
 ### Run the full evaluation
 
@@ -171,8 +206,11 @@ screen -S watchdog -dm bash ~/final-year-project/gcp/playwright_watchdog.sh
 
 # Run the filtered held-out eval (~20h on an L4):
 bash eval/run_full_eval.sh
-# Override defaults via env vars if needed:
-#   RL_CHECKPOINT=<path>  TEST_CSV=<path>  N_TASKS=<N>  SEED=<N>  OUT=<dir>
+# Or point at a specific checkpoint trajectory (e.g. the one selected by
+# the best-checkpoint search):
+RL_CHECKPOINT=checkpoints_feasible/checkpoint_trajectory_300 \
+  bash eval/run_full_eval.sh
+# Other overrides: TEST_CSV=<path>  N_TASKS=<N>  SEED=<N>  OUT=<dir>
 ```
 
 This wraps `evaluate_checkpoint.py --compare`, which runs the LoRA-adapted checkpoint and the base SFT model on the same task set in sequence. Same seed across both arms means the per-task comparisons are paired. Two output files are produced under `$OUT`:

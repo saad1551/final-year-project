@@ -1,22 +1,23 @@
 #!/usr/bin/env bash
 # Run ON the VM (inside ~/final-year-project) to launch training under tmux.
-# Resumes from final_checkpoint and trains on the 2,068 feasible-train tasks.
+# Trains on the 2,068 feasible-train tasks starting from the base SFT model.
+# Set RESUME_FROM=<path> to warm-start from an existing LoRA checkpoint.
 
 set -euo pipefail
 
 REPO_DIR="${REPO_DIR:-$HOME/final-year-project}"
 ENV_NAME="${ENV_NAME:-insta}"
 SESSION="${SESSION:-fyp-train}"
-RESUME_FROM="${RESUME_FROM:-checkpoints/checkpoint_trajectory_600}"
+# Empty by default = train a fresh LoRA adapter on top of the base SFT model.
+# Set RESUME_FROM=<path-to-checkpoint-dir> to warm-start from an existing LoRA
+# adapter (e.g. to resume an interrupted run).
+RESUME_FROM="${RESUME_FROM:-}"
 TRAIN_CSV="${TRAIN_CSV:-feasibility_results/feasible_sample_20260324_195836.csv}"
-# Save new checkpoints to a separate dir so they don't collide with the old
-# warm-start checkpoints (checkpoints/checkpoint_trajectory_500/600/...).
-# When RESUME_DATASET_IDX=0 resets the trajectory counter, names like
-# "checkpoint_trajectory_500" would otherwise overwrite the originals.
 CHECKPOINT_DIR="${CHECKPOINT_DIR:-checkpoints_feasible}"
-# num_trajectories is the *target* trajectory_id, not an increment. With
-# RESUME_DATASET_IDX=0 the counter resets, so 500 means run trajectories 1..500
-# of the feasible CSV from a model warm-started at checkpoint_trajectory_600.
+# num_trajectories is the *target* trajectory_id (not an increment). When
+# starting from scratch the counter starts at 1, so NUM_TRAJECTORIES=500
+# means trajectories 1..500. When resuming, the counter continues from
+# whatever the checkpoint's metadata says.
 NUM_TRAJECTORIES="${NUM_TRAJECTORIES:-500}"
 SAVE_EVERY="${SAVE_EVERY:-25}"
 REF_KL_FREQUENCY="${REF_KL_FREQUENCY:-5}"
@@ -42,12 +43,12 @@ if ! command -v tmux >/dev/null; then
   sudo apt-get update -y && sudo apt-get install -y tmux
 fi
 
-# Pre-flight: dataset and checkpoint sanity
+# Pre-flight: dataset and (optional) checkpoint sanity
 if [[ ! -f "$TRAIN_CSV" ]]; then
   echo "ERROR: training CSV not found at $TRAIN_CSV" >&2; exit 1
 fi
-if [[ ! -d "$RESUME_FROM" ]]; then
-  echo "ERROR: warm-start checkpoint not found at $RESUME_FROM" >&2; exit 1
+if [[ -n "$RESUME_FROM" && ! -d "$RESUME_FROM" ]]; then
+  echo "ERROR: RESUME_FROM was set but directory not found: $RESUME_FROM" >&2; exit 1
 fi
 
 # Vertex AI is the default judge backend on the VM. The credit pool the user
@@ -68,8 +69,11 @@ export DISABLE_SCREENSHOTS="${DISABLE_SCREENSHOTS:-1}"
 # Compose extra args for the python invocation (resolved by the outer shell
 # before being baked into the inner heredoc).
 EXTRA_ARGS=""
+if [[ -n "$RESUME_FROM" ]]; then
+  EXTRA_ARGS="$EXTRA_ARGS --resume_from $RESUME_FROM"
+fi
 if [[ -n "${RESUME_DATASET_IDX:-}" ]]; then
-  EXTRA_ARGS="--resume_dataset_idx $RESUME_DATASET_IDX"
+  EXTRA_ARGS="$EXTRA_ARGS --resume_dataset_idx $RESUME_DATASET_IDX"
 fi
 
 # Build the inner command. The DL VM image uses system Python directly
@@ -94,7 +98,7 @@ echo "[\$(date)] playwright server up"
 
 echo "[$(date)] starting training"
 echo "  csv         : $TRAIN_CSV"
-echo "  resume_from : $RESUME_FROM"
+echo "  resume_from : ${RESUME_FROM:-<none, training fresh LoRA from base SFT>}"
 echo "  trajectories: $NUM_TRAJECTORIES"
 
 # JUDGE_USE_VERTEX, JUDGE_VERTEX_LOCATION, JUDGE_VERTEX_PROJECT are already
@@ -102,7 +106,6 @@ echo "  trajectories: $NUM_TRAJECTORIES"
 
 python3 pipeline_in_steps.py \
   --train_csv "$TRAIN_CSV" \
-  --resume_from "$RESUME_FROM" \
   --checkpoint_dir "$CHECKPOINT_DIR" \
   --num_trajectories $NUM_TRAJECTORIES \
   --save_every $SAVE_EVERY \

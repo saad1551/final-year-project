@@ -4,7 +4,7 @@ This repository contains the code, data, and analysis artifacts for a final-year
 
 1. **A feasibility audit of the InSTA-150k web-agent benchmark.** Using a Gemini-2.5-Flash judge with URL-context grounding, we classify 2,598 sampled InSTA test tasks into feasible / website-down / content-outdated / uncertain. **Only 28.3% of sampled tasks are reliably feasible.** The breakdown and methodology are in `feasibility_results/`.
 
-2. **An RL training experiment on a feasibility-filtered subset.** We apply PPO + LoRA training to the base SFT model `btrabucco/Insta-Qwen3-1.7B-SFT` on a 2,068-task feasibility-filtered subset and evaluate on a held-out 200-task feasibility-filtered subset, comparing the trained model against the base SFT baseline. Code in `gcp/`, training pipeline in `pipeline_in_steps.py`, eval pipeline in `eval/`.
+2. **An RL training experiment on a feasibility-filtered subset.** We apply PPO + LoRA training to the base SFT model `btrabucco/Insta-Qwen3-1.7B-SFT` on a 2,068-task feasibility-filtered subset and evaluate on 100 held-out feasibility-filtered tasks (sampled from a 200-task held-out CSV with a fixed seed), comparing the trained model against the base SFT baseline. Code in `gcp/`, training pipeline in `pipeline_in_steps.py`, eval pipeline in `eval/`.
 
 ## Headline numbers
 
@@ -39,8 +39,10 @@ This repository contains the code, data, and analysis artifacts for a final-year
 │   └── merge_lora.py          # merge LoRA adapter into base model
 │
 ├── eval/                      # held-out evaluation harness
-│   ├── run_full_eval.sh       # orchestrate the 3×{1,2}-cell evaluation
-│   └── analyze_eval_results.py
+│   ├── run_full_eval.sh       # one-command Base SFT vs RL-on-filtered eval
+│   ├── analyze_eval_results.py
+│   ├── best_checkpoint_search.sh
+│   └── best_checkpoint_compare.py
 │
 ├── gcp/                       # GCP provisioning + training launch
 │   ├── provision_vm.sh
@@ -62,7 +64,6 @@ This repository contains the code, data, and analysis artifacts for a final-year
 ├── insta/                     # InSTA package (judge prompts, configs)
 ├── javascript/server/         # Node.js Playwright server
 ├── data/                      # datasets (InSTA train/test, see REPRODUCIBILITY.md)
-├── checkpoints_feasible/      # this paper's RL training checkpoints
 ├── agent_prompts/             # prompts used by the agent
 ├── configs/                   # configuration objects
 ├── markdown/                  # HTML→Markdown utilities

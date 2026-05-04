@@ -41,7 +41,7 @@ JUDGE_API_KEY=<your_key> python sample_feasible_tasks.py \
 
 This iterates over the test CSV (shuffled with the given seed), calls Gemini-2.5-Flash with URL-context grounding, and accepts tasks classified as `FEASIBLE` with confidence ≥ 0.95 until 200 are collected. Output: a timestamped CSV under `feasibility_results/feasible_sample_<ts>.csv` plus rejected tasks under `rejected_sample_<ts>.csv`.
 
-The feasibility audit numbers in §3 of the report are produced by **a separate, larger run** that processed 2,598 tasks. To reproduce that exact run is not feasible (Gemini's url_context tool is non-deterministic; specific website states have changed since), but the methodology and seed are documented so subsequent runs are interpretable.
+The 28.3% headline feasibility number comes from **a separate, larger run** that processed 2,598 tasks (parsed log preserved at `feasibility_results/v2_log_parsed.csv`, rendered as `feasibility_results/figure1_dataset_decay.{png,pdf}`). To reproduce that exact run is not feasible (Gemini's `url_context` tool is non-deterministic; specific website states have changed since), but the methodology and seed are documented so subsequent runs are interpretable.
 
 ### Reproduce Figure 1 (dataset-decay breakdown)
 
@@ -157,7 +157,7 @@ python scripts/monitor_training.py \
 - The two checkpoints to compare:
   - `btrabucco/Insta-Qwen3-1.7B-SFT` (Base SFT, no LoRA — auto-loaded by `evaluate_checkpoint.py --compare`)
   - `checkpoints_feasible/checkpoint_trajectory_300/` (RL-on-filtered)
-- The held-out test CSV: `feasibility_results/feasible_sample_20260424_124844.csv` (200 feasibility-filtered tasks).
+- The held-out test CSV: `feasibility_results/feasible_sample_20260424_124844.csv` (200 feasibility-filtered tasks; the eval below samples 100 of them via `--sample_size 100 --seed 42`).
 - Same Vertex-AI/Gemini setup as training.
 - An L4/T4 GPU VM.
 
@@ -170,14 +170,12 @@ cd ~/final-year-project
 screen -S watchdog -dm bash ~/final-year-project/gcp/playwright_watchdog.sh
 
 # Run the filtered held-out eval (~20h on an L4):
-python evaluate_checkpoint.py \
-  --checkpoint_dir checkpoints_feasible/checkpoint_trajectory_300 \
-  --dataset feasibility_results/feasible_sample_20260424_124844.csv \
-  --sample_size 100 --seed 42 --compare \
-  --output_dir eval_results/run_<timestamp>
+bash eval/run_full_eval.sh
+# Override defaults via env vars if needed:
+#   RL_CHECKPOINT=<path>  TEST_CSV=<path>  N_TASKS=<N>  SEED=<N>  OUT=<dir>
 ```
 
-`--compare` runs the LoRA-adapted checkpoint and the base SFT model on the same task set in sequence. Same seed across both arms means the per-task comparisons are paired. Two output files are produced under `--output_dir`:
+This wraps `evaluate_checkpoint.py --compare`, which runs the LoRA-adapted checkpoint and the base SFT model on the same task set in sequence. Same seed across both arms means the per-task comparisons are paired. Two output files are produced under `$OUT`:
 - `checkpoint_results_<ts>.json` — RL-on-filtered trajectories
 - `base_results_<ts>.json` — Base SFT trajectories
 
@@ -187,7 +185,7 @@ python evaluate_checkpoint.py \
 python eval/analyze_eval_results.py \
   --run_dir eval_results/run_<timestamp>
 # -> stdout: Markdown Table 1 with means and 95% bootstrap CIs
-# -> writes eval_results/run_<ts>/summary.md   (paste-ready into the report)
+# -> writes eval_results/run_<ts>/summary.md   (Markdown table of the results)
 # -> writes eval_results/run_<ts>/summary.csv  (data for downstream plotting)
 # -> writes eval_results/run_<ts>/figure3.{png,pdf}  (bar chart)
 ```

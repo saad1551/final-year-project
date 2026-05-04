@@ -1,0 +1,1263 @@
+website,instruction,steps,criteria
+ro.farnell.com,Accept the cookie settings on Farnell România to access the main website content.,"[""Navigate to 'ro.farnell.com'""
+ ""Click the 'Accept toate cookie-urile' button to accept all cookies""]","[""The agent successfully clicks the 'Accept toate cookie-urile' button.""
+ 'The cookie consent banner is no longer displayed after the action.'
+ 'The agent is redirected to the main content or homepage of ro.farnell.com.']"
+docs.monai.io,Find the documentation for the `Compose` class within MONAI's `transforms` module and identify its purpose.,"[""Navigate to 'docs.monai.io'""
+ ""Click on 'API Reference' from the main navigation.""
+ ""On the API Reference page, locate and click on the 'Transforms' link.""
+ ""On the Transforms page, scroll down or search for the 'Compose' class documentation.""
+ 'Identify the purpose of the `Compose` class from its description.']","['Successfully navigates to the `monai.transforms` documentation page.'
+ 'Locates the `Compose` class documentation.'
+ 'Accurately states that `Compose` is used to chain multiple transforms together.']"
+goat-simulator.com,What are the system requirements for Goat Simulator: Remastered on PC?,"['Navigate to the Steam page for Goat Simulator: Remastered (https://store.steampowered.com/app/1762930)'
+ ""Locate the 'System Requirements' section on the page""
+ 'Extract the minimum and recommended system requirements for PC, and respond with this information.']","['Identifies both minimum and recommended system requirements.'
+ 'Lists the operating system, processor, memory, graphics, and storage for both minimum and recommended specifications.'
+ 'The extracted information matches the details provided on the Steam page.']"
+lga.sa.gov.au,Find the contact email address for the City of Charles Sturt council on the LGA SA website.,"['Navigate to lga.sa.gov.au'
+ ""Locate the 'Councils' or 'Member Councils' section of the website""
+ ""Find the listing for the 'City of Charles Sturt'""
+ 'Extract the contact email address for the City of Charles Sturt council']","['Successfully navigates to lga.sa.gov.au'
+ 'Identifies and clicks on the correct link to view member councils or a council directory'
+ 'Locates the specific page or section for the City of Charles Sturt'
+ 'Provides the correct contact email address for the City of Charles Sturt council']"
+fattmerchant.com,Identify the specific pricing plans or models offered by Stax Payments (formerly Fattmerchant) and determine if they have a flat-rate option.,"[""Navigate to 'https://www.staxpayments.com/' (which is the current domain for what was Fattmerchant.com)""
+ ""Click on the 'Pricing' link in the navigation bar""
+ 'Examine the pricing page to identify the different pricing plans or models available'
+ 'Determine if a flat-rate pricing option is explicitly mentioned or offered, and summarize the findings.']","['Successfully navigates to the Stax Payments pricing page.'
+ 'Identifies and describes at least two distinct pricing models or tiers offered by Stax Payments.'
+ 'Clearly states whether a flat-rate pricing option is available or not, based on the information on the pricing page.']"
+practitionerhealth.nhs.uk,"What are the specific eligibility criteria for healthcare professionals in England to access the confidential mental health service, and how do they initiate a self-referral?","[""Navigate to 'practitionerhealth.nhs.uk'""
+ ""Click on the 'HEALTHCARE STAFF IN ENGLAND' link""
+ 'Locate the section detailing eligibility criteria for self-referral'
+ 'Identify how to initiate a self-referral, such as finding registration forms or contact details for initial access'
+ 'Summarize the eligibility criteria and the self-referral process in the answer']","[""Clearly states that the service is for 'Primary and Secondary Care Staff in England where there is a genuine reason why they cannot access care confidentially e.g. due to the seniority of their role, or the team they work in'""
+ ""Mentions that 'Doctors and Dentists in England' are included in this category""
+ ""Identifies that 'Registration forms' are available for self-referral""
+ 'Mentions that consultation appointments and therapy sessions will take place using video technology']"
+booksearch.blogspot.com,"Find the announcement about the Google Books Search blog moving to the Inside Search Blog, and state the date it was posted.","['Navigate to booksearch.blogspot.com'
+ ""Identify the announcement regarding the blog's migration to the Inside Search Blog""
+ 'Extract the date of this specific announcement']","[""Identifies the blog post titled 'Google Books Search Blog joins the Inside Search Blog'""
+ ""Correctly states the publication date of this specific announcement as 'Friday, August 24, 2012'""]"
+berliner-schloss.de,"Find out how many sandstone figures have been added to the balustrades of the Berlin Palace, and identify the current status of the balustrade figures donation campaign.","[""Navigate to 'berliner-schloss.de'""
+ 'Accept the cookie consent banner if present'
+ ""Navigate to the 'Aktuelles' (News) section""
+ 'Locate the news article discussing the sandstone figures on the balustrades'
+ 'Extract the number of sandstone figures mentioned in the article'
+ ""Return to the homepage or a relevant section to find the 'Balustradenfiguren Countdown' or similar donation status""
+ 'Summarize the current status of the balustrade figures donation campaign.']","[""States that '7 von 19' (7 of 19) sandstone figures have been added to the balustrades.""
+ ""Mentions the existence and status of the 'Balustradenfiguren Countdown' or similar donation campaign status on the homepage.""]"
+senate.mo.gov,Find the next scheduled hearing for the 'Appropriations' committee.,"[""Navigate to 'https://www.senate.mo.gov/'"" ""Click on the 'Hearings' link""
+ ""Locate the 'Appropriations' committee in the list of hearings""
+ 'Identify the date and time of its next scheduled hearing, and respond with that information']","[""Identifies the 'Appropriations' committee's next scheduled hearing""
+ 'States the correct date and time of the hearing']"
+mosi.org.uk,"How can I book free admission tickets for the Science and Industry Museum, and what is the opening date for the Power Hall: The Law Family Gallery?","['Navigate to mosi.org.uk'
+ 'Locate and click on the link to book free museum admission tickets.'
+ 'Confirm the process for booking free admission tickets.'
+ ""Navigate to the 'What's on' page.""
+ ""Find the 'Power Hall: The Law Family Gallery' event.""
+ ""Extract the opening date for the 'Power Hall: The Law Family Gallery'.""
+ 'Summarize the booking process and the opening date in the answer.']","['States that free museum admission tickets can be booked via a specific link or section on the website.'
+ ""Identifies the opening date for the 'Power Hall: The Law Family Gallery' as 'autumn 2025'.""]"
+northyorkshire-pfcc.gov.uk,Summarize the 'Policy on Unreasonable Complainants and Correspondents' on the York and North Yorkshire Combined Authority website.,"[""Navigate to 'northyorkshire-pfcc.gov.uk'""
+ ""Click on the 'Contact us' link""
+ ""Scroll down to locate and click on the 'Policy on Unreasonable Complainants and Correspondents' link""
+ 'Read the policy and summarize its key points regarding staff interaction and handling of difficult behaviour.']","['States that the policy addresses rude, aggressive, or vexatious behaviour.'
+ 'Mentions that staff reserve the right to terminate calls or manage contact.'
+ 'Outlines the three-step process for phone calls (ask to desist, warn of termination, terminate call).']"
+visabureau.com,Find the processing time for a 'Skilled Independent visa (subclass 189)' on the Australian Department of Home Affairs website.,"[""Navigate to 'homeaffairs.gov.au'"" ""Go to the 'Visas' section.""
+ ""Click on 'Visa processing times'.""
+ ""Navigate to the 'Skilled visa processing priorities' section.""
+ ""Locate and extract the processing time information for the 'Skilled Independent visa (subclass 189)'.""]","[""Successfully navigates to the 'Skilled visa processing priorities' page.""
+ ""Identifies the specific processing time or a clear indication of how processing times are determined for the 'Skilled Independent visa (subclass 189)'.""
+ 'Provides the found processing time or relevant information in the answer.']"
+outdoorresearch.com,"Find the price of the 'Men's Helium Rain Jacket' (not the 'Ultralight' version) on Outdoor Research, and identify its available colors and sizes.","[""Navigate to 'outdoorresearch.com'""
+ ""Locate and click on the 'Men's' category in the navigation menu.""
+ ""Navigate to the 'Jackets' sub-category.""
+ ""Browse the jacket listings to find the 'Men's Helium Rain Jacket' (ensure it's not the 'Ultralight' version).""
+ 'Click on the product to go to its detail page.'
+ 'Identify and extract the price of the jacket.'
+ 'Identify and list all available colors and sizes for the jacket.']","[""Successfully navigates to the Men's Helium Rain Jacket product page (not the Ultralight version).""
+ ""States the correct price of the Men's Helium Rain Jacket.""
+ ""Lists all available colors for the Men's Helium Rain Jacket.""
+ ""Lists all available sizes for the Men's Helium Rain Jacket.""]"
+cjonline.com,Find the date of the most recent article on cjonline.com that mentions 'Kansas Lottery Powerball'.,"['Navigate to cjonline.com'
+ ""Click on the 'Search' dropdown to reveal the search input field""
+ ""Enter 'Kansas Lottery Powerball' into the search input field and submit the search""
+ ""From the search results, identify the most recent article mentioning 'Kansas Lottery Powerball'""
+ 'Extract the publication date of this article and provide it as the answer']","[""Successfully uses the search functionality to query 'Kansas Lottery Powerball'""
+ 'Identifies the most recent article from the search results'
+ 'Correctly extracts and states the publication date of the identified article']"
+mcgill.ca,Find the email address for the Undergraduate Studies Coordinator at the McGill University School of Computer Science.,"['Navigate to the McGill University School of Computer Science homepage.'
+ ""Click on the 'Contact Us' link.""
+ ""Locate the 'Undergraduate Studies' section.""
+ 'Identify the email address for the Undergraduate Studies Coordinator and provide it in the answer.']","[""The answer explicitly states the email address: 'ugrad-coordinator@cs.mcgill.ca'""]"
+locations.traderjoes.com,What are the operating hours for the Trader Joe's at 72nd & Broadway in New York City?,"[""Navigate to 'locations.traderjoes.com'""
+ ""Select 'New York' from the list of states""
+ ""Select 'New York' from the list of cities""
+ ""Click on the 'View Store Details' link for the '72nd & Broadway (542)' location""
+ 'Locate the operating hours on the store details page and provide them in the answer']","[""Identifies the correct Trader Joe's location at 72nd & Broadway in New York City.""
+ 'Navigates to the specific store details page for the 72nd & Broadway location.'
+ 'Extracts and states the operating hours for that specific store.']"
+material-tailwind.com,Find the code example for a basic Material Tailwind Button component and identify if it supports different sizes.,"[""Navigate to 'material-tailwind.com'"" ""Click on the 'Docs' dropdown.""
+ ""Click on 'Button' under the 'Components' section.""
+ 'Locate the code example for a basic button.'
+ 'Scan the documentation for information regarding button sizes.']","[""Successfully navigates to the 'Button' component documentation page.""
+ 'Identifies and extracts a code example for a basic button (e.g., the default button code).'
+ ""Confirms whether the button component supports different sizes (e.g., 'sm', 'md', 'lg') based on the documentation.""
+ 'Provides the code example and states whether different sizes are supported.']"
+supermicro.com,List the different types of servers available under the 'Rackmount Servers' category on Supermicro's website.,"[""Navigate to 'supermicro.com'""
+ 'Accept or decline cookie preferences to proceed'
+ ""Click on the 'Products' link""
+ ""Click on the 'Rackmount Servers' category link""
+ 'Identify and list the sub-categories of Rackmount Servers']","['Successfully navigates to the Supermicro website'
+ ""Successfully navigates to the 'Products' section""
+ ""Successfully navigates to the 'Rackmount Servers' page or section""
+ ""Lists the server types: '1U Dual Processor', '2U Dual Processor', 'Single Processor', and 'Multi Processor'""]"
+ang.wiktionary.org,"Find five Old English words listed under the letter 'H' in the alphabetical index on ang.wiktionary.org, and list them.","['Navigate to ang.wiktionary.org'
+ ""Locate and click on the 'Stæfrǣwlic Bīecnend' (Alphabetical Index) section.""
+ ""Click on the link for the letter 'H' (Syndrig:AllPages/H).""
+ ""Identify and list five distinct Old English words starting with 'H' from the displayed page.""]","[""The agent successfully navigates to the alphabetical index for 'H'.""
+ ""The agent identifies and lists five distinct Old English words that begin with the letter 'H' from the page.""]"
+chinamil.com.cn,Find the latest official news article on China's naval developments on chinamil.com.cn and report its publication date and headline.,"[""Navigate to 'chinamil.com.cn'""
+ ""Locate the 'Navy' or 'Naval' section, or use the website's search function for 'navy' or 'naval developments'""
+ 'Identify the most recent news article related to naval developments'
+ 'Extract the publication date and the headline of this article, and provide them in the answer']","[""Successfully navigates to 'chinamil.com.cn'""
+ ""Identifies a news article specifically about China's naval developments""
+ 'Provides the correct, most recent publication date of the identified article'
+ 'Provides the correct headline of the identified article']"
+admission.asu.edu,"Use the ASU tuition calculator to estimate the annual cost for a first-year Arizona resident student, assuming they live on campus and are pursuing a degree in the College of Liberal Arts and Sciences.","['Navigate to admission.asu.edu' ""Click on 'Cost and Aid'""
+ ""Click on 'First-year Student from Arizona'""
+ ""Click on the 'ASU tuition calculator' link""
+ ""Select 'First-year' as the student type""
+ ""Select 'Arizona resident' as the residency status""
+ ""Select 'Live on campus' for housing""
+ ""Select 'College of Liberal Arts and Sciences' for the college/major (if applicable or a reasonable default)""
+ 'Identify the estimated annual cost presented by the calculator, and respond with that cost in the answer']","['Successfully navigates to and interacts with the ASU tuition calculator.'
+ 'Correctly inputs the specified criteria (first-year, Arizona resident, live on campus, College of Liberal Arts and Sciences).'
+ 'Extracts the final estimated annual cost displayed by the calculator.']"
+jasonhartman.com,"What is the purpose of the Hartman Comparison Index (HCI) White Paper, and where can I find it on the website?","[""Navigate to 'https://jasonhartman.com/'"" ""Click on the 'Resources' link""
+ ""Locate and click on the 'Hartman Comparison Index (HCI) White Paper' link under 'Reports and Articles'""
+ 'Summarize the purpose of the HCI White Paper based on the content of the document or its description on the page']","[""Successfully navigates to the 'Hartman Comparison Index (HCI) White Paper' document or its description page.""
+ 'Accurately describes the purpose or main content of the HCI White Paper, demonstrating understanding of its relevance to real estate investment.']"
+pv-magazine-usa.com,"Subscribe to the 'U.S. (English, daily)' newsletter on pv-magazine-usa.com using a dummy email address 'test@example.com'.","[""Navigate to 'pv-magazine-usa.com'""
+ 'Locate the newsletter subscription form on the homepage or an article page'
+ ""Enter 'test@example.com' into the email input field""
+ ""Select 'U.S. (English, daily)' from the edition options""
+ ""Click the 'submit' button to subscribe""]","[""Successfully inputs 'test@example.com' into the email field.""
+ ""Successfully selects 'U.S. (English, daily)' as the newsletter edition.""
+ ""Clicks the 'submit' button for the newsletter subscription form.""
+ 'Does not encounter any errors during the subscription process (e.g., invalid email format error).']"
+ojjdp.gov,Find the most recent statistical data available on juvenile arrests from the OJJDP website.,"[""Navigate to 'ojjdp.gov'"" ""Click on 'Research & Statistics' (id: 112)""
+ ""Click on 'Statistical Briefing Book' (id: 301)""
+ ""Search for 'juvenile arrests' within the Statistical Briefing Book publications or navigate to relevant sections like 'Arrest Data'""
+ 'Identify the most recent statistical data or report on juvenile arrests and state its title and publication date.']","[""Identifies a publication from the 'Statistical Briefing Book' section.""
+ 'The publication explicitly contains statistical data on juvenile arrests.'
+ 'The publication is the most recent available on the topic of juvenile arrests at the time of the search.'
+ 'States the title and publication date of the identified statistical data/report.']"
+alife.org,"How can I nominate someone for an ISAL award, and what information is required?","[""Navigate to 'alife.org'""
+ ""Locate and click on the '2025 Call for ISAL Awards Nominations' news item on the homepage.""
+ 'Find the link to the nomination form within the news item.'
+ 'Click on the nomination form link to access the form.'
+ ""Identify the required information for nomination on the form (e.g., nominee's name, award category, justification).""]","['Successfully navigates to the ISAL Awards nomination form.'
+ ""Identifies and states the required fields or information for submitting a nomination (e.g., nominee's name, email, award category, justification/citation).""]"
+bcra.gov.ar,Find the monthly inflation rate for January 2024 on bcra.gov.ar.,"[""Navigate to 'bcra.gov.ar'""
+ ""Click on the 'PRINCIPALES VARIABLES' section or 'Estadísticas' section if 'PRINCIPALES VARIABLES' is not directly clickable to find inflation data.""
+ ""Click on 'Inflación mensual' (monthly inflation).""
+ ""On the 'Fecha Form' (date form), input '01/01/2024' into the 'Desde' (From) date input and '31/01/2024' into the 'Hasta' (To) date input.""
+ ""Click the 'B1' (submit) button to retrieve the data.""
+ 'Locate the monthly inflation rate for January 2024 in the displayed results and state it.']","['Successfully navigates to the monthly inflation data page.'
+ ""Correctly inputs '01/01/2024' as the 'Desde' date and '31/01/2024' as the 'Hasta' date.""
+ 'Clicks the submit button to filter the data.'
+ 'Identifies and states the correct monthly inflation rate for January 2024 from the retrieved results.']"
+tsb.gc.ca,What are the latest safety recommendations issued by the Transportation Safety Board of Canada for the rail mode of transportation?,"[""Navigate to 'tsb.gc.ca'""
+ ""Click on the 'English' link to set the language.""
+ ""Click on the 'Rail' dropdown menu.""
+ ""Click on the 'Recommendations' link under the Rail dropdown.""
+ 'Identify and list the latest safety recommendations for rail transportation.']","[""Navigates to the 'Recommendations' section for rail transportation.""
+ 'Identifies and lists at least two distinct safety recommendations.'
+ 'Provides the recommendation numbers and a brief description of each latest recommendation.']"
+iwf.org.uk,"What was the total number of URLs and images reported to the IWF in 2023, according to their 2024 Annual Data & Insights Report?","[""Navigate to 'iwf.org.uk'"" 'Accept cookie consent if prompted'
+ ""Click on the 'READ 2024 REPORT' link for the 'IWF 2024 Annual Data & Insights Report'""
+ 'Locate the section in the report that details the number of URLs and images reported in 2023'
+ 'Extract the total numbers for both URLs and images reported in 2023 and provide them in the answer.']","['Successfully navigates to the IWF 2024 Annual Data & Insights Report.'
+ 'Identifies the specific data points for URLs and images reported in 2023.'
+ 'Provides the correct total number of URLs and images reported in 2023 from the report.']"
+chalons-tourisme.com,Find the contact information (phone number or email) for the Châlons-en-Champagne Tourism Office.,"[""Navigate to 'chalons-tourisme.com'""
+ ""Look for a 'Contact' or 'Information' link, typically found in the footer or header.""
+ ""If not immediately visible, explore common sections like 'About Us' or 'Practical Information'.""
+ 'Locate the official phone number or email address for the tourism office and provide it in the answer.']","['Provides a valid phone number for the Châlons-en-Champagne Tourism Office.'
+ 'Provides a valid email address for the Châlons-en-Champagne Tourism Office (if available and different from phone).']"
+feinsteininstitute.org,Identify the primary research focus of the Institute of Behavioral Science at the Feinstein Institutes for Medical Research.,"['Navigate to feinsteininstitute.org'
+ ""Click on the 'Institutes & researchers' link""
+ ""Locate and click on the 'Institute of Behavioral Science' link or section""
+ 'Identify and state the primary research focus of this institute.']","[""Successfully navigates to the 'Institutes & researchers' section.""
+ ""Successfully navigates to the specific page or section for the 'Institute of Behavioral Science'.""
+ 'Accurately identifies and states the primary research focus of the Institute of Behavioral Science as presented on the website.']"
+knowablemagazine.org,"Find an article on Knowable Magazine that discusses innovative solutions or technologies for sustainable agriculture, and identify one specific technology or approach mentioned.","[""Navigate to 'knowablemagazine.org'""
+ ""Use the search bar to look for articles related to 'sustainable agriculture solutions' or 'agricultural technology'""
+ 'Browse the search results to identify an article that focuses on innovative solutions or technologies'
+ 'Click on the most relevant article to open it'
+ 'Read the article to identify at least one specific technology or approach discussed, and state what it is.']","['Successfully navigates to knowablemagazine.org.'
+ 'Uses the search functionality to find relevant articles.'
+ 'Opens an article that directly addresses innovative solutions or technologies for sustainable agriculture.'
+ ""Identifies and names a specific technology, method, or approach mentioned in the article (e.g., 'precision farming', 'vertical farming', 'CRISPR in crops', 'drought-resistant crops', 'agroecology').""]"
+mountunion.edu,Find the average undergraduate tuition and fees for the University of Mount Union.,"[""Navigate to 'mountunion.edu'"" ""Click on the 'Admission & Aid' button""
+ ""Click on the 'Tuition and Aid' link""
+ 'Locate the average undergraduate tuition and fees on the page']","['Identifies the correct section for undergraduate tuition and fees'
+ 'Extracts the specific numerical value for the average undergraduate tuition and fees']"
+theoi.com,"Who were the parents of the Minotaur, and what was its original name according to theoi.com?","[""Navigate to 'theoi.com'""
+ 'Use the search bar to find information about the Minotaur'
+ ""Locate the page detailing the Minotaur's origins and parentage""
+ 'Identify its parents and original name (if mentioned), and respond with that information']","[""Identifies Pasiphae and the Cretan Bull as the Minotaur's parents""
+ ""States that the Minotaur's original name was Asterion (or Asterius)""
+ 'Information is explicitly found on theoi.com']"
+iss-casis.org,Find a list of research project portfolios on the ISS National Lab website.,"[""Navigate to 'iss-casis.org'""
+ ""Click on 'Research & Technology Development'""
+ ""Click on 'Research Opportunities & Results'""
+ ""Click on 'Research Project Portfolio'""
+ 'Confirm that a list or directory of research projects is displayed.']","[""Successfully navigates to the 'Research Project Portfolio' page.""
+ 'The page displays a list or directory of past or ongoing research projects.']"
+yodel.co.uk,"On yodel.co.uk, find out what a valid tracking number looks like or where to find one, and describe its characteristics.","[""Navigate to 'yodel.co.uk'""
+ ""Click on the 'Find your tracking number' link or navigate to the Help Centre to find information about tracking numbers""
+ 'Locate details regarding the format, length, or origin of a valid Yodel tracking number'
+ 'Summarize the characteristics of a valid tracking number in the answer']","['Identifies the typical format or length of a Yodel tracking number (e.g., number of digits, presence of letters)'
+ ""Mentions where a customer can typically find their tracking number (e.g., confirmation email, sender's website)""
+ 'Does not attempt to input random tracking numbers, but rather seeks information about them']"
+theicc.co.uk,"A user is planning a large conference for 1000 attendees and needs to know if the ICC Birmingham can accommodate this capacity, what types of spaces are available for such a large event, and how to get in touch with their events team to discuss booking.","[""Navigate to 'theicc.co.uk'""
+ ""Locate and click on the 'Our Spaces' link to find information about event venues and capacities.""
+ 'Identify spaces suitable for a large conference (e.g., 1000 attendees).'
+ ""Find the 'Contact Us' link or relevant contact information for event inquiries.""
+ 'Summarize the suitable spaces and provide the contact method for booking.']","['Identifies at least one space capable of holding 1000 attendees (or confirms if no single space can, then suggests multiple spaces if applicable).'
+ 'Describes the type of space identified (e.g., auditorium, hall).'
+ 'Provides clear instructions or direct contact details (e.g., email, phone number, or a specific contact form link) for discussing event bookings.']"
+coldwatersafety.org,"What are the five Golden Rules of Cold Water Safety, and where can I find information on recommended Cold Water Gear?","[""Navigate to 'coldwatersafety.org'""
+ ""Click on the 'Golden Rules' button to find the five rules""
+ 'Identify and list the five Golden Rules'
+ 'Navigate back to the main navigation or homepage'
+ ""Click on the 'Cold Water Gear' button""
+ 'Confirm the presence of information regarding recommended cold water gear']","['Accurately lists all five Golden Rules of Cold Water Safety.'
+ ""Successfully navigates to the 'Cold Water Gear' section.""
+ ""Confirms that the 'Cold Water Gear' section contains information about recommended gear.""]"
+emergency.unhcr.org,"What is the primary policy document guiding UNHCR's use of Cash-Based Interventions (CBIs) in emergencies, and what is its validity period?","[""Navigate to 'emergency.unhcr.org'"" ""Click on 'Emergency Assistance'""
+ ""Click on 'Cash Based Interventions (CBIs)'""
+ ""Click on 'Policies and guidelines' or 'Overview' to find the relevant policy document""
+ 'Identify the name and validity period of the primary CBI policy document']","[""Identifies 'UNHCR Policy on CBI 2022-2026' as the primary policy document""
+ ""States the validity period of the policy as '2022-2026'""]"
+teslamotors.com,"Configure a Tesla Model 3 Long Range with the Pearl White Multi-Coat paint, 19-inch Nova Wheels, and Black and White Interior, and state its estimated price.","[""Navigate to 'teslamotors.com'""
+ ""Select the 'Model 3' from the main navigation or product listings""
+ ""Click on 'Design & Order' or 'Customize' to enter the configurator""
+ ""Select the 'Long Range' trim""
+ ""Choose 'Pearl White Multi-Coat' for the paint color""
+ ""Select '19'' Nova Wheels'"" ""Choose 'Black and White' for the interior""
+ 'Identify the estimated price displayed on the configuration page and respond with it.']","['Successfully navigates to the Model 3 configuration page.'
+ ""Selects the 'Long Range' trim.""
+ ""Selects 'Pearl White Multi-Coat' paint."" ""Selects '19'' Nova Wheels'.""
+ ""Selects 'Black and White' interior.""
+ 'Provides the correct estimated price for the configured vehicle, including all selected options.']"
+rome-airport.info,Find the link to the map of Rome Fiumicino Airport (FCO).,"[""Navigate to 'rome-airport.info'"" ""Click on the 'OTHER INFO' link""
+ 'Click on the link associated with the map icon (https://www.rome-airport.info/wp-content/uploads/2019/09/map.svg)']","['Successfully navigates to the page displaying the airport map'
+ ""The URL of the final page contains 'map.svg'""]"
+archive.thulb.uni-jena.de,"Find information about the 'Theaterzettelportal' project, specifically what it aims to achieve and what kind of documents it digitizes.","[""Navigate to 'archive.thulb.uni-jena.de'""
+ ""Locate the 'Theaterzettelportal' section on the homepage""
+ ""Click on the 'Mehr' (More) link associated with the 'Theaterzettelportal' to get detailed information""
+ 'Extract the aim of the project and the type of documents it digitizes, and summarize this information in the answer']","['States that the project aims to digitize, scientifically process, and present online the playbills of the Weimar Theater.'
+ 'Mentions that it focuses on playbills (Theaterzettel) as significant documents of German stages.']"
+roh.org.uk,Navigate to the Royal Opera House website (roh.org.uk) and identify the main sections or categories available on the homepage.,"[""Navigate directly to the Royal Opera House homepage at 'https://www.roh.org.uk/'""
+ ""Once on the homepage, identify and list the main navigation links or sections (e.g., 'What's On', 'Opera', 'Ballet', 'Visit Us', 'Support Us', 'Learning & Participation').""]","[""Successfully navigates to 'https://www.roh.org.uk/'""
+ ""Lists at least 3-5 major navigation categories or sections visible on the homepage (e.g., 'What's On', 'Opera', 'Ballet', 'Visit Us', 'Support Us', 'Learning & Participation', 'About Us').""
+ 'Does not encounter any JSON parsing errors related to the URL.']"
+lipidlibrary.aocs.org,"Find information about 'lipid oxidation' on the AOCS website (aocs.org), specifically looking for an overview or definition if available within their publications or resources.","[""Navigate to 'https://www.aocs.org'""
+ ""Look for a 'Publications & Resources' or similar menu item.""
+ ""Search or browse within the AOCS website for content related to 'lipid oxidation' or 'lipid peroxidation'.""
+ 'Identify and summarize any overview or definition found on the AOCS website.']","['Successfully navigates to the main AOCS website (aocs.org).'
+ 'Locates a section related to publications, resources, or technical information.'
+ ""Finds and cites a definition or explanation of 'lipid oxidation' or 'lipid peroxidation' from content directly hosted on aocs.org.""
+ 'If no direct definition is found, the agent should state that the information is not readily available on the AOCS website.']"
+stclaircollege.ca,Find the phone number for the Admissions office at St. Clair College.,"[""Navigate to 'stclaircollege.ca'""
+ ""Click on the 'Admissions' link in the main navigation.""
+ 'Locate the phone number for the Admissions office on the Admissions page or a linked contact page.'
+ 'Respond with the phone number.']","['Provides a specific phone number for the Admissions office.'
+ 'The phone number is found on an official St. Clair College webpage related to Admissions or general contact information for Admissions.']"
+supremecourt.nt.gov.au,Find the contact information for the Supreme Court Library.,"['Navigate to supremecourt.nt.gov.au'
+ ""Click on the 'Contact' link in the main menu.""
+ ""On the 'Contact us' page, locate and click the 'Library' link under the list of specific contacts.""
+ 'Extract the contact details for the Supreme Court Library.']","['Provides the correct contact details (e.g., phone number, email, or physical location if listed) specifically for the Supreme Court Library, not the general court contact.'
+ 'The agent successfully navigates to the specific Library contact information page or section within the website.']"
+purewow.com,Find the full recipe for 'Cheater's Mini Rhubarb Galettes' on PureWow and identify the ingredients required.,"[""Navigate to 'purewow.com'""
+ ""Locate and click on the article '68 Spring Desserts to Celebrate the New Season'""
+ ""Scroll down or navigate within the article to find the 'Cheater's Mini Rhubarb Galettes' section""
+ ""Click on the link or element that leads to the full recipe for 'Cheater's Mini Rhubarb Galettes'""
+ 'Identify and list at least three key ingredients from the recipe']","[""Successfully navigates to the full recipe page for 'Cheater's Mini Rhubarb Galettes'""
+ ""Lists at least three correct ingredients from the 'Cheater's Mini Rhubarb Galettes' recipe""]"
+fallout.wikia.com,What are the minimum system requirements for Fallout 4 on PC?,"['Navigate to the Fallout 4 page on Fallout Wiki Fandom.'
+ ""Locate the 'System requirements' section.""
+ ""Click on the 'show' button for 'Minimum requirements'.""
+ 'Extract and provide the minimum system requirements for PC.']","['Successfully navigates to the Fallout 4 page.'
+ ""Identifies and clicks the 'show' button specifically for 'Minimum requirements'.""
+ 'Lists the correct minimum system requirements for Fallout 4 on PC as displayed on the page.']"
+izod.com,"What are the available colors for the 'Advantage Performance Polo' on IZOD.com, and what is its original price?","[""Navigate to 'izod.com'""
+ ""Click on the 'MEN' link to access the men's collection.""
+ ""Locate and click on the 'Advantage Performance Polo' product listing.""
+ 'Identify and list all available colors for the polo.'
+ 'Identify the original price of the polo before any discounts.']","[""Lists all available colors for the 'Advantage Performance Polo' (e.g., Black, Blue Radiance, etc.).""
+ ""States the original price of the 'Advantage Performance Polo' as $50.""]"
+nissan.at,What is the combined fuel consumption (in L/100km) for the Nissan Qashqai e-POWER on the official Nissan Austria website?,"[""Navigate to 'https://www.nissan.at/'""
+ 'Locate the Nissan Qashqai model on the website'
+ ""Navigate to the Qashqai's detailed product page or specifications section""
+ 'Find the fuel consumption data for the e-POWER variant, specifically the combined L/100km value'
+ 'State the combined fuel consumption in L/100km in the answer']","['Successfully navigates to the official Nissan Austria website (nissan.at)'
+ 'Identifies and navigates to the Nissan Qashqai model page'
+ 'Locates the specifications for the Qashqai e-POWER variant'
+ 'Extracts the combined fuel consumption value in L/100km'
+ ""The answer provides the correct numerical value for the combined fuel consumption (e.g., '5.3 L/100km' or similar, depending on the exact specification listed on the site)""]"
+help.fareharbor.com,"What is the main phone number for FareHarbor support, and where is their headquarters located?","['Navigate to help.fareharbor.com'
+ 'Locate the contact phone number on the page'
+ 'Locate the headquarters address on the page'
+ 'Respond with both the phone number and the address']","[""States the phone number as '(855) 495-5551'""
+ ""States the headquarters address as 'Vijzelstraat 66-80, 1017 HL Amsterdam, Netherlands'""]"
+stratfordschools.com,Identify the core subjects taught in the elementary school program at Stratford School.,"[""Navigate to 'stratfordschools.com'""
+ ""Click on 'Our Programs' in the navigation bar""
+ ""Click on 'Elementary' to view the elementary school program details""
+ 'Locate and list the core subjects mentioned in the curriculum description']","[""Lists 'math', 'vocabulary', 'grammar', 'reading', and 'writing' as core subjects""
+ 'Confirms these subjects are taught daily and build sequentially']"
+helionenergy.com,"What is the name of Helion Energy's current fusion generator, and what is its primary purpose?","[""Navigate to 'helionenergy.com'""
+ 'Accept or decline the cookie policy to clear any overlays'
+ ""Click on the 'Technology' link in the navigation menu""
+ 'Locate the name of the current fusion generator and its primary purpose on the technology page'
+ 'Respond with the name and purpose of the generator']","[""Successfully navigates to the 'Technology' page.""
+ ""Identifies 'Polaris' as the name of the current fusion generator.""
+ 'States that Polaris is designed to demonstrate net electricity from fusion.']"
+turistforeningen.no,Find the contact information (email or phone number) for the Stavanger branch of the Norwegian Trekking Association (DNT) on turistforeningen.no.,"[""Navigate to 'turistforeningen.no'""
+ 'Locate the section for local branches or contact information'
+ 'Find the Stavanger branch (Stavanger Turistforening)'
+ 'Extract the email address or phone number for the Stavanger branch']","[""Successfully navigates to 'turistforeningen.no'""
+ 'Identifies the correct section for contact information or local branches'
+ 'Locates the contact details specifically for the Stavanger branch (Stavanger Turistforening)'
+ 'Provides either a valid email address or phone number for the Stavanger branch']"
+masterslider.com,Summarize the main features of the Master Slider plugin based on its official WordPress.org plugin page.,"[""Navigate to the WordPress.org search results page for 'master-slider-responsive-touch-slider'""
+ ""Click on the 'Master Slider – Responsive Touch Slider' link to go to its dedicated plugin page""
+ ""Locate and read the 'Description' or 'Features' section on the plugin page""
+ 'Summarize the key functionalities and benefits mentioned']","[""The agent navigates to the specific plugin page for 'Master Slider – Responsive Touch Slider' (https://wordpress.org/plugins/master-slider-responsive-touch-slider/)""
+ 'The response lists at least three distinct features or benefits of the plugin (e.g., SEO friendly, responsive touch swipe, easy to build sliders, works across all devices).']"
+caesarstone.ca,Find the description for the 5141 Frosty Carrina quartz countertop surface on caesarstone.ca.,"[""Navigate to 'https://www.caesarstone.ca/'""
+ ""Accept the 'Accept All Cookies' prompt if visible""
+ ""Locate and click on the 'Explore' link or image associated with '5141 Frosty Carrina'""
+ ""If direct access fails, look for a general 'Quartz' or 'Surfaces' navigation link and then search for 'Frosty Carrina' or '5141'""
+ 'Once on the 5141 Frosty Carrina product page, locate and extract the product description.']","[""Successfully navigates to the dedicated product page for '5141 Frosty Carrina'""
+ ""Extracts and provides the full product description for '5141 Frosty Carrina'""
+ ""Demonstrates ability to interact with primary navigation elements (e.g., 'Explore' links or main menu categories)""
+ 'Overcomes any initial cookie consent banners or loading issues to access site content']"
+theonering.net,Find out if there are any upcoming fan events or conventions related to The Lord of the Rings listed on TheOneRing.net.,"[""Navigate to 'theonering.net'""
+ ""Look for a 'Community' or 'Events' section in the main navigation.""
+ ""If no direct 'Events' section, explore the 'Community' section for event listings or forums discussing events.""
+ 'Identify if any upcoming fan events or conventions are mentioned.']","['Successfully navigates to a page listing fan events or conventions.'
+ 'Identifies at least one upcoming event or explicitly states if no events are listed.'
+ 'The information found is related to fan events/conventions, not just general news.']"
+icpa4kids.org,What is the total cost for a chiropractor to complete the Webster Certification if they are not an ICPA member?,"[""Navigate to 'icpa4kids.org'""
+ ""Click on the 'Training' link in the main navigation.""
+ ""Click on the 'Webster Certification' link under the 'Training' section.""
+ ""Locate the 'Seminar/Certification Pricing' link or section.""
+ 'Find the total cost for non-members to complete the Webster Certification and provide it in the answer.']","['Identifies the correct section for Webster Certification pricing.'
+ 'States the total cost for non-members.'
+ 'The answer must be a specific numerical value representing the cost.']"
+bildung-noe.gv.at,"When are the next school holidays for Lower Austria, according to the Bildungsdirektion Niederösterreich website?","[""Navigate to 'bildung-noe.gv.at'""
+ ""Locate and click on the 'Ferientermine' link, likely found under 'Häufig besucht' or a similar service section.""
+ 'Identify the dates for the upcoming school holidays.'
+ 'Respond with the dates of the next school holidays.']","[""Successfully navigates to the 'Ferientermine' page.""
+ 'Extracts the correct dates for the next school holidays for Lower Austria as listed on the website.']"
+tirerack.com,Find the cheapest set of all-season tires for a 2020 Honda CR-V and state their brand and price.,"[""Navigate to 'tirerack.com'"" ""Select 'Honda' as the vehicle make""
+ ""Select '2020' as the vehicle year"" ""Select 'CR-V' as the vehicle model""
+ ""Click the 'Tires' button to view tire results""
+ ""Apply a filter for 'All-Season' tires""
+ 'Sort the results by price (low to high)'
+ 'Identify the brand and price of the cheapest set of all-season tires']","['Successfully navigates through the vehicle selection process (Make, Year, Model)'
+ ""Applies the 'All-Season' tire filter""
+ 'Sorts the tire results by price from lowest to highest'
+ 'Accurately identifies and states the brand and price of the cheapest all-season tires for a 2020 Honda CR-V']"
+projectsafechildhood.gov,Find the main purpose of the 'Internet Crimes Against Children Task Force' by navigating to its website from Project Safe Childhood.,"[""Navigate to 'projectsafechildhood.gov'""
+ ""Click on the 'Publications & Resources' link""
+ ""Scroll down to the 'Websites' section""
+ ""Click on the 'Internet Crimes Against Children Task Force' link""
+ 'Identify the main purpose or mission statement of the ICAC Task Force on their website, and respond with that information.']","['Successfully navigates to the Internet Crimes Against Children Task Force website from the Project Safe Childhood website.'
+ 'Identifies and states the primary mission or purpose of the ICAC Task Force, such as investigating technology-facilitated child sexual exploitation crimes and providing training and technical assistance to law enforcement.']"
+chicagohouse.org,What are the four mission-critical pillars of service provided by Chicago House?,"['Navigate to chicagohouse.org'
+ ""Locate the 'Our Foundation' section on the homepage or About Us page""
+ 'Identify the four mission-critical pillars of service'
+ 'List these four pillars in the answer']","[""Identifies 'housing' as a pillar"" ""Identifies 'health' as a pillar""
+ ""Identifies 'employment' as a pillar""
+ ""Identifies 'TransLife Care' as a pillar""
+ 'The answer accurately lists all four pillars as stated on the website']"
+circos.ca,Find and display the online version of the Circos tutorials.,"[""Navigate to 'circos.ca'""
+ 'Locate the section on the website that discusses Circos distribution and tutorials'
+ 'Identify and click the link that directs to the online version of the tutorials']","['The agent successfully navigates to a webpage displaying the online Circos tutorials'
+ 'The displayed page contains content related to Circos tutorials and examples, and is not a download prompt']"
+1st4sport.com,Find the description for the '1st4sport Level 2 Award in Understanding an Athlete's Lifestyle' and identify its associated partner organization.,"['Navigate to the qualifications search results page on 1st4sport.com.'
+ ""Locate the '1st4sport Level 2 Award in Understanding an Athlete's Lifestyle' in the search results.""
+ ""Click on the 'Show details' button or the qualification title to expand its information.""
+ 'Extract the full description of the qualification and the name of its associated partner organization.']","[""Identifies the correct qualification: '1st4sport Level 2 Award in Understanding an Athlete's Lifestyle'.""
+ 'Successfully expands the details for this qualification.'
+ ""States that the qualification 'Provides the knowledge, confidence and skills to support talented athletes’ lifestyles'.""
+ ""Correctly identifies 'Talented Athlete Scholarship Scheme' as the associated partner.""]"
+linux-magazine.com,Find the article about TuxCare's AlmaLinux 9 announcement and state what it successfully completed.,"['Navigate to linux-magazine.com'
+ ""Use the search bar to search for 'TuxCare AlmaLinux 9'""
+ ""Click on the article 'TuxCare Has a Big AlmaLinux 9 Announcement in Store'""
+ 'Locate the information about what TuxCare successfully completed and provide it in the answer']","[""Successfully navigates to the 'TuxCare Has a Big AlmaLinux 9 Announcement in Store' article.""
+ ""Identifies that TuxCare successfully completed a 'Security Technical Implementation Guide for AlmaLinux OS 9'.""
+ ""The answer accurately states 'Security Technical Implementation Guide for AlmaLinux OS 9'.""]"
+discovernursing.com,"Find information about how to apply to nursing school on discovernursing.com, and list the key steps involved in the application process.","[""Navigate to 'discovernursing.com'""
+ ""Click on the 'Nursing School Resources' link""
+ ""Click on the 'How to Apply to Nursing School' link""
+ 'Identify and list the key steps involved in the nursing school application process from the content on the page.']","[""Navigates to the 'How to Apply to Nursing School' page.""
+ 'Accurately summarizes at least three distinct key steps or advice points for applying to nursing school as presented on the page.']"
+ched.gov.ph,What is the full address and email of the CHED Regional Office for MIMAROPA?,"[""Navigate to 'https://ched.gov.ph/regional-offices'""
+ 'Locate the entry for CHEDRO MIMAROPA on the page'
+ 'Extract the full address and email associated with CHEDRO MIMAROPA']","[""Identifies 'Ms. Edna Imelda F. Legazpi' as the Director IV for CHEDRO MIMAROPA""
+ ""Provides the correct address: 'Higher Education Development Center Bldg. C.P. Garcia Avenue, UP Campus, Diliman, Quezon City'""
+ ""Provides the correct email: 'chedro4b@ched.gov.ph'""]"
+sd70.bc.ca,Find the current school calendar on the School District 70 (SD70) website and identify the date of the next professional development day.,"[""Navigate directly to 'https://www.sd70.bc.ca'""
+ ""Locate the 'Calendar' or 'School Calendar' section on the website, typically found in the main navigation or a quick links section.""
+ ""Open the current school year's calendar.""
+ 'Identify and extract the date of the next professional development day listed on the calendar.']","[""Successfully navigates to 'https://www.sd70.bc.ca'.""
+ 'Locates and opens the current school calendar.'
+ 'Accurately identifies and states the date of the next professional development day from the calendar.']"
+blog.mycorporation.com,Find an article on the MyCorporation blog that compares the tax implications and benefits of S-Corporations versus C-Corporations.,"[""Navigate to 'blog.mycorporation.com'""
+ ""Click on the 'Starting a Business' dropdown menu""
+ ""Click on the 'Business Entities' link within the 'Starting a Business' dropdown""
+ ""Locate and click on the article titled 'S Corp vs. C Corp: Taxation, Benefits, and Decision-Making Guide'""
+ 'Confirm the article discusses the tax implications and benefits of both S-Corporations and C-Corporations.']","[""The agent successfully navigates to the 'S Corp vs. C Corp: Taxation, Benefits, and Decision-Making Guide' article.""
+ ""The article's content is confirmed to discuss the tax implications of both S-Corporations and C-Corporations.""
+ ""The article's content is confirmed to discuss the benefits of both S-Corporations and C-Corporations.""]"
+cafirefoundation.org,What is the primary objective of the California Fire Foundation's Disaster Relief Programs?,"[""Navigate to 'cafirefoundation.org'""
+ ""Locate and click on the 'What We Do' menu dropdown""
+ ""Click on the 'Disaster Relief Programs' link within the 'What We Do' section or on the homepage if visible""
+ 'Read the description of the Disaster Relief Programs to identify its primary objective, and respond with that objective in the answer']","['Identifies that the program provides immediate financial assistance and resources to firefighters and communities impacted by disasters.'
+ 'Mentions that it helps survivors and firefighters.']"
+nirsa.net,"Find information about the NIRSA Annual Conference, including its typical timing and how to register.","[""Navigate to 'nirsa.net'""
+ ""Explore the main navigation menus (e.g., 'Discover', 'Connect', 'Grow') for a section related to major conferences or events.""
+ 'Locate the page dedicated to the NIRSA Annual Conference.'
+ 'Identify information regarding the typical timing (e.g., month, season) of the conference.'
+ 'Find details or links on how to register for the conference.']","['Successfully navigates to the NIRSA Annual Conference page.'
+ ""Identifies the typical time of year the Annual Conference is held (e.g., 'spring', 'February', 'March').""
+ 'Locates a clear path or link to registration information for the Annual Conference.']"
+yahoo.es,Accept the cookie consent on Yahoo.es to access the main page.,"[""Identify the 'Aceptar todo' (Accept all) button on the cookie consent banner.""
+ ""Click the 'Aceptar todo' button to dismiss the banner and proceed to the main Yahoo page.""]","['The cookie consent banner is no longer displayed.'
+ 'The agent has successfully navigated to the main Yahoo.es homepage or a subsequent page, indicating successful consent acceptance.']"
+virtualmentor.ama-assn.org,"Find a podcast on the AMA Journal of Ethics website that discusses private equity investment in healthcare, and identify the month and year it was published.","['Navigate to virtualmentor.ama-assn.org (which redirects to the AMA Journal of Ethics multimedia page).'
+ 'Locate the section for podcasts.'
+ ""Identify a podcast related to 'private equity investment in healthcare'.""
+ 'Extract the publication month and year of the identified podcast.']","['Successfully navigates to the multimedia/podcast section of the AMA Journal of Ethics website.'
+ ""Identifies a podcast titled 'Author Interview: “Can Current Legal Tools Respond Adequately to Risks of Private Equity Investment in Health Care?”' or 'Author Interview: “When Does Private Equity Ownership of Physician Practices Violate ‘First, Do No Harm’?”'.""
+ ""Cites the publication date as 'May 2025' for the identified podcast.""]"
+txcatholic.org,What resources does the Texas Catholic Conference offer to parents with children in public schools regarding human sexuality instruction?,"[""Navigate to 'txcatholic.org'""
+ ""Locate and click on the 'More information' link related to 'Parental engagement in public schools'""
+ 'Identify and summarize the resources or guidance provided on the resulting page concerning human sexuality instruction.']","['Successfully navigates to the specific page detailing resources for parental engagement in public schools.'
+ 'Identifies and describes the type of resources offered (e.g., guides, articles, policies) related to human sexuality instruction.'
+ 'The answer accurately reflects the content found on the page regarding this specific topic.']"
+isuzuute.com.au,"What is the maximum braked towing capacity for the Isuzu D-MAX 4x4 X-Terrain Crew Cab Ute, and where can I find its full specifications document?","[""Navigate to 'isuzuute.com.au'""
+ ""Click on the 'D-MAX' link to go to the D-MAX model page""
+ ""Click on the 'Towing' link to find information about towing capacity""
+ 'Locate the maximum braked towing capacity for the 4x4 X-Terrain Crew Cab Ute'
+ 'Identify the link or section for downloading the full specifications document for the D-MAX range']","[""States the correct maximum braked towing capacity for the Isuzu D-MAX 4x4 X-Terrain Crew Cab Ute (e.g., '3,500 kg')""
+ ""Identifies the specific link or section on the website where the full specifications document (e.g., 'Download Specs' or 'Brochure') can be found for the D-MAX.""]"
+ligatus.org.uk,"What is the primary purpose of the 'Language of Bindings' project, and what standard is its thesaurus based on?","[""Navigate to 'ligatus.org.uk'""
+ ""Locate and click on the 'Language of Bindings' project link.""
+ 'Identify the primary purpose of the project and the standard its thesaurus is based on.'
+ 'Respond with this information.']","[""States that the primary purpose is to be a 'reference tool for the terminology of pre-industrial bookbinding'.""
+ ""Mentions that the thesaurus is based on 'SKOS'.""]"
+kelkoo.co.uk,"What is the cheapest price for the 'Samsung Galaxy Watch' on Kelkoo.co.uk, and from which retailer is it available?","[""Navigate to 'kelkoo.co.uk'""
+ ""Attempt to search for 'Samsung Galaxy Watch' using the search bar.""
+ ""If the search bar fails, navigate directly to the product page for 'Samsung Galaxy Watch' using a known URL structure (e.g., 'https://www.kelkoo.co.uk/product/samsung-galaxy-watch').""
+ 'Locate the cheapest price listed on the product page.'
+ 'Identify the retailer offering this cheapest price.'
+ ""Respond with both the cheapest price and the retailer's name.""]","['Successfully navigates to the Samsung Galaxy Watch product page.'
+ 'Identifies the cheapest price displayed on the page.'
+ 'Identifies the retailer associated with the cheapest price.'
+ 'The answer explicitly states both the price and the retailer, verifying the information from the webpage content.']"
+geelvinck.nl,Find out if there are any upcoming concerts listed on the Museum Geelvinck website and identify the date and title of the earliest listed concert.,"[""Navigate to 'geelvinck.nl'"" ""Click on the 'Agenda' link""
+ 'Locate the earliest upcoming concert listed on the agenda page'
+ 'Extract the date and title of this concert and provide them in the answer']","[""Successfully navigates to the 'Agenda' page.""
+ 'Identifies the earliest upcoming concert listed on the page.'
+ 'Provides both the date and the title of the earliest upcoming concert.']"
+permakultur.de,"Find the duration and a brief description of the 'Tausend Seen, Tausend Ideen – durch wilde Natur zur Permakultur!' course.","[""Navigate to 'permakultur.de'"" 'Scroll down to view the listed courses.'
+ ""Click on the link for 'Tausend Seen, Tausend Ideen – durch wilde Natur zur Permakultur!'""
+ 'Locate the duration and a brief description of the course on the new page, and respond with this information.']","[""Successfully navigates to the detailed page for 'Tausend Seen, Tausend Ideen – durch wilde Natur zur Permakultur!'""
+ 'Identifies the duration of the course (e.g., number of days or hours).'
+ ""Provides a concise summary of the course's content or focus, as described on its dedicated page.""]"
+hsls.pitt.edu,"What kind of training does the HSLS liaison for NAPC provide, and where can I find more information about HSLS training opportunities?","[""Navigate to the University of Pittsburgh's 'Find People' directory (as this was the entry point to identifying the HSLS liaison).""
+ ""Search for 'HSLS' to locate the HSLS liaison for NAPC Training.""
+ ""Based on the liaison's title, infer that 'NAPC' likely refers to a specific training program or area.""
+ 'Navigate to the main HSLS website (hsls.pitt.edu) to find information on training or workshops.'
+ ""Search or browse the HSLS website for 'training', 'workshops', or 'NAPC' to understand the scope of training offered and specific details about NAPC training.""
+ 'Summarize the type of training provided by the HSLS liaison for NAPC and general information on HSLS training opportunities.']","[""Identifies the primary focus or type of training related to 'NAPC' (if explicitly stated on the site).""
+ 'Locates a section or page on the HSLS website dedicated to training or workshops.'
+ 'Provides a general overview of the types of training opportunities available through HSLS (e.g., specific software, research skills, database use).'
+ ""Does not simply reiterate the liaison's contact information, but rather describes the *content* of the training.""]"
+laundromatproject.org,Find the email address for general inquiries or contact at The Laundromat Project.,"[""Navigate to 'laundromatproject.org'""
+ ""Look for a 'Contact Us' or 'About' section in the primary navigation or footer.""
+ ""If no direct contact page, explore sections like 'Support Our Work' or the footer for contact details.""
+ 'Identify and extract the general inquiry email address.']","['Successfully navigates to a contact or about page.'
+ 'Locates and provides a valid email address for general inquiries.'
+ 'Does not provide a physical address or phone number if an email is available and requested.']"
+help.anchor.fm,What are the recommended audio file formats and specifications for uploading a podcast episode to Spotify for Podcasters (formerly Anchor FM)?,"['Navigate to help.anchor.fm (which will likely redirect to Spotify for Podcasters help).'
+ ""Search for 'audio file formats' or 'uploading specifications'.""
+ 'Locate the article or section detailing recommended audio formats and specifications (e.g., MP3, bitrate, sample rate).'
+ 'Extract and state the recommended audio file format and any specific technical specifications mentioned.']","['Identifies MP3 as the recommended audio file format.'
+ 'Mentions a recommended bitrate (e.g., 128 kbps or higher for mono, 256 kbps or higher for stereo).'
+ 'States a recommended sample rate (e.g., 44.1 kHz).']"
+wiki.libreelec.tv,"How can a user update their LibreELEC installation, and what are the two main update channels mentioned on the wiki?","[""Navigate to 'wiki.libreelec.tv'""
+ ""Click on the 'Updating' link under the 'Support' section.""
+ 'Identify the two main update channels for LibreELEC.'
+ 'Summarize the methods for updating LibreELEC and state the two update channels.']","[""Mentions the two main update channels: 'Stable' and 'Beta/Nightly'.""
+ ""Describes the general process of updating LibreELEC as found on the 'Updating' page (e.g., via GUI or manually).""]"
+texasrealfood.com,"Check if texasrealfood.com is back online. If it is, find information about Texas farmers' markets.","[""Navigate to 'texasrealfood.com'""
+ 'Verify if the website is accessible (no 521 error)'
+ ""If accessible, search for 'farmers' markets' or navigate to a relevant section""
+ ""Extract information about Texas farmers' markets if found""]","[""Successfully identifies if 'texasrealfood.com' is accessible or still down.""
+ ""If accessible, navigates to a section or search result related to Texas farmers' markets.""
+ ""If information about farmers' markets is found, the agent should indicate its presence and potentially summarize it.""]"
+savills.es,Find the total number of apartments for sale in Madrid on Savills España.,"[""Navigate to 'savills.es'"" 'Accept the cookie preferences if prompted'
+ ""Click on 'Encuentra tu inmueble' (Find your property)""
+ ""Select 'Madrid' as the location for the search""
+ ""Select 'Apartamentos' (Apartments) as the property type""
+ 'Perform the search to display the listings'
+ 'Identify the total number of apartments listed for sale in Madrid, and respond with that number']","['Successfully navigates to the property search results page for apartments in Madrid.'
+ 'Identifies and states the total number of apartments listed on the page (or across multiple pages if pagination is present and the total is displayed).']"
+muamalat.com.my,Find the address of the Bank Muamalat branch in Kuala Lumpur on muamalat.com.my.,"[""Navigate directly to 'muamalat.com.my'""
+ ""Locate the 'Branch Locator' or 'Contact Us' section on the website""
+ ""Search or filter for branches in 'Kuala Lumpur'""
+ 'Extract and provide the full address of at least one Bank Muamalat branch in Kuala Lumpur']","[""Successfully navigates to 'muamalat.com.my'""
+ 'Identifies and navigates to the section for branch locations'
+ 'Locates an address for a Bank Muamalat branch in Kuala Lumpur'
+ 'The provided address is accurate and complete, including street, city, and postal code.']"
+theroyalgazette.com,Find the most recent article on The Royal Gazette website that discusses economic development in Bermuda.,"[""Navigate to 'royalgazette.com'""
+ ""Use the search bar to search for 'economic development Bermuda'""
+ 'Review the search results to identify the most recent article related to economic development in Bermuda'
+ 'Click on the most recent article to open it'
+ ""Confirm the article's publication date and that its content is about economic development in Bermuda""]","[""The agent successfully navigates to 'royalgazette.com'""
+ 'The agent uses the search functionality to look for relevant articles.'
+ ""The agent identifies and opens the article with the most recent publication date among the search results that is relevant to 'economic development in Bermuda'.""
+ 'The answer provided includes the title and publication date of the identified article.']"
+fatsecret.com,"Find the nutritional information for a medium-sized banana on FatSecret. Specifically, what are its calories, total carbohydrates, protein, and total fat?","['Navigate to fatsecret.com' ""Search for 'banana' in the search bar""
+ ""Click on the search result for 'Banana (Medium)' or a similar entry representing a standard banana""
+ ""Locate the nutritional information table on the banana's dedicated page""
+ 'Extract the values for calories, total carbohydrates, protein, and total fat']","['Successfully navigates to the detailed nutritional page for a banana.'
+ 'Accurately identifies and extracts the calorie count for a medium banana.'
+ 'Accurately identifies and extracts the total carbohydrate content for a medium banana.'
+ 'Accurately identifies and extracts the protein content for a medium banana.'
+ 'Accurately identifies and extracts the total fat content for a medium banana.']"
+districtcourt.nsw.gov.au,Find the contact information for media inquiries at the District Court of New South Wales.,"[""Navigate to the 'Contact us' page on districtcourt.nsw.gov.au.""
+ ""Locate and click on the 'Information for Media' link.""
+ 'Extract the relevant contact details for media inquiries.']","[""Successfully navigates to the 'Information for Media' page.""
+ 'Identifies and provides the specific contact details (e.g., phone number, email address, or specific media liaison) listed for media inquiries.'
+ ""The provided contact information is accurate and directly from the 'Information for Media' section.""]"
+socialdance.stanford.edu,How can I subscribe to the Stanford Dance Division's email distribution list to receive updates on dance events?,"[""Navigate to 'socialdance.stanford.edu'""
+ ""Locate the instructions for subscribing to the 'Stanford Dance Division's e-mail distribution list'""
+ 'Identify the email address to which a subscription request should be sent'
+ 'Formulate an answer that includes the specific email address for subscription']","[""Identifies 'dance-news-join@lists.stanford.edu' as the subscription email address""
+ 'Mentions that the subject and body of the message will be ignored']"
+futurestudents.mst.edu,What types of financial aid are available for future students at Missouri University of Science and Technology?,"[""Navigate to 'futurestudents.mst.edu'""
+ ""Click on the 'Financial Aid' link in the main navigation menu""
+ 'Identify and list the different categories or types of financial aid mentioned on the page']","['Lists at least three distinct types or categories of financial aid (e.g., scholarships, grants, loans, work-study)'
+ 'The listed financial aid types are explicitly stated on the Missouri S&T Financial Aid page for future students']"
+labs.loc.gov,"Find a digitized photograph related to the American Civil War from the Library of Congress Digital Collections, and identify its original format.","['Navigate to the Library of Congress Digital Collections homepage.'
+ ""Use the global search bar to search for 'American Civil War photograph'.""
+ ""Filter the search results by 'Photos, Prints, Drawings' under the 'Original Format' section.""
+ 'Click on one of the search results to open the item details.'
+ 'Locate and identify the original format of the selected photograph.']","['The agent successfully navigates to a specific digitized photograph.'
+ 'The selected photograph is demonstrably related to the American Civil War.'
+ ""The agent correctly identifies the original format (e.g., 'photograph', 'print', 'daguerreotype') of the chosen item.""]"
+thepenngazette.com,"How many articles related to 'Archaeology' are available on The Pennsylvania Gazette website, and what is the title of the most recent one?","[""Navigate to any article page on thepenngazette.com to access the 'Popular' categories list.""
+ ""Locate the 'Archaeology' category and identify the number of articles associated with it.""
+ ""Click on the 'Archaeology' category link to view all articles in that category.""
+ 'Identify the most recent article by its publication date.'
+ 'State the total number of articles and the title of the most recent one.']","[""States the correct number of articles for the 'Archaeology' category as '70 items'.""
+ ""Identifies the title of the most recent article within the 'Archaeology' category.""]"
+borderstates.com,Bypass the CAPTCHA on borderstates.com to gain access to the main website content.,"[""Navigate to 'borderstates.com'""
+ 'Identify the CAPTCHA challenge on the page'
+ ""Locate and click the 'submit' button associated with the CAPTCHA form to request unblock""]","['Successfully navigates past the Radware CAPTCHA page'
+ ""The agent is no longer on a page displaying the 'We apologize for the inconvenience...' message""
+ 'The agent is able to view or interact with the main content of borderstates.com (e.g., homepage, search bar, product categories)']"
+reflectionsholidayparks.com.au,Find the phone number for the 'Reflections Holiday Parks Byron Bay' location.,"[""Navigate to 'reflectionsholidayparks.com.au'""
+ ""Locate and click on a navigation element (e.g., 'Parks' or 'Destinations') to view a list of all holiday parks.""
+ ""Find 'Reflections Holiday Parks Byron Bay' in the list of parks and click on its link.""
+ ""Once on the Byron Bay park's dedicated page, locate and extract the phone number.""]","[""Successfully navigates to the specific page for 'Reflections Holiday Parks Byron Bay'.""
+ 'Identifies and provides the correct phone number for the Byron Bay park.']"
+comune.bologna.it,Find the general contact phone number for the 'Uffici comunali' (Municipal Offices) listed on the Comune di Bologna website.,"[""Navigate to 'comune.bologna.it'"" ""Click on 'Amministrazione'""
+ ""Click on 'Uffici'"" ""Click on 'Lista' to view a list of offices""
+ ""Locate the general contact phone number for 'Uffici comunali' or a main municipal contact number if specified, and respond with that number.""]","[""Successfully navigates to the 'Uffici' section and selects the 'Lista' view.""
+ 'Identifies and extracts a valid phone number for the municipality of Bologna or a general municipal office.'
+ 'The extracted phone number is explicitly stated as the answer.']"
+pasco.com,Find the product page for 'SPARKvue 4.12' software and identify its primary features.,"[""Navigate to 'pasco.com'""
+ ""Click on the 'SPARKvue 4.12' link or use the search bar to find it""
+ 'Once on the product page, identify and summarize the primary features of the software']","['Successfully navigates to the dedicated product page for SPARKvue 4.12.'
+ 'Identifies and lists at least three distinct primary features of the SPARKvue 4.12 software as described on its product page.']"
+dramamine.com,"What is the active ingredient in Dramamine Original Formula, and what is the recommended dosage for adults?","['Navigate to dramamine.com'
+ ""Locate and click on the 'Dramamine Original Formula' product page or section.""
+ 'Identify the active ingredient listed for Dramamine Original Formula.'
+ 'Find the recommended adult dosage information on the same page.'
+ 'Respond with both the active ingredient and the adult dosage.']","[""States the correct active ingredient for Dramamine Original Formula as 'Dimenhydrinate'.""
+ ""Provides the correct recommended adult dosage for Dramamine Original Formula (e.g., '1 to 2 tablets every 4 to 6 hours, not to exceed 8 tablets in 24 hours' or similar phrasing found on the official site).""]"
+theferret.scot,"How many environmental breaches at fish farms were reported in the last two years according to an article by Rob Edwards, and what is the date of this article?","['Navigate to theferret.scot'
+ ""Locate the article titled 'More than 100 environmental breaches at fish farms' by Rob Edwards""
+ 'Extract the number of environmental breaches reported in the article'
+ 'Extract the publication date of the article'
+ 'Provide both pieces of information in the answer']","[""States that 'More than 100 environmental breaches' were reported""
+ ""Identifies the article date as 'January 23, 2025'""]"
+firstalert.com,Find the product details for a 'Superior' level smoke alarm that is hardwired and has a 10-year battery backup.,"['Navigate to firstalert.com' 'Accept the cookie policy if prompted'
+ ""Click on the 'PRODUCTS' link""
+ ""Apply the 'Smoke Alarm' filter under 'TYPE'""
+ ""Apply the 'Superior' filter under 'LEVEL OF PROTECTION'""
+ ""Look for a product that specifies 'Hardwire' and '10-Year Battery Backup' in its description or details""
+ 'Click on the product link to view its full details'
+ 'Identify and state the model number of such a product']","['Successfully navigates to the products section.'
+ ""Applies the 'Smoke Alarm' filter.""
+ ""Applies the 'Superior' level of protection filter.""
+ 'Locates and clicks on a product that is hardwired and has a 10-year battery backup.'
+ 'Extracts the model number of the identified product.']"
+irsvideos.gov,"Find an official IRS video explaining how to file taxes online, assuming irsvideos.gov is inaccessible.","['Attempt to navigate to irsvideos.gov and confirm its inaccessibility.'
+ ""Use a search engine (e.g., DuckDuckGo, Google) to search for 'IRS official video how to file taxes online'.""
+ 'Filter search results to show only videos.'
+ ""Identify and click on a video link from an official IRS channel or a highly credible government/tax-related source (e.g., IRS YouTube channel, a government agency's website).""
+ 'Confirm the video explains how to file taxes online and is from an official or highly reputable source.']","['The agent explicitly states that irsvideos.gov is inaccessible.'
+ 'The agent successfully navigates to a search engine to find an alternative.'
+ 'The agent locates and opens a video that clearly explains how to file taxes online.'
+ 'The video source is identified as official (e.g., IRS.gov, IRS YouTube channel) or a highly reputable tax information provider.']"
+thewebahead.net,"Find out who the guest was on episode 117, 'Transforming the Shapes with Eva Ferreira', and what other episodes they appeared on.","[""Navigate to 'thewebahead.net'""
+ ""Locate episode 117, 'Transforming the Shapes with Eva Ferreira', on the 'All Episodes' page.""
+ ""Identify the guest's name from the episode description.""
+ ""Click on the 'Guests' link in the navigation bar.""
+ ""Find the identified guest's profile page.""
+ 'List all episodes the guest has appeared on.']","[""Identifies 'Eva Ferreira' as the guest on episode 117.""
+ ""Successfully navigates to the 'Guests' section of the website.""
+ ""Locates Eva Ferreira's profile or listing.""
+ 'States all episodes Eva Ferreira has appeared on, if more than one is listed.']"
+dancespirit.com,Find an article on dancespirit.com that discusses ballet technique tips for beginners.,"['Navigate to dancespirit.com (if not already there)'
+ 'Locate and use the main site search bar or navigation menu to find articles'
+ ""Search for 'ballet technique tips' or 'beginner ballet'""
+ 'Click on a relevant article from the search results'
+ 'Confirm the article discusses ballet technique tips for beginners']","['Successfully navigates away from the College Guide section.'
+ 'Locates and clicks on a search bar or main navigation element to find articles.'
+ 'Identifies and clicks on an article specifically about ballet technique tips for beginners.'
+ 'The article content is accessible and relevant to the proposed task.']"
+tobeouterwear.com,Accept the cookie policy on TOBE Outerwear to access the main website content.,"['Navigate to tobeouterwear.com'
+ ""Locate and click the 'Yes. Let's go!' button on the cookie consent banner""]","['The cookie consent banner is no longer visible on the page'
+ 'The agent has successfully navigated to the main content of the TOBE Outerwear website']"
+prestationsducanada.gc.ca,"Using the Benefit Finder on prestationsducanada.gc.ca, find out what benefits a 70-year-old resident of Ontario with no health issues and a modest family income might be eligible for, and identify at least one benefit listed in the results.","[""Navigate to 'prestationsducanada.gc.ca'""
+ ""Select 'Ontario' as the province or territory"" ""Enter '70' as the age""
+ ""Select 'Oui' for 'Diriez-vous que votre revenu familial est modique?' (Is your family income modest?)""
+ ""Select 'Aucun problème de santé' (No health issues)""
+ 'Submit the form to view the results'
+ 'Identify and state at least one benefit listed on the results page']","['Successfully navigates to the Benefit Finder form.'
+ 'Accurately fills in the form with: Province: Ontario, Age: 70, Family Income: Oui (modest), Health: Aucun problème de santé (no issues).'
+ 'Successfully submits the form.'
+ 'Extracts and states at least one specific benefit listed on the results page (e.g., Old Age Security, Guaranteed Income Supplement, etc.).']"
+tulipfestival.ca,"What is the primary reason the Canadian Tulip Festival relies on donations, and where can a user find the option to donate?","[""Navigate to 'tulipfestival.ca'""
+ ""Locate the 'Partners & Sponsors' page or a similar page that discusses funding""
+ 'Identify the statement explaining the reliance on donations'
+ 'Find the link or button that allows users to donate, and describe its location or text']","['States that the festival is free for all but not free to produce, and is a not-for-profit charity'
+ ""Identifies the 'Donate Today' link as the option to donate""
+ ""Confirms the 'Donate Today' link is visible on the 'Partners & Sponsors' page""]"
+continuingstudies.uvic.ca,Find the description for the 'Amateur Landscape and Garden Design' program.,"[""Navigate to 'continuingstudies.uvic.ca'""
+ ""Search for 'Amateur Landscape and Garden Design' in the search bar""
+ ""Click on the 'Amateur Landscape and Garden Design' program link in the search results""
+ 'Locate and extract the program description from the detailed program page, and respond with that description in the answer']","[""Successfully navigates from the search results page to the detailed program page for 'Amateur Landscape and Garden Design'""
+ ""Extracts and provides the full description of the 'Amateur Landscape and Garden Design' program""
+ ""The extracted description accurately reflects the content on the program's dedicated page""]"
+eurocloud.org,Find and open the latest annual report or a recent key publication on the EuroCloud website.,"[""Identify the correct and accessible domain for EuroCloud (e.g., by searching for 'EuroCloud' on a search engine if `eurocloud.europa.eu` remains inaccessible).""
+ 'Navigate to the correct EuroCloud website (e.g., `https://eurocloud.org/`).'
+ ""Locate the 'Publications' or 'Resources' section of the website.""
+ 'Identify the most recent annual report or a prominent key publication.'
+ 'Click on the link to open the identified publication.']","['Successfully navigates to a working EuroCloud website (e.g., `https://eurocloud.org/`).'
+ 'Locates and clicks on a link to a publication (e.g., an annual report, white paper, or major study).'
+ 'The opened document is a legitimate publication from EuroCloud.']"
+slocounty.ca.gov,What is the process to obtain a certified copy of a birth certificate from the San Luis Obispo County Clerk-Recorder's office?,"[""Navigate to 'slocounty.ca.gov'"" ""Click on the 'Departments' link""
+ ""Locate and click on the 'County Clerk-Recorder' or 'Clerk-Recorder' department link in the directory (likely under 'C' or 'R')""
+ ""Navigate to the section on 'Birth Certificates' or 'Vital Records'""
+ 'Identify and summarize the steps required to obtain a certified copy of a birth certificate.']","[""Successfully navigates to the San Luis Obispo County Clerk-Recorder's office webpage.""
+ 'Identifies the specific section or page detailing how to obtain birth certificates.'
+ 'Accurately describes at least two key steps in the process, such as required documentation, application methods (online, mail, in-person), or fees.']"
+familylaw.co.uk,Find the publication 'The Family Court Practice 2025' on the website and determine if it is available for order.,"[""Navigate to 'familylaw.co.uk'""
+ ""Locate the 'Spotlight' section or search for 'The Family Court Practice 2025'""
+ ""Click on the link for 'The Family Court Practice 2025'""
+ 'Confirm if the publication is available for order.']","[""Successfully navigates to the specific product page for 'The Family Court Practice 2025'.""
+ 'Identifies and states that the publication is available for order.']"
+fishwatch.gov,Find out which types of seafood are good sources of Omega-3 fatty acids on fishwatch.gov.,"[""Navigate directly to 'fishwatch.gov'""
+ ""Look for a section or search for information related to 'health benefits' or 'nutrition'""
+ 'Locate specific seafood types that are highlighted as good sources of Omega-3 fatty acids'
+ 'List at least three examples of such seafood in the answer']","[""Successfully navigates to 'fishwatch.gov'""
+ 'Identifies a section or page discussing the nutritional benefits of seafood, specifically Omega-3s'
+ 'Lists at least three distinct seafood types that are good sources of Omega-3 fatty acids, as stated on the website']"
+lib.dr.iastate.edu,Find the most recently published digital thesis on 'sustainable agriculture' from Iowa State University and identify its publication year.,"[""Navigate to 'lib.dr.iastate.edu'""
+ ""Search for 'sustainable agriculture' in the main search bar""
+ ""Apply the 'Date Issued Descending' sort option to view the most recent publications first""
+ 'Locate the first thesis in the results and identify its publication year']","['Successfully navigates to the Iowa State University Digital Repository.'
+ ""Executes a search for 'sustainable agriculture'.""
+ ""Applies the 'Date Issued Descending' sort option.""
+ 'Identifies the publication year of the most recent thesis found in the search results.']"
+nactso.gov.uk,Explain the key requirements of Martyn's Law as outlined on the ProtectUK website.,"[""Navigate to 'nactso.gov.uk'""
+ ""Click on the 'Martyn's Law' link in the main navigation.""
+ ""Read the information provided on Martyn's Law.""
+ ""Summarize the key requirements or implications of Martyn's Law for businesses and public venues.""]","[""Successfully navigates to the 'Martyn's Law' section of the website.""
+ ""Identifies and explains at least two key requirements or implications of Martyn's Law (e.g., duty to assess and mitigate risks, staff training, or specific venue obligations).""
+ 'The explanation is based solely on information found on the ProtectUK website.']"
+miyatabike.com,Describe the main features of the 'SPIKY' model in the Kids Bike series.,"[""Navigate to 'miyatabike.com'""
+ ""Click on the 'KIDS' or 'KIDS BIKE' link to go to the Kids Bike section.""
+ ""Locate the 'SPIKY' model within the Kids Bike section.""
+ ""Summarize the main features or description provided for the 'SPIKY' model.""]","['Successfully navigates to the Kids Bike section.'
+ ""Identifies the 'SPIKY' model on the page.""
+ ""Provides a summary of the 'SPIKY' model's features or description as presented on the website.""]"
+lendlease.com,What are Lendlease's absolute zero target year and their social value creation target by 2025?,"[""Navigate to 'lendlease.com'""
+ ""Click on the 'Sustainability' link in the navigation menu""
+ ""Click on the 'Our Approach' sub-link""
+ 'Identify the absolute zero target year and the social value creation target by 2025 from the displayed content'
+ 'Respond with both targets in the answer']","[""States 'ABSOLUTE ZERO BY 2040' as the climate target.""
+ ""States '$250 million of social value by 2025' as the social value target.""
+ ""Both pieces of information are directly extracted from the 'Our Approach' page.""]"
+picknsave.com,"After selecting the Kenosha - 18th St store, identify one specific deal or product featured in the weekly ad.","[""Navigate to 'picknsave.com/weeklyad'""
+ ""Click on the 'Pickup at PNS Kenosha - 18th St' button (id: 70)""
+ 'Wait for the weekly ad content to load for the Kenosha - 18th St store'
+ 'Identify and state one specific deal or product name visible within the loaded weekly ad']","[""Successfully clicks the 'Pickup at PNS Kenosha - 18th St' button.""
+ 'The webpage displays the weekly ad content for the Kenosha - 18th St store.'
+ 'The agent provides the name of a specific product or deal that is clearly visible within the loaded weekly ad for that store.']"
+planetradio.co.uk,Find out which presenter is currently on air for Hits Radio and what show they are hosting.,"[""Navigate to 'planetradio.co.uk' (or 'rayo.fm' if redirected)""
+ ""Locate and click on the 'Hits Radio' station link to go to its dedicated page""
+ ""On the Hits Radio page, identify the 'Now Playing' or 'On Air' section""
+ 'Extract the name of the current presenter and the show they are hosting']","['Successfully navigates to the dedicated Hits Radio page.'
+ 'Identifies the current presenter and their show.'
+ ""Provides the correct presenter's name and show title as displayed on the website.""]"
+arduinobasics.blogspot.com,What is the Discord server invite link for the Arduino Basics community?,"[""Navigate to 'arduinobasics.blogspot.com'""
+ 'Locate the Discord server invitation on the homepage'
+ 'Extract the Discord invite link and provide it in the answer']","[""Identifies the correct Discord invite link, 'https://discord.gg/FxnBnZx'""
+ 'The answer contains only the Discord invite link']"
+isrctn.com,"Find the registration date and recruitment status for the study titled 'Disease in the small blood vessels, heart failure and diabetes' on the ISRCTN Registry.","[""Navigate to 'isrctn.com'"" 'Accept all cookies'
+ ""Search for 'Disease in the small blood vessels, heart failure and diabetes' in the search bar""
+ 'Locate the correct study in the search results'
+ ""Extract the 'Registration date' and 'Recruitment status' for this specific study, and respond with this information in the answer""]","[""Identifies the correct study: 'Disease in the small blood vessels, heart failure and diabetes'""
+ ""States the registration date as '26/05/2025'""
+ ""States the recruitment status as 'Not yet recruiting'""]"
+angryflower.com,Find the publication date of the comic strip 'Habeas Kaiju' on angryflower.com.,"['Navigate to angryflower.com'
+ ""Locate the comic strip 'Habeas Kaiju' on the homepage or by navigating through the archives if not immediately visible""
+ ""Identify the publication date associated with 'Habeas Kaiju'""
+ 'Respond with the publication date in the answer']","[""Cites the specific date 'Fri, May 16, 2025' for the 'Habeas Kaiju' comic strip""]"
+diablo.fandom.com,"What is the primary antagonist in Diablo III, and what is their ultimate fate in the base game?","[""Navigate to 'diablo.fandom.com'""
+ ""Search for 'Diablo III' in the search bar""
+ 'Click on the link for the Diablo III main page'
+ 'Locate the section discussing the primary antagonist and their fate in the base game (before expansions)'
+ ""Summarize the antagonist's identity and their ultimate fate in the answer""]","['Identifies Diablo as the primary antagonist'
+ 'States that Diablo is defeated by the Nephalem in the High Heavens'
+ ""Mentions that Diablo's essence is contained within the Black Soulstone""]"
+successrealization.com,"What does the acronym SMART stand for in the context of goal setting, according to Wikipedia?","['Navigate to Wikipedia.org' ""Search for 'SMART criteria'""
+ ""Click on the 'SMART criteria' article link in the search results""
+ 'Locate the section defining the SMART acronym'
+ 'State what each letter of SMART stands for.']","['Identifies that SMART stands for Specific, Measurable, Achievable (or Attainable), Relevant (or Realistic), and Time-bound.'
+ ""The answer is derived from the 'SMART criteria' Wikipedia page.""]"
+zooplus.co.uk,Find a trial pack for dog food and identify the cheapest option available.,"['Navigate to zooplus.co.uk' ""Click on the 'Dog' category link.""
+ ""Locate and click on the 'Dog Trial Packs' subcategory link.""
+ 'Identify the product with the lowest price among the trial packs displayed.'
+ 'State the name and price of the cheapest dog food trial pack.']","[""Successfully navigates to the 'Dog Trial Packs' section.""
+ 'Identifies the specific product that is the cheapest trial pack.'
+ 'Provides the name and exact price of the cheapest trial pack.']"
+asksara.livingmadeeasy.org.uk,Find general recommendations for mobility aids on Living Made Easy.,"[""Navigate to 'livingmadeeasy.blob.core.windows.net'""
+ ""Click on the 'Access and mobility' link""
+ ""Browse the 'Access and mobility' section to identify general categories or types of mobility aids""
+ 'Summarize at least three general types of mobility aids mentioned on the page, if available.']","[""Successfully navigates to the 'Access and mobility' section.""
+ 'Identifies and lists at least three distinct categories or types of mobility aids (e.g., walking aids, wheelchairs, scooters, adapted vehicles, etc.) that are presented on the page.'
+ 'The summary should be concise and directly reflect information found on the webpage.']"
+toppers.com,Find the price of a Large 'Build Your Own Pizza' with pepperoni for delivery to zip code 53703.,"['Navigate to toppers.com' ""Click on 'Delivery'""
+ ""Enter '53703' in the Zip code field and proceed""
+ ""Click on 'Pizza' from the main menu"" ""Click on 'Build Your Own Pizza'""
+ ""Select 'Large' as the size"" ""Add 'Pepperoni' as a topping""
+ 'Identify the total price for this pizza' 'Report the price']","['Successfully navigates past the order setup by entering a valid delivery zip code (e.g., 53703)'
+ ""Accesses the 'Build Your Own Pizza' customization page""
+ ""Selects 'Large' as the pizza size"" ""Adds 'Pepperoni' as a topping""
+ 'Identifies and reports the correct price for a Large Build Your Own Pizza with pepperoni for delivery to the specified zip code.']"
+mobilemarketingmagazine.com,"Find a whitepaper on mobilemarketingmagazine.com that discusses data-driven advertising or analytics, and identify its title.","[""Navigate to 'mobilemarketingmagazine.com'""
+ ""Click on the 'Whitepapers' link in the navigation menu""
+ 'Scan the list of whitepapers for titles related to data, analytics, or data-driven advertising'
+ 'Identify the title of a relevant whitepaper and provide it as the answer']","[""The agent successfully navigates to the 'Whitepapers' section.""
+ 'The agent identifies and cites the full title of at least one whitepaper that clearly relates to data-driven advertising or analytics.'
+ 'The cited whitepaper title is present on the mobilemarketingmagazine.com website.']"
+ietcc.csic.es,"After successfully navigating to the ietcc.csic.es website, locate the section dedicated to 'Publications' or 'Research' and identify the total number of research papers or articles listed for the year 2023, if available.","[""Navigate to 'ietcc.csic.es'""
+ ""Locate and click on the 'Publications' or 'Research' section of the website""
+ 'Filter or navigate to the publications for the year 2023'
+ 'Count the total number of research papers or articles listed for 2023, and respond with that count in the answer. If no specific count is available, state that.']","['Successfully accesses the ietcc.csic.es website.'
+ 'Navigates to the publications or research section.'
+ 'Identifies the publications for the year 2023.'
+ 'Provides an accurate count of research papers/articles for 2023, or correctly states if the count is not explicitly available.']"
+yorkshire-dales.com,"What type of geographical feature is Trow Gill, and where is it located within the Yorkshire Dales?","[""Navigate to 'yorkshire-dales.com'"" ""Search for 'Trow Gill'""
+ ""Click on the 'Trow Gill' link in the search results""
+ 'Identify the geographical feature and its location from the page content, and respond with that information']","[""States that Trow Gill is a 'wooded limestone ravine'""
+ ""Mentions its location 'at the head of Clapdale near Clapham'""
+ 'Confirms it is in the \'heart of Yorkshire\'s ""Three Peaks"" limestone country\'']"
+schools.covid19.ca.gov,"What are the key considerations for managing a child with symptoms of illness in a California school or child care setting, according to the latest guidance?","[""Navigate to 'schools.covid19.ca.gov'""
+ ""Locate the 'Managing Children with Symptoms' section""
+ ""Click on the link 'Considerations when a Child has Symptoms of Illness in C...' (id: 1738)""
+ 'Open the linked document and identify the key considerations for managing a child with symptoms'
+ 'Summarize these key considerations, including any specific advice for COVID-19']","[""Successfully opens the 'Considerations when a Child has Symptoms of Illness in C...' document.""
+ 'Identifies and summarizes at least three key considerations for managing symptomatic children.'
+ ""Mentions the guidance to 'continue to test and follow current isolation guidance' for COVID-19, as stated on the main page, and confirms if this is elaborated upon in the document.""]"
+rheingau-musik-festival.de,"Find all Jazz concerts scheduled at the Rheingau Musik Festival for the entire festival period, and list their dates and venues.","[""Navigate to the 'Programmübersicht' (Program Overview) page on rheingau-musik-festival.de.""
+ ""Locate the 'Konzerte filtern' (Filter Concerts) section.""
+ ""Select 'Jazz' from the 'Alle Sparten' (All Genres) dropdown.""
+ 'Apply the filter to display only Jazz concerts.'
+ 'Scroll through the resulting list of concerts to identify all Jazz events.'
+ 'For each Jazz concert found, extract its date and venue.'
+ 'Provide a list of all Jazz concerts with their respective dates and venues.']","[""Successfully uses the 'Alle Sparten' filter to narrow down results to 'Jazz' concerts.""
+ 'Identifies and lists all Jazz concerts available on the filtered page.'
+ 'For each identified Jazz concert, accurately states its date.'
+ 'For each identified Jazz concert, accurately states its venue (Spielstätten).']"
+goodfish.org.au,Find a 'Better Choice' alternative to Saddletail Snapper that is wild caught in Queensland.,"['Navigate to goodfish.org.au' ""Search for 'Saddletail Snapper'""
+ ""Observe that Saddletail Snapper is rated 'Eat Less'""
+ ""Clear the current search and apply filters to find 'Better Choice' seafood that is 'Wild Caught' in 'QLD'""
+ 'Identify a specific species that meets these criteria and state its name.']","[""Identifies that Saddletail Snapper is rated 'Eat Less'""
+ ""Successfully navigates the filter options to select 'Better Choice', 'Wild Caught', and 'QLD'""
+ ""Provides the name of at least one specific species that meets all specified criteria (e.g., 'Cobia' or 'Mulloway' if available and rated 'Better Choice' in QLD Wild Caught)""]"
+collegiaterecovery.org,Identify and list the key standards and recommendations for collegiate recovery programs as outlined by ARHE.,"[""Navigate to 'collegiaterecovery.org'""
+ ""Click on the 'Collegiate Recovery' link""
+ ""Click on the 'Standards & Recommendations' link""
+ 'Extract and list the key standards and recommendations for CRPs.']","[""Navigates to the 'Standards & Recommendations' page.""
+ 'Identifies at least three distinct standards or recommendations for CRPs.'
+ 'Presents the extracted information in a clear, concise list or summary.']"
+nachi.org,"What are the primary benefits of an InterNACHI® All-Access Membership, as described on the website?","[""Navigate to 'nachi.org'"" ""Click on the 'Get All-Access Membership' link""
+ 'Identify and summarize the key benefits listed for an All-Access Membership']","['Mentions free training, online testing, and certification.'
+ 'Mentions business development and marketing support.'
+ 'Mentions discounts on services/products (e.g., software, E&O insurance, trucks).'
+ 'Mentions lead generation/leads sent to members.']"
+pt.uefa.com,"Who was named the Player of the Season for the UEFA Women's Champions League, and who was the Young Player of the Season?","[""Navigate to 'https://www.uefa.com/womenschampionsleague/'""
+ 'Locate the headlines or news section on the main page'
+ 'Identify the Player of the Season and Young Player of the Season from the displayed information'
+ 'Respond with the names of both players']","[""Identifies 'Aitana Bonmatí' as the Player of the Season""
+ ""Identifies 'Melchie Dumornay' as the Young Player of the Season""]"
+calvertcountymd.gov,How can citizens participate in their local government according to the Calvert County website?,"[""Navigate to 'calvertcountymd.gov'""
+ ""Locate and click on the link or section related to citizen participation in local government, specifically the 'www.calvertcountymd.gov/BOCC' link mentioned on the County Administrator page.""
+ 'Identify and summarize the methods or opportunities for citizen involvement presented on that page.']","['Successfully navigates to the Board of County Commissioners (BOCC) page or a page detailing citizen participation.'
+ 'Identifies at least two specific ways citizens can participate (e.g., attending meetings, providing input, contacting commissioners).']"
+recyclingnews.de,"On recyclingnews.de, find the most recent article discussing new recycling technologies and provide its title and publication date.","[""Navigate directly to 'recyclingnews.de'""
+ 'Accept any cookie consent banners to ensure full site access'
+ 'Locate the section for news or articles, potentially using a search bar or categories'
+ ""Identify the most recent article specifically related to 'recycling technologies' or similar keywords""
+ 'Extract the title and publication date of that article']","[""The agent successfully navigates to 'recyclingnews.de'""
+ 'The agent identifies the most recent article on recycling technologies'
+ 'The agent provides the correct title of the article'
+ 'The agent provides the correct publication date of the article']"
+justbooks.co.uk,Find the cheapest *used* copy of 'Animal Farm' by George Orwell on justbooks.co.uk and state its price and condition.,"['Navigate to justbooks.co.uk' 'Accept cookie preferences if prompted'
+ ""Search for 'Animal Farm George Orwell' in the search bar""
+ 'Scroll down to ensure sorting options are visible'
+ ""Click on the 'Price: Low to High' sorting option""
+ ""Identify the first listing that is marked as 'Used'""
+ ""Extract the price and condition (if more specific than 'Used') of this listing""]","[""Successfully navigates to the search results for 'Animal Farm' by George Orwell.""
+ ""Successfully sorts the search results by 'Price: Low to High'.""
+ ""Identifies the cheapest *used* copy of 'Animal Farm'.""
+ 'States the exact price of the cheapest used copy.'
+ ""States the condition of the cheapest used copy (e.g., 'Used').""]"
+mooresclothing.ca,Find the price of a Joseph Abboud Modern Fit Sport Coat and list the available colors.,"[""Navigate to 'mooresclothing.ca'""
+ 'Click on the search button to activate the search input field.'
+ ""Type 'Joseph Abboud Modern Fit Sport Coat' into the search bar and press Enter.""
+ 'Locate the Joseph Abboud Modern Fit Sport Coat in the search results or product listings.'
+ 'Identify the price of the sport coat.'
+ 'List all available colors for this specific sport coat.']","['Identifies the correct price for the Joseph Abboud Modern Fit Sport Coat.'
+ 'Lists all available colors for the Joseph Abboud Modern Fit Sport Coat as displayed on the website.']"
+remotehub.com,How many full-time remote data science job opportunities are currently listed on RemoteHub?,"[""Navigate to 'remotehub.com'""
+ ""Enter 'data science' into the 'Search Jobs' input field""
+ ""Click the 'Search' button""
+ ""Select the 'Full Time' checkbox under 'Job Type'""
+ ""Select the 'Remote' checkbox under 'Location'""
+ 'Identify the total number of jobs displayed after applying all filters, and respond with that number in the answer']","[""Successfully navigates to 'remotehub.com'""
+ ""Performs a search for 'data science'""
+ ""Applies both 'Full Time' and 'Remote' filters to the search results""
+ 'Accurately reports the exact number of job listings that match all specified criteria']"
+publiclibraryofscience.org,"Find the main search bar on the PLOS website and search for 'open access publishing'. Then, identify how many journals are listed in the search results.","[""Navigate to 'plos.org'""
+ 'Locate the main search bar or search icon on the homepage'
+ ""Enter 'open access publishing' into the search bar""
+ 'Submit the search query'
+ 'On the search results page, identify the number of distinct PLOS journals that appear in the results (e.g., PLOS ONE, PLOS Biology, etc.)'
+ 'State the number of journals found']","['Successfully navigates to the PLOS website.'
+ 'Correctly identifies and uses the search functionality.'
+ ""Successfully submits the search query 'open access publishing'.""
+ 'Navigates to a search results page.'
+ 'Accurately counts the number of distinct PLOS journals listed in the search results (e.g., PLOS ONE, PLOS Biology, PLOS Medicine, etc.)'
+ 'Provides the correct count of journals.']"
+ridley-bikes.com,Find the price of the Ridley Falcn RS road bike with the Shimano 105 Di2 groupset.,"[""Navigate to 'ridley-bikes.com'"" 'Accept the cookie policy if prompted'
+ ""Navigate to the 'Bikes' section"" ""Select 'Road Bikes'""
+ ""Locate and click on the 'Falcn RS' model""
+ ""Use the configurator to select the 'Shimano 105 Di2' groupset""
+ 'Identify and extract the final price displayed after configuration']","['Successfully navigates to the Falcn RS configurator page.'
+ ""Selects the 'Shimano 105 Di2' groupset within the configurator.""
+ 'Accurately reports the final price of the configured bike.']"
+zeulenroda-triebes.de,Find the official website of the 'Tourismuszentrum Zeulenrodaer Meer' within the Zeulenroda-Triebes municipal website.,"[""Navigate to 'zeulenroda-triebes.de'""
+ ""Accept the cookie settings to dismiss the overlay (e.g., by clicking 'Alles akzeptieren' or 'Auswahl bestätigen')""
+ ""Locate and navigate to the 'Impressum' or 'Kontakt' section of the website""
+ ""Identify the official website URL for 'Tourismuszentrum Zeulenrodaer Meer' within the contact or imprint details.""]","['Successfully dismisses the cookie consent banner.'
+ ""Navigates to the 'Impressum' or 'Kontakt' page.""
+ ""Extracts the correct official website URL for 'Tourismuszentrum Zeulenrodaer Meer'.""]"
+resources.companieshouse.gov.uk,Find the registered office address for 'Tesla Motors Limited' on the Companies House website.,"[""Navigate to the Companies House search page on GOV.UK (e.g., by searching for 'Companies House' on GOV.UK or directly navigating to 'https://www.gov.uk/get-information-about-a-company')""
+ ""Search for 'Tesla Motors Limited'""
+ 'Click on the correct company result to view its details'
+ ""Locate and extract the registered office address from the company's profile page""]","['Successfully navigates to the Companies House search functionality.'
+ ""Correctly searches for 'Tesla Motors Limited'.""
+ 'Identifies and clicks on the correct company entry in the search results.'
+ ""Extracts the full registered office address for 'Tesla Motors Limited' (which is 'Building 10, Chiswick Park, 566 Chiswick High Road, London, United Kingdom, W4 5XS').""]"
+loyalbooks.com,Find a free audiobook in the 'Mystery' genre and identify its author and the number of reviews it has received.,"[""Navigate to 'loyalbooks.com'""
+ ""Click on the 'Mystery' genre link under 'Popular Genres' or 'More Genres'""
+ ""Browse the list of mystery books to find one that is an audiobook (if distinguishable from the current view, otherwise proceed to the book's page)""
+ 'Identify the author of a chosen audiobook and the number of reviews it has received'
+ 'State the title, author, and number of reviews for the chosen audiobook in the answer']","[""Successfully navigates to the 'Mystery' genre page.""
+ 'Identifies a book that is explicitly stated or implied to be an audiobook.'
+ 'Correctly states the author of the chosen audiobook.'
+ 'Correctly states the number of reviews for the chosen audiobook.']"
+sarcomaalliance.org,"Identify the primary treatment approaches for bone sarcomas, and find a sarcoma center in California.","['Navigate to sarcomaalliance.org'
+ ""Click on the 'Education' dropdown menu""
+ ""Click on 'Bone Sarcomas & Subtypes'""
+ 'Locate and summarize the primary treatment approaches for bone sarcomas on the page'
+ ""Navigate back to the homepage or a page with the 'Find a Sarcoma Expert' link""
+ ""Click on 'Find a Sarcoma Center'""
+ 'Search for or filter centers in California'
+ 'Identify at least one sarcoma center located in California']","['Identifies at least two primary treatment approaches for bone sarcomas (e.g., surgery, chemotherapy, radiation therapy).'
+ ""Successfully navigates to the 'Sarcoma Centers' page.""
+ 'Identifies at least one sarcoma center located in California.']"
+postcarbon.org,What is the primary argument or conclusion presented in 'The Shale Bubble' report series regarding the 'shale revolution'?,"[""Navigate to 'postcarbon.org'""
+ ""Locate and click on 'The Shale Bubble' link in the 'Related Projects' section""
+ ""Browse the content of 'The Shale Bubble' report series to identify its primary argument or conclusion""
+ 'Summarize the main argument in the answer']","[""Successfully navigates to the content of 'The Shale Bubble' report series.""
+ ""Identifies that the report series 'debunked the hype' about the 'shale revolution'.""
+ ""Mentions that the report provided 'detailed analysis of the claims underpinning the U.S. Energy Information Administration’s (EIA) tight oil and shale gas forecasts'.""]"
+fayettecountypa.org,"Find out how to search for property records on the Fayette County, PA website.","[""Navigate to 'fayettecountypa.org'""
+ ""Click on the 'Government' dropdown menu.""
+ ""Click on 'Departments' to view the list of county departments.""
+ ""Locate and click on the 'Tax Assessment' department link.""
+ ""On the Tax Assessment page, find and click the 'Property Record Search' link.""]","[""Successfully navigates to the 'Property Record Search' page or the external link for property record search.""
+ 'Confirms that the agent has identified the correct method or link for searching property records.']"
+digitalbenin.org,Find the number of artifacts in the Digital Benin collection that are classified as 'Altar & Shrine Objects' and are held by the 'British Museum'.,"[""Navigate to 'digitalbenin.org/catalogue'""
+ ""In the 'Categories' filter section, select 'Altar & Shrine Objects'.""
+ ""In the 'Institutions' filter section, select 'British Museum'.""
+ 'Locate and state the total number of objects displayed after applying both filters.']","[""The agent successfully applies the 'Altar & Shrine Objects' filter under 'Categories'.""
+ ""The agent successfully applies the 'British Museum' filter under 'Institutions'.""
+ 'The agent accurately reports the final count of artifacts that satisfy both criteria.']"
+jura.ku.dk,List three distinct research areas or centers affiliated with the University of Copenhagen Faculty of Law.,"[""Navigate to 'jura.ku.dk'"" 'Accept cookies if prompted'
+ ""Click on the 'Forskning på KU' (Research at UCPH) dropdown or a direct link to research within the Faculty of Law section""
+ 'Identify and list three distinct research areas, centers, or groups mentioned on the research-related pages.']","['Identifies at least three distinct research areas, centers, or groups.'
+ 'The listed areas are directly affiliated with the University of Copenhagen Faculty of Law.'
+ 'The answer is presented as a list of names of the research areas/centers.']"
+evereve.com,Find a pair of KAANAS shoes under $150 on EVEREVE.com and identify their material.,"[""Navigate to 'evereve.com'""
+ ""Click on 'Shoes & Accessories' in the main navigation.""
+ ""Filter by 'Brand' and select 'KAANAS'.""
+ ""Filter by 'Price' and set the maximum price to $150.""
+ 'Select the first KAANAS shoe product that meets the price criteria.'
+ ""Locate the 'Material & Care' section on the product page and identify the material.""]","['The agent successfully navigates to the KAANAS brand shoes.'
+ 'The agent applies a price filter to show items under $150.'
+ 'The agent clicks on a product that is from the KAANAS brand and is priced under $150.'
+ 'The agent correctly identifies and states the primary material of the selected shoe.']"
+ageukmobility.co.uk,Find out how to request a free home visit for a homelift on Age Co Mobility.,"['Navigate to ageukmobility.co.uk' 'Accept all cookies if prompted'
+ ""Click on the 'Homelifts' link in the navigation menu""
+ ""Locate and click on the 'Book a home visit' link or similar call to action on the Homelifts page""
+ 'Identify the contact method or form for requesting a home visit and summarize it.']","['Successfully navigates to the Homelifts product page.'
+ 'Identifies and describes the method for requesting a free home visit (e.g., a phone number, an online form, or a specific link).'
+ 'Does not attempt to fill out any forms, but accurately identifies the relevant contact information or action.']"
+bookstore.billygraham.org,"Find a book authored by Billy Graham on the topic of evangelism, and identify its current price.","[""Navigate to 'bookstore.billygraham.org'""
+ ""Use the search bar to search for 'Billy Graham evangelism'""
+ 'Locate a book in the search results that is explicitly authored by Billy Graham and is about evangelism'
+ 'Click on the identified book to view its product page'
+ 'Find the current price of the book on its product page, and respond with the book title and its price']","['Identifies a book explicitly stated as authored by Billy Graham'
+ ""The book's topic is clearly evangelism""
+ 'States the correct current price of the identified book']"
+earlychildhoodireland.ie,What are the key benefits of becoming a member of Early Childhood Ireland?,"['Navigate to earlychildhoodireland.ie'
+ ""Locate and click on the 'Membership' link in the main navigation or quick links""
+ 'Identify and list the key benefits of membership as described on the page']","['Lists at least three distinct benefits of Early Childhood Ireland membership (e.g., access to resources, discounts, advocacy support, networking opportunities)'
+ ""The information provided is directly from the Early Childhood Ireland website's membership section""]"
+pasadenastarnews.com,"Find out if the Pasadena Star-News offers an e-edition, and if so, what date is the current e-edition available?","[""Navigate to 'pasadenastarnews.com'""
+ ""Look for a link or section related to 'E-Edition' or 'Digital Edition'""
+ 'Click on the E-Edition link'
+ 'Identify the date of the current E-Edition displayed on the page, and respond with that date in the answer']","['Confirms that an E-Edition is available'
+ ""States the date of the current E-Edition, which is 'Monday, May 26th 2025'""]"
+bushtheatre.co.uk,"Find out if the Bush Theatre offers any discounts for students or young people, and if so, what are the age criteria or requirements?","[""Navigate to 'bushtheatre.co.uk'""
+ ""Look for a section related to tickets, pricing, or concessions (e.g., 'Your Visit' or 'Tickets')""
+ 'Browse the relevant page for information on student or young person discounts'
+ 'Identify any specific age criteria or requirements for these discounts and respond with the details.']","['States whether student/young person discounts are offered.'
+ 'If discounts are offered, specifies the age range or any other key requirements (e.g., valid ID, specific membership).'
+ 'The answer is derived directly from information found on the Bush Theatre website.']"
+moran.senate.gov,"Find the contact information for Senator Moran's Washington D.C. office, including the address and phone number.","[""Navigate to 'moran.senate.gov'""
+ ""Click on the 'Connect' link in the navigation bar""
+ 'Locate the contact information for the Washington D.C. office'
+ 'Extract the address and phone number for the Washington D.C. office and provide them in the answer']","['Provides the correct street address for the Washington D.C. office'
+ 'Provides the correct phone number for the Washington D.C. office']"
+thinkproductive.co.uk,"Find out if Think Productive offers any free downloadable resources, such as templates or guides, and if so, identify one specific resource.","[""Navigate to 'thinkproductive.co.uk'""
+ 'Look for a section on the website dedicated to resources, downloads, or free tools'
+ 'Identify at least one free downloadable resource (e.g., a template, guide, or e-book)'
+ 'State the name of one such resource in the answer']","[""Successfully navigates to 'thinkproductive.co.uk'""
+ 'Identifies a section on the website containing free downloadable resources'
+ 'Provides the name of at least one specific free downloadable resource found on the website']"
+blog.lezyne.com,Find the price of the 'Classic Floor Drive' pump on the Lezyne website.,"['Navigate to Lezyne.com' 'Open the navigation menu'
+ ""Click on 'PUMPS FOR ROAD BIKES' or a similar pump-related category if available, or navigate to the main 'Pumps' section of the website.""
+ ""Scroll down to locate the 'Classic Floor Drive' product listing.""
+ ""Extract the price of the 'Classic Floor Drive' pump.""]","[""Identifies the 'Classic Floor Drive' pump.""
+ ""States the correct price of the 'Classic Floor Drive' pump.""]"
+partselect.com,"Find out if the Whirlpool W10311524 Refrigerator Air Filter is compatible with a Maytag refrigerator model MFI2570FEZ, and if so, what is the manufacturer part number?","['Navigate to PartSelect.com.'
+ ""Search for 'Whirlpool W10311524 Refrigerator Air Filter'.""
+ 'Locate the product page for the filter.'
+ ""Find the 'Model Cross Reference' or compatibility section.""
+ 'Check if Maytag model MFI2570FEZ is listed as compatible.'
+ 'If compatible, identify the manufacturer part number for this specific filter.']","['States whether the Whirlpool W10311524 Refrigerator Air Filter is compatible with Maytag model MFI2570FEZ.'
+ 'If compatible, provides the manufacturer part number (W10311524).']"
+new.usgbc.org,What are the critical imperatives addressed by LEED v5?,"[""Navigate to 'new.usgbc.org'""
+ ""Click on the 'LEED' link to go to the LEED rating system page""
+ ""Locate the section discussing 'LEED v5'""
+ 'Identify and list the critical imperatives addressed by LEED v5 in the answer']","[""Mentions 'equity'"" ""Mentions 'health'"" ""Mentions 'ecosystems'""
+ ""Mentions 'resilience'"" 'States that LEED v5 addresses these imperatives']"
+shop.minecraft.net,What are the dimensions and care instructions for the Minecraft Creeper Kids Cape?,"['Navigate to shop.minecraft.net' ""Click on the 'Best Sellers' link""
+ ""Click on the 'Shop Now' link for the 'Minecraft Creeper Kids Cape'""
+ ""Locate the 'Product Details' section on the page""
+ 'Extract the dimensions and care instructions from this section, and provide them in the answer']","['States the size of the cape as \'36.75"" H x 17.75 W\''
+ 'Mentions the velcro attachment at the neck'
+ ""Lists the care instructions: 'Hand wash', 'Do not bleach', 'Line dry', 'Cool Iron if needed'""]"
+eox.at,"What is the title of the most recent blog post on the EOX website, and what year does it refer to if applicable?","[""Navigate to 'eox.at'"" ""Click on the 'Blog' link in the navigation menu.""
+ 'Identify the most recent blog post listed on the blog page.'
+ 'Extract the title of this post and any year mentioned within the title.']","[""Identifies 'Sentinel-2 cloudless 2024' as the most recent blog post.""
+ ""States that the year referred to in the title is '2024'.""]"
+centreofthecell.org,"What are the general opening times for inquiries at the Centre of the Cell, and what days are they available?","[""Navigate to 'http://centreofthecell.org/'""
+ ""Click on the 'Get in touch' link""
+ ""Locate the 'Opening times' section on the page""
+ 'Extract the general opening hours and days of availability for inquiries, and respond with that information']","[""States the general opening hours are '09:30 – 17:00'""
+ ""Mentions the team is available 'Monday – Friday'""]"
+green-e.org,Find the Green-e® Renewable Energy Standard for Singapore document on the Green-e website and identify its last update date.,"[""Navigate to 'green-e.org'""
+ ""Use the search bar to search for 'Green-e Renewable Energy Standard for Singapore'""
+ 'Click on the relevant search result that leads to the document or its description'
+ ""Locate the last updated date for the 'Green-e® Renewable Energy Standard for Singapore' document and provide it in the answer.""]","['Successfully navigates to the Green-e website.'
+ ""Locates the 'Green-e® Renewable Energy Standard for Singapore' document or its information page.""
+ ""Identifies the correct last updated date for the document, which is 'September 30, 2022'.""]"
+jam-software.de,"What are the key differences between the TreeSize Personal and Professional editions, and where can I download a trial version of TreeSize?","[""Navigate to 'jam-software.de'""
+ ""Navigate to the TreeSize product page (e.g., via 'Produkte' menu or direct link if available).""
+ ""Locate and click on the 'Editionen & Preise' (Editions & Prices) link for TreeSize.""
+ 'Identify the main distinctions between TreeSize Personal and Professional editions.'
+ 'Locate the download link for a trial version of TreeSize.'
+ 'Summarize the differences and provide the download link in the answer.']","['Clearly states at least two key differences between TreeSize Personal and Professional editions (e.g., features, target audience, licensing).'
+ 'Provides a direct link to download a trial version of TreeSize.'
+ ""The information provided is accurate based on the website's content.""]"
+mountalexander.vic.gov.au,How can a resident report a missed bin collection to the Mount Alexander Shire Council?,"[""Navigate to 'mountalexander.vic.gov.au'"" ""Click on the 'Council' link""
+ ""Click on the 'Report an issue' link""
+ 'Identify the method(s) for reporting a missed bin collection and summarize them in the answer']","['Identifies the primary method(s) for reporting a missed bin collection (e.g., online form, phone number, specific instructions).'
+ 'The answer accurately describes how a resident would report a missed bin collection based on the information found on the website.']"
+nolahmattress.com,"What is the Nolah Evo Comfort+ mattress designed for, what are its key features, and does it include free shipping and a trial period?","[""Navigate to 'nolahsleep.com'""
+ ""Click on the 'Mattresses' link to view the collection.""
+ ""Locate the 'Nolah Evo Comfort+' mattress listing.""
+ 'Identify the primary design purpose, key features, and confirm if free shipping and a trial period are included.'
+ 'Respond with this information.']","[""States that the Nolah Evo Comfort+ is designed for 'uncompromised comfort with maximum support' and is 'BEST FOR PLUS-SIZE SLEEPERS'.""
+ ""Lists key features such as 'plush Euro topper', 'Nolah AirFoam®', and '8-inch individually-wrapped coils'.""
+ ""Confirms that it 'Includes Free Shipping & 120-Night Trial'.""]"
+nuget.org,Find the latest stable version of the 'Newtonsoft.Json' package and list all .NET frameworks it supports.,"[""Navigate to 'nuget.org'""
+ ""Search for 'Newtonsoft.Json' in the search bar if not already on the search results page.""
+ ""Click on the 'Newtonsoft.Json' package title to go to its detailed page.""
+ 'Locate the latest stable version number.'
+ 'Identify and list all supported .NET frameworks from the detailed page.']","[""Identifies the latest stable version as '13.0.3'""
+ ""Lists the supported frameworks: '.NET 5.0', '.NET Core 1.0', '.NET Standard 1.0', '.NET Framework 2.0'""
+ ""The answer must only contain information relevant to 'Newtonsoft.Json' and not other packages.""]"
+bermudapolice.bm,Does the Bermuda Police Service website provide information on how to report a crime online?,"['Navigate to bermudapolice.bm'
+ ""Attempt to locate a section or link related to 'Crime Prevention Info', 'Crime Stoppers', or 'Forms & Publications' that might contain information on online crime reporting.""
+ ""If direct navigation fails, use the internal search bar on bermudapolice.bm (ID 14) to search for 'report crime online' or similar terms.""
+ 'If no relevant information is found after thorough exploration of the available links and internal search, state that the information is not available on the website.']","['The agent must explicitly state whether information on online crime reporting is found on bermudapolice.bm.'
+ 'If found, the agent must specify the section or page where this information is located.'
+ ""If not found, the agent must clearly state that the information is not accessible or available on the website after attempting multiple relevant navigation paths (e.g., 'Crime Prevention Info', 'Crime Stoppers', 'Forms & Publications') and using the internal search functionality.""]"
+wizard101central.com,What is the base accuracy of the 'Tempest' spell for a Wizard101 Storm wizard?,"['Navigate to the Wizard101 Central wiki (or a relevant Wizard101 wiki on Fandom if Central is not directly accessible).'
+ ""Use the search bar to find information about the 'Tempest' spell.""
+ ""Locate the spell's details, specifically its base accuracy.""
+ ""State the base accuracy of the 'Tempest' spell for a Storm wizard in your answer.""]","[""Identifies the correct spell ('Tempest').""
+ ""States the base accuracy of the 'Tempest' spell.""
+ 'The accuracy value provided is correct (e.g., 85%).']"
+tokyo.park.hyatt.com,"What are the available room types at the Park Hyatt Tokyo, and what is the approximate starting price for a one-night stay in the cheapest room type?","['Navigate to tokyo.park.hyatt.com'
+ 'If the official website is unresponsive or inaccessible, use a reliable third-party hotel booking site (e.g., Booking.com, Expedia, TripAdvisor) to find information about Park Hyatt Tokyo.'
+ 'Locate the section detailing room types.'
+ 'Identify the cheapest available room type.'
+ 'Find the approximate starting price for a one-night stay for that room type (for any future date if specific dates are not provided).'
+ 'State the room types and the approximate starting price for the cheapest room.']","['Lists at least three distinct room types available at the Park Hyatt Tokyo.'
+ ""Provides an approximate starting price for the least expensive room type (e.g., 'starting from X USD/night').""
+ 'The information is sourced from a functional and reliable website (either the official site or a reputable third-party booking platform).'
+ 'Successfully navigates past any CAPTCHA or error pages encountered during the process.']"
+garden.lovetoknow.com,"Find an article on LoveToKnow Garden that provides tips for thrifty gardening, specifically focusing on how to save money on gardening gear.","[""Navigate to 'garden.lovetoknow.com'""
+ ""Locate and click on the 'Gardening Basics' category (or a similar general gardening category if 'Gardening Basics' is not directly visible)""
+ 'Scroll through the articles to find one related to saving money or thrifty gardening gear'
+ ""Click on the article titled 'Blossom on a Budget: 12 Tips for Thrifting Gardening Gear'""
+ 'Confirm the article is displayed and contains tips for thrifting gardening gear']","[""Successfully navigates to the 'Blossom on a Budget: 12 Tips for Thrifting Gardening Gear' article.""
+ 'Confirms the article provides at least three distinct tips or strategies for saving money on gardening gear through thrifting or budgeting.'
+ 'States that the article is about thrifting gardening gear.']"
+interregeurope.eu,Find a good practice example related to 'citizen engagement' and identify the date it was published.,"[""Navigate to 'interregeurope.eu'"" ""Click on 'Policy solutions'""
+ ""Click on 'Good practices' under 'Resources by type'""
+ ""Use the search input to filter for 'citizen engagement'""
+ 'Submit the search form'
+ 'Identify the publication date of a relevant good practice example']","[""Successfully navigates to the 'Good practices' section.""
+ ""Applies the 'citizen engagement' filter correctly.""
+ 'Identifies and states the publication date of at least one good practice example related to citizen engagement.']"
+internacional.elpais.com,Find an article discussing the impact of climate change on a specific region in Latin America within the 'Clima y Medio Ambiente' section.,"[""Navigate to 'internacional.elpais.com'""
+ ""Locate and click on the 'Clima y Medio Ambiente' section or a similar environmental news category.""
+ 'Browse the articles within this section to find one that specifically discusses the impact of climate change on a Latin American region.'
+ 'Click on the relevant article and identify the specific region mentioned.']","['The agent successfully navigates to a section dedicated to climate and environment news.'
+ 'The agent identifies and clicks on an article that explicitly discusses the impact of climate change.'
+ 'The chosen article focuses on a specific region within Latin America.'
+ 'The agent can state the name of the specific Latin American region mentioned in the article.']"
+lightspeedmagazine.com,Find the title of the latest science fiction story that is available as a podcast on Lightspeed Magazine.,"[""Navigate to 'https://www.lightspeedmagazine.com'""
+ ""Locate the 'Latest Science Fiction Story' section on the homepage""
+ ""Identify the title of the story that has a 'Listen' option available""
+ 'Respond with the title of that story']","[""Identifies 'Through the Machine' as the latest science fiction story.""
+ ""Confirms that 'Through the Machine' has a 'Listen' option.""]"
+outwardbound.org,"Find a Classic for High School expedition that focuses on rock climbing and is suitable for 14-16 year olds. Provide the expedition name, duration in days, and cost.","[""Navigate to 'outwardbound.org'"" ""Click on 'EXPEDITIONS' dropdown menu""
+ ""Click on 'Classic for High School' link""
+ 'Scroll down to view the expedition list'
+ ""Identify an expedition that includes 'Rock Climbing' in its name or description and is for 14-16 year olds""
+ 'Extract the expedition name, duration in days, and cost']","[""Identifies 'Joshua Tree Backpacking & Rock Climbing' as a suitable expedition""
+ ""States the duration is '7' days"" ""States the cost is '$2,540'""]"
+mg.gov.br,Find the current schedule of cultural events at the Biblioteca Pública Estadual de Minas Gerais and identify the theme of its 'Exposição Em Destaque'.,"[""Navigate to 'mg.gov.br'""
+ ""Search for 'Biblioteca Pública Estadual de Minas Gerais' or 'Exposição Em Destaque'""
+ 'Click on the relevant search result that leads to the exhibition details'
+ 'Locate information about the current exhibition theme and any associated cultural event schedule on that page.']","[""Identifies the current theme of the 'Exposição Em Destaque' at the Biblioteca Pública Estadual de Minas Gerais.""
+ 'States whether a specific schedule of cultural events (e.g., dates, times, types of events) is provided on the page.'
+ ""If a schedule is not explicitly listed, the agent should state that the events are described as 'bimestralmente' (bimonthly) and include types like 'palestra, bate-papo, apresentação musical, cinema'.""]"
+tomwaits.com,"What is the primary inspiration behind Tom Waits' album 'Blood Money', and what play is it based on?","[""Navigate to 'tomwaits.com'"" ""Click on the 'Albums' link""
+ ""Click on the 'Blood Money' album link""
+ 'Read the album description to identify the primary inspiration and the play it is based on'
+ 'Summarize this information in the answer']","[""States that 'Blood Money' is based on the socio/political play 'Woyzeck'""
+ ""Mentions that 'Woyzeck' was originally written by Georg Buchner in 1837""
+ ""Includes details about the play's inspiration (German soldier, medical experiments, infidelity, murder)""]"
+daihatsu.com,"Find the official press release on daihatsu.com announcing the launch of the new Tanto Custom and Tanto Fun Cross models, and identify the date of this announcement.","[""Navigate to 'daihatsu.com'""
+ ""Locate the 'News' or 'Press Release' section of the website""
+ ""Browse the news articles to find the announcement for the 'Tanto Custom' and 'Tanto Fun Cross' launch""
+ 'Extract the date of the press release']","['Successfully navigates to the official Daihatsu website.'
+ ""Locates the specific press release titled 'Daihatsu Launches the New Tanto Custom, Evolved to be Quality-Oriented and Impressive in Style, Alongside the Tanto Fun Cross, an Outdoor Model for The New Age'.""
+ ""Correctly identifies the date of the press release as 'October 3, 2022'.""]"
+quakeroats.com,Find a recipe for oatmeal cookies on the Quaker Oats website and identify if it contains raisins.,"[""Navigate to 'quakeroats.com'"" ""Click on the 'Recipes' submenu""
+ ""Click on 'Cookies' under the 'BY DISH' category""
+ 'Browse the cookie recipes to find an oatmeal cookie recipe'
+ 'Determine if the found oatmeal cookie recipe contains raisins']","[""Successfully navigates to a specific oatmeal cookie recipe page (e.g., 'Vanishing Oatmeal Raisin Cookies')""
+ 'Clearly states whether the identified oatmeal cookie recipe includes raisins.']"
+listoffreeware.com,Find an article listing free online tools for converting CSV files.,"[""Navigate to 'listoffreeware.com'""
+ 'Look for articles related to CSV conversion tools on the homepage or by using the search bar.'
+ 'Click on a relevant article title to open it.'
+ 'Confirm the article discusses free online CSV conversion tools.']","['The agent successfully navigates to an article on listoffreeware.com.'
+ ""The article's title or content clearly indicates it lists or discusses free online CSV conversion tools.""
+ 'The agent provides the title of the article or a brief summary confirming its relevance to the task.']"
+axis-communications.com,Find the product page for 'AXIS M3088-V Network Camera' and identify its maximum video resolution.,"[""Navigate to 'axis-communications.com'""
+ ""Locate and click on the 'Products' or 'Cameras' section in the main navigation.""
+ ""Use the search bar or product categories to find 'AXIS M3088-V Network Camera'.""
+ ""Click on the product listing for 'AXIS M3088-V Network Camera'.""
+ 'On the product page, locate the specifications or technical details section to find the maximum video resolution.'
+ 'State the maximum video resolution in the answer.']","[""Successfully navigates to the product page for 'AXIS M3088-V Network Camera'.""
+ 'Accurately identifies and states the maximum video resolution for this specific camera model.']"
+georgetown.edu,What is the application deadline for Regular Decision undergraduate admissions at Georgetown University?,"[""Navigate to 'georgetown.edu'"" ""Click on 'Admissions & Aid'""
+ 'Locate and click on a link related to undergraduate admissions or application processes'
+ 'Find the Regular Decision application deadline and state it in the answer']","['Identifies the correct application deadline for Regular Decision undergraduate admissions.'
+ 'The answer must be the specific date provided on the website.']"
+metrohm.com,"Find the product page for a specific pH meter, for example, the '913 pH Meter', and identify its key features.","['Navigate to metrohm.com' 'Accept the cookie policy if prompted'
+ ""Navigate to the 'Products' section and select 'pH'""
+ ""Locate and click on the '913 pH Meter' product listing""
+ ""Identify and list at least three key features of the '913 pH Meter' from its product page""]","[""Successfully navigates to the dedicated product page for the '913 pH Meter'""
+ ""Extracts and lists at least three distinct key features of the '913 pH Meter' from its product page (e.g., 'compact design', 'touchscreen operation', 'compliance with GLP/GMP')""]"
+osaarchivum.org,"What is the primary focus of the Ádám Modor Collection mentioned on the Blinken OSA Archivum website, and what historical period does it supplement?","[""Navigate to 'osaarchivum.org'"" ""Click on the 'News' section""
+ ""Locate and click on the article titled 'The Foot Soldier of Samizdat: The Ádám Modor Collection'""
+ 'Extract the primary focus of the collection and the historical period it supplements from the article content']","['Identifies that the Ádám Modor Collection focuses on the records of the samizdat and post-samizdat publisher.'
+ 'States that the collection supplements the history of the Hungarian democratic opposition.']"
+ems1.com,"What are some key takeaways or lessons learned regarding EMS response from Hurricane Helene's devastation, according to the article 'Insider analysis: EMS lessons from Hurricane Helene’s devastation' on EMS1?","['Navigate to ems1.com'
+ ""Search for 'Insider analysis: EMS lessons from Hurricane Helene’s devastation'""
+ 'Click on the article link in the search results'
+ 'Read the article to identify key lessons or takeaways regarding EMS response to Hurricane Helene'
+ 'Summarize these key takeaways in the answer']","['Identifies and cites at least two distinct lessons or takeaways for EMS response from the Hurricane Helene article.'
+ 'The summarized points accurately reflect the content of the specified article.'
+ 'The agent successfully navigates to and reads the correct article on EMS1.com.']"
+gypsyplate.com,"How many total recipes are listed in the 'Stews and Curries' category on GypsyPlate, and what is the title of the first recipe listed in that category?","[""Navigate to 'gypsyplate.com'""
+ ""Click on the 'recipes' link in the navigation bar or the 'Recipe Index' link in the welcome section.""
+ ""Locate and click on the 'Stews and Curries' category or filter.""
+ ""Count the total number of recipes displayed in the 'Stews and Curries' category.""
+ 'Identify the title of the first recipe listed in that category, and provide both the count and the title in the answer.']","[""Correctly identifies the total number of recipes in the 'Stews and Curries' category.""
+ ""Correctly identifies the title of the first recipe listed in the 'Stews and Curries' category.""
+ 'The answer must include both the count and the title.']"
+games.famobi.com,"Find a game that can be embedded on a website, copy its embed link, and provide it in the answer.","['Navigate to games.famobi.com'
+ 'Clear any privacy consent banners if present'
+ 'Browse game categories or specific game pages to find a game with an embed option'
+ 'Navigate to the page of a game that offers embedding'
+ 'Locate and copy the embed link for the game'
+ 'Provide the copied embed link in the answer']","['The agent successfully navigates to a game page that offers an embed option.'
+ 'The agent identifies and extracts the correct embed link for the chosen game.'
+ ""The provided embed link is accurate and functional (e.g., 'https://play.famobi.com/om-nom-bubbles').""]"
+wellington.vic.gov.au,How much does it cost to dispose of general waste at a Wellington Shire Council waste facility (tip)?,"[""Navigate to 'wellington.vic.gov.au'""
+ ""Click on the 'Environment' section or link""
+ ""Click on the 'Waste Facilities (Tips)' link""
+ ""Locate and click on the 'Tip Fees' link or section""
+ 'Find the cost for general waste disposal and provide it in the answer']","[""Identifies the correct section for 'Environment' and then 'Waste Facilities (Tips)'""
+ ""Navigates to the 'Tip Fees' information""
+ 'States the specific cost for general waste disposal (e.g., per cubic meter, per car load, etc.) as listed on the website']"
+tripplanner.kingcounty.gov,"Plan a public transit trip from the University of Washington to the Seattle Space Needle, arriving by 5:00 PM today.","[""Navigate to 'tripplanner.kingcounty.gov'""
+ ""Enter 'University of Washington' into the origin field""
+ ""Enter 'Seattle Space Needle' into the destination field""
+ ""Click on the 'Trip planning options' button""
+ ""Select 'Arrive by' and set the time to '5:00 PM' and the date to today's date""
+ ""Click the button to find trips (likely the 'Leave now' button, or a similar 'Plan Trip' button that appears after setting options)""
+ 'Confirm that trip itineraries are displayed with an arrival time close to 5:00 PM']","['The agent successfully navigates to the trip planner.'
+ ""The agent correctly inputs 'University of Washington' as the origin and 'Seattle Space Needle' as the destination.""
+ ""The agent interacts with the 'Trip planning options' to specify an arrival time.""
+ 'The agent sets the arrival time to 5:00 PM for the current date.'
+ 'The agent successfully initiates the trip search with the specified arrival time.'
+ 'The final displayed trip itineraries reflect an arrival time around 5:00 PM.']"
+obesityresearch.nih.gov,"Identify where to find up-to-date information on obesity research from the National Institutes of Health, given that obesityresearch.nih.gov is no longer being updated.","[""Navigate to 'obesityresearch.nih.gov'""
+ 'Locate the notice indicating the website is not being updated'
+ 'Identify the alternative website provided for current information'
+ 'Respond with the URL of the alternative website']","[""States that 'obesityresearch.nih.gov' is not being updated""
+ ""Identifies 'nih.gov' as the correct alternative source for current information""
+ ""Provides the URL 'nih.gov' in the answer""]"
+im.nrw.de,"Find the official postal address of the Ministry of the Interior of North Rhine-Westphalia, Germany.","[""Navigate to 'im.nrw.de'""
+ ""Click on the 'Kontakt' link, likely found under the 'Service' section or in the main navigation.""
+ 'Locate the official postal address on the contact page.'
+ 'Provide the full postal address in the answer.']","['Successfully navigates to the official contact page of the Ministry.'
+ 'Extracts the complete and correct postal address of the Ministry of the Interior of North Rhine-Westphalia.'
+ 'The answer contains only the postal address and no other information.']"
+greenvillehumane.com,What are the requirements to adopt a dog from the Greenville Humane Society?,"[""Navigate to 'https://www.greenvillehumane.com/'""
+ ""Navigate to the 'Adopt' section of the website""
+ 'Locate and click on the link or section detailing the adoption requirements for dogs'
+ 'Extract the key requirements for dog adoption and provide them in the answer']","['Identifies at least three specific requirements for adopting a dog (e.g., age, identification, existing pets, landlord approval, etc.)'
+ 'The extracted information is accurate and directly from the Greenville Humane Society website']"
+life-science-alliance.org,What is the focus of the 'LSA Immunology Collection 2025' on Life Science Alliance?,"[""Navigate to 'life-science-alliance.org'""
+ ""Locate and click on the 'Collections' link in the main navigation.""
+ ""Find the 'LSA Immunology Collection 2025' on the collections page.""
+ 'Identify the stated focus or description of this collection, and respond with that information.']","[""Identifies the 'LSA Immunology Collection 2025' specifically.""
+ ""States that the collection focuses on 'Original findings on T cell receptor signaling, T cell development, and immune responses' (or similar phrasing found on the collection page).""]"
+realtimestatistics.net,Determine if the Real Time Statistics Project website (realtimestatistics.net) displays any real-time statistics or interactive content.,"['Navigate to realtimestatistics.net'
+ 'Attempt to scroll down to reveal content'
+ 'Inspect the visible area of the webpage for any statistics, links, or interactive elements'
+ 'Report whether any real-time statistics or interactive content is present on the website']","['States that no real-time statistics or interactive content is displayed on the website'
+ ""Confirms that only the header 'Real Time Statistics' is visible after extensive scrolling""]"
+cambridgesciencefestival.org,"What is the nature of the 'reimagined' Cambridge Science Festival for 2026, and how can interested parties stay updated or get involved?","[""Navigate to 'cambridgesciencefestival.org'""
+ ""Read the announcement regarding 'THE FUTURE OF CAMBRIDGE SCIENCE FESTIVAL'""
+ ""Identify any information on the page describing the nature of the 'reimagined' festival for 2026.""
+ 'Locate any calls to action or links for staying updated or getting involved.'
+ ""Summarize the findings regarding the festival's future and how to engage.""]","[""States that the festival is being 'reimagined' for 2026 and that previous years are paused.""
+ 'Identifies any details provided about the new format or focus of the 2026 festival (if available on the page).'
+ ""Locates and mentions any provided methods for staying updated (e.g., newsletter sign-up, social media links, 'contact us' information).""
+ ""Acknowledges if specific details about the 'reimagined' nature or involvement opportunities are *not* yet available on the current page.""]"
+issues.org,"After reviewing the article 'Shuchi Grover: K–12 Education in the Age of AI', find the related article titled 'Who Is Responsible for AI Copyright Infringement?' and identify the author(s) of that article.","[""Navigate to the article 'Shuchi Grover: K–12 Education in the Age of AI' on issues.org (if not already there).""
+ ""Locate the 'Related Articles' section.""
+ ""Click on the link for 'Who Is Responsible for AI Copyright Infringement?'.""
+ ""Identify and state the author(s) of the 'Who Is Responsible for AI Copyright Infringement?' article.""]","[""Successfully navigates to the 'Who Is Responsible for AI Copyright Infringement?' article.""
+ ""Correctly identifies 'Michael P. Goodyear' as the author of the article.""]"
+papermuseum.jp,"What materials were used for the paper of the 'Million Pagodas and Dharani', and in what year was papermaking introduced to Japan according to the Paper Museum website?","[""Navigate to 'papermuseum.jp/en/'"" ""Click on the 'Collection' link""
+ ""Locate the description for 'Million Pagodas and Dharani' and 'Painting of Prince Shôtoku by Genso Okuda'""
+ ""Extract the paper materials for 'Million Pagodas and Dharani' and the year papermaking was introduced to Japan""
+ 'Respond with both pieces of information.']","[""Identifies 'hemp and Kozo material' as the paper for 'Million Pagodas and Dharani'""
+ ""States that papermaking was introduced to Japan in '610 AD'""
+ 'Both pieces of information are correctly extracted from the provided text.']"
+tntap.tn.gov,"What is the combined state and local sales tax rate for Davidson County, Tennessee?","[""Navigate to 'https://www.tn.gov/revenue/taxes/sales-and-use-tax/'""
+ ""Click on the 'Local Sales Tax' link""
+ 'Locate the sales tax rate for Davidson County'
+ 'Add the state sales tax rate (7%) to the local sales tax rate for Davidson County'
+ 'Respond with the combined rate']","['Identifies the correct local sales tax rate for Davidson County from the website'
+ 'Correctly calculates the combined state and local sales tax rate'
+ 'The answer states the final combined percentage']"
+iwataasks.nintendo.com,"Identify the primary roles of Eiji Aonuma, Daiki Iwamoto, and Satoru Takizawa in the development of both the original 'The Legend of Zelda: The Wind Waker' and 'The Legend of Zelda: The Wind Waker HD', based on the 'Iwata Asks' interview.","[""Navigate to the 'Iwata Asks - The Legend of Zelda: The Wind Waker HD' interview.""
+ 'Read the introductory section of the interview to identify the roles of Aonuma, Iwamoto, and Takizawa for both the original and HD versions.'
+ 'Extract and list the specific titles and responsibilities mentioned for each individual and each game version.'
+ 'Summarize the extracted roles for each person across both versions of the game.']","['Correctly identifies Eiji Aonuma as director for the original game and producer for the HD version.'
+ ""Correctly identifies Daiki Iwamoto as not part of the original team but director for the HD version, and mentions his work on 'Phantom Hourglass'.""
+ 'Correctly identifies Satoru Takizawa as design manager for the original game (specifically involved in core design, enemy characters, and effects) and HD Refining Art Director for the HD version.'
+ 'The answer clearly distinguishes between their roles in the original game and the HD remake.']"
+cookieconsent.com,"How can a user build a free cookie consent banner on cookieconsent.com, and what are the steps involved?","[""Navigate to 'cookieconsent.com'""
+ ""Locate the section or link to 'Build your Cookie Consent'""
+ 'Identify the steps or process outlined for building the free banner'
+ 'Summarize the key steps for building the free cookie consent banner in the answer']","[""Identifies that the 'Build your Cookie Consent' section is the relevant starting point for the free banner.""
+ ""Describes at least two actionable steps or concepts for building the banner as presented on the website (e.g., 'Customize the banner', 'Get the code', 'Implement on your website').""
+ ""Does not confuse the free banner building process with the 'Try Privacy Consent today' advanced solution.""]"

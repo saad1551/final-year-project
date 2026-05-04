@@ -13,7 +13,7 @@ set -euo pipefail
 
 REPO_DIR="${REPO_DIR:-$HOME/final-year-project}"
 CKPT_DIR="${CKPT_DIR:-checkpoints_feasible}"
-EVAL_CSV="${EVAL_CSV:-feasibility_results/feasible_sample_20260424_124844.csv}"
+EVAL_CSV="${EVAL_CSV:-data/doable_tasks_eval.csv}"
 N_TASKS="${N_TASKS:-25}"
 SEED="${SEED:-42}"
 OUT="${OUT:-eval_results/best_ckpt_search_$(date +%Y%m%d_%H%M%S)}"

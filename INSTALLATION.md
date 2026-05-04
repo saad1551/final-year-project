@@ -28,6 +28,9 @@ pip install -r requirements.txt
 # Install the local insta package (provides judge prompts, configs)
 pip install -e .
 
+# Fetch the InSTA train split (~102 MB; the test split ships with the repo)
+python data/download.py
+
 # Optional: only if running browser sessions locally
 playwright install chromium
 cd javascript/server && npm install && cd ../..
@@ -85,7 +88,7 @@ rsync -avz \
   --exclude='eval_results/' --exclude='visualization_output/' \
   --exclude='feasibility_results/feasibility_check_2026*.json' \
   --exclude='javascript/server/node_modules/' \
-  ./ saadashraf@<VM_EXTERNAL_IP>:final-year-project/
+  ./ <VM_USERNAME>@<VM_EXTERNAL_IP>:final-year-project/
 
 # (Or use gcloud compute scp --recurse if you can't get rsync's -e wrapper to work.)
 ```
@@ -93,7 +96,7 @@ rsync -avz \
 ### Set up the VM environment
 
 ```bash
-gcloud compute ssh fyp-train-l4 --zone=us-east4-c
+gcloud compute ssh <INSTANCE_NAME> --zone=<ZONE>
 cd ~/final-year-project
 bash gcp/setup_vm.sh
 ```
@@ -166,6 +169,19 @@ huggingface-cli login --token <your_hf_token>
 
 The base model `btrabucco/Insta-Qwen3-1.7B-SFT` is public, so this is purely a "no warning, faster downloads" thing.
 
+### Launch a training run
+
+```bash
+# All env vars optional; defaults are sane (500 trajectories, save every 25,
+# output to checkpoints_feasible/, screenshots disabled).
+NUM_TRAJECTORIES=500 \
+CHECKPOINT_DIR=checkpoints_feasible \
+TRAIN_CSV=feasibility_results/feasible_sample_20260324_195836.csv \
+bash gcp/launch_training.sh
+```
+
+This launches a detached `tmux` session named `fyp-train`. Attach with `tmux attach -t fyp-train`, detach with `Ctrl-b d`. Per-trajectory CSV log streams to `training_logs/training_log_<ts>.csv`. The `gcp/launch_training.sh` header documents every overridable env var.
+
 ---
 
 ## What's in the deep-learning image already
@@ -190,9 +206,9 @@ We don't use `conda` on the VM — system Python is sufficient and avoids re-dow
 ## Troubleshooting
 
 ### CUDA out of memory
-Already optimized: 4-bit NF4 quantization, gradient checkpointing, micro-batching, LoRA (only 1.69% of params trainable). If still tight, in `pipeline_in_steps.py`:
-- Lower `MAX_TRAJECTORY_STEPS` from 20 → 12
-- Lower `JUDGE_LAST_OBS` and `JUDGE_LAST_ACTIONS` from 50 → 20
+Already optimized: 4-bit NF4 quantization, gradient checkpointing, micro-batching, LoRA (only 1.69% of params trainable). If still tight:
+- Lower `MAX_TRAJECTORY_STEPS` from 20 → 12 in `pipeline_in_steps.py`.
+- Lower the judge's per-trajectory observation/action history (defined in `src/judge_integration.py`) by setting env vars before launching training: `export JUDGE_LAST_OBS=20 JUDGE_LAST_ACTIONS=20`.
 
 ### `bitsandbytes` import errors on Windows
 Use WSL2. `bitsandbytes` Windows builds are unreliable.

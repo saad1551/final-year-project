@@ -177,7 +177,7 @@ python scripts/monitor_training.py \
   - A LoRA adapter checkpoint. Two options for getting it onto the eval VM:
     - **Use ours** (recommended for reviewers): `bash scripts/download_checkpoint.sh` fetches it from the GitHub Release and extracts to `checkpoints_feasible/final_checkpoint/`. ~21 MB download, ~35 MB extracted.
     - **Use one you trained yourself**: produced by §2 at `checkpoints_feasible/checkpoint_trajectory_<N>/`. See "Selecting which checkpoint to evaluate" below for picking the best one.
-- The held-out test CSV: `feasibility_results/feasible_sample_20260424_124844.csv` (200 feasibility-filtered tasks; the eval below samples 100 of them via `--sample_size 100 --seed 42`).
+- The held-out test CSV: `data/doable_tasks_eval.csv` (200 feasibility-filtered tasks produced by `filter_doable_tasks_eval.py` — the lenient-binary collector documented in §1; ships in the repo). The eval below samples 100 of them via `--sample_size 100 --seed 42`, which gives a deterministic and reproducible per-task list.
 - Same Vertex-AI/Gemini setup as training.
 - An L4/T4 GPU VM.
 

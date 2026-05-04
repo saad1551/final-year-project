@@ -15,7 +15,7 @@ REPO_DIR="${REPO_DIR:-$HOME/final-year-project}"
 # from the project's GitHub Release. If you trained your own checkpoint via
 # gcp/launch_training.sh, point this at e.g. checkpoints_feasible/checkpoint_trajectory_<N>
 RL_CHECKPOINT="${RL_CHECKPOINT:-checkpoints_feasible/final_checkpoint}"
-TEST_CSV="${TEST_CSV:-feasibility_results/feasible_sample_20260424_124844.csv}"
+TEST_CSV="${TEST_CSV:-data/doable_tasks_eval.csv}"
 N_TASKS="${N_TASKS:-100}"
 SEED="${SEED:-42}"
 OUT="${OUT:-eval_results/run_$(date +%Y%m%d_%H%M%S)}"

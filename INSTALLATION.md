@@ -206,9 +206,9 @@ We don't use `conda` on the VM — system Python is sufficient and avoids re-dow
 ## Troubleshooting
 
 ### CUDA out of memory
-Already optimized: 4-bit NF4 quantization, gradient checkpointing, micro-batching, LoRA (only 1.69% of params trainable). If still tight, in `pipeline_in_steps.py`:
-- Lower `MAX_TRAJECTORY_STEPS` from 20 → 12
-- Lower `JUDGE_LAST_OBS` and `JUDGE_LAST_ACTIONS` from 50 → 20
+Already optimized: 4-bit NF4 quantization, gradient checkpointing, micro-batching, LoRA (only 1.69% of params trainable). If still tight:
+- Lower `MAX_TRAJECTORY_STEPS` from 20 → 12 in `pipeline_in_steps.py`.
+- Lower the judge's per-trajectory observation/action history (defined in `src/judge_integration.py`) by setting env vars before launching training: `export JUDGE_LAST_OBS=20 JUDGE_LAST_ACTIONS=20`.
 
 ### `bitsandbytes` import errors on Windows
 Use WSL2. `bitsandbytes` Windows builds are unreliable.

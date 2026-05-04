@@ -11,8 +11,11 @@ Inputs (per --run_dir):
 
 Outputs:
   - stdout: pretty-printed Markdown table
-  - <run_dir>/summary.md:  same content as stdout
-  - <run_dir>/summary.csv: per-cell rewards/success/CI for downstream plotting
+  - <run_dir>/summary.md:    same content as stdout
+  - <run_dir>/summary.csv:   per-cell rewards/success/CI for downstream plotting
+  - <run_dir>/summary.json:  compact summary in {tasks_evaluated, total_tasks,
+                             checkpoint_success_rate_percent, base_model_success_rate_percent}
+                             — mean judge-success-score × 100, paired by row index.
   - <run_dir>/figure3.{png,pdf}: 2-bar comparison chart
 """
 
@@ -44,13 +47,17 @@ def latest(glob_pattern: str, in_dir: Path) -> Path:
     return matches[-1]
 
 
-def per_task_metrics(rows: list[dict]) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Return (rewards, successes_binary, num_steps).
+def per_task_metrics(rows: list[dict]) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """Return (rewards, success_scores, successes_binary, num_steps).
 
-    Reward is a weighted combination matching training (0.7s + 0.2e + 0.1sc).
-    Tasks where the judge failed (None scores) are dropped.
+    - rewards: weighted combination matching training (0.7s + 0.2e + 0.1sc)
+    - success_scores: the raw judge success score in [0, 1]
+    - successes_binary: 1.0 if success_score > SUCCESS_THRESHOLD else 0.0
+    - num_steps: trajectory length
+
+    Tasks where the judge failed (all None scores) are dropped.
     """
-    rewards, successes, steps = [], [], []
+    rewards, success_scores, successes, steps = [], [], [], []
     for r in rows:
         j = r.get("judgment")
         if not j:
@@ -64,9 +71,11 @@ def per_task_metrics(rows: list[dict]) -> tuple[np.ndarray, np.ndarray, np.ndarr
         e = e or 0.0
         sc = sc or 0.0
         rewards.append(0.7 * s + 0.2 * e + 0.1 * sc)
+        success_scores.append(s)
         successes.append(1.0 if s > SUCCESS_THRESHOLD else 0.0)
         steps.append(r.get("num_steps") or 0)
-    return np.array(rewards), np.array(successes), np.array(steps)
+    return (np.array(rewards), np.array(success_scores),
+            np.array(successes), np.array(steps))
 
 
 def bootstrap_ci(values: np.ndarray, n: int = BOOTSTRAP_N, alpha: float = 0.05) -> tuple[float, float, float]:
@@ -139,8 +148,8 @@ def main():
     base_rows = load_results(latest("base_results_*.json", rd))
 
     # Per-task metrics. Same seed across both arms means rows are paired by index.
-    ckpt_rew, ckpt_succ, ckpt_steps = per_task_metrics(ckpt_rows)
-    base_rew, base_succ, base_steps = per_task_metrics(base_rows)
+    ckpt_rew, ckpt_score, ckpt_succ, ckpt_steps = per_task_metrics(ckpt_rows)
+    base_rew, base_score, base_succ, base_steps = per_task_metrics(base_rows)
 
     # Truncate to common length for paired comparisons (defends against one arm
     # finishing more tasks than the other if eval was killed mid-run).
@@ -150,12 +159,14 @@ def main():
         "RL-on-filtered": {
             "n": len(ckpt_rew),
             "reward": bootstrap_ci(ckpt_rew),
+            "score": bootstrap_ci(ckpt_score),
             "success": bootstrap_ci(ckpt_succ),
             "mean_steps": float(np.mean(ckpt_steps)) if len(ckpt_steps) else float("nan"),
         },
         "Base SFT": {
             "n": len(base_rew),
             "reward": bootstrap_ci(base_rew),
+            "score": bootstrap_ci(base_score),
             "success": bootstrap_ci(base_succ),
             "mean_steps": float(np.mean(base_steps)) if len(base_steps) else float("nan"),
         },
@@ -163,13 +174,13 @@ def main():
 
     # Markdown table
     md = ["## Held-out evaluation (mean [95% bootstrap CI])\n",
-          "| Checkpoint | n | Reward | Success rate | Mean steps |",
-          "|---|---|---|---|---|"]
+          "| Checkpoint | n | Reward | Mean judge success score | Success rate (>0.5) | Mean steps |",
+          "|---|---|---|---|---|---|"]
     for ckpt in ["Base SFT", "RL-on-filtered"]:
         m = metrics[ckpt]
         md.append(
             f"| **{ckpt}** | {m['n']} | {fmt_ci(m['reward'])} | "
-            f"{fmt_ci(m['success'])} | {m['mean_steps']:.1f} |"
+            f"{fmt_ci(m['score'])} | {fmt_ci(m['success'])} | {m['mean_steps']:.1f} |"
         )
     md.append("")
 
@@ -195,13 +206,30 @@ def main():
     # CSV summary for plotting
     with (rd / "summary.csv").open("w", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["checkpoint", "n", "reward_mean", "reward_lo", "reward_hi",
-                    "success_mean", "success_lo", "success_hi", "mean_steps"])
+        w.writerow(["checkpoint", "n",
+                    "reward_mean", "reward_lo", "reward_hi",
+                    "score_mean", "score_lo", "score_hi",
+                    "success_mean", "success_lo", "success_hi",
+                    "mean_steps"])
         for ckpt in ["Base SFT", "RL-on-filtered"]:
             m = metrics[ckpt]
             rm, rl, rh = m["reward"]
+            tm, tl, th = m["score"]
             sm, sl, sh = m["success"]
-            w.writerow([ckpt, m["n"], rm, rl, rh, sm, sl, sh, m["mean_steps"]])
+            w.writerow([ckpt, m["n"], rm, rl, rh, tm, tl, th, sm, sl, sh, m["mean_steps"]])
+
+    # Compact JSON summary in the friend-script format (for easy comparison /
+    # downstream consumption). The "*_success_rate_percent" keys here use the
+    # same definition as the friend's eval: mean(judge_success_score) * 100.
+    n_eval = min(len(ckpt_score), len(base_score))
+    summary_json = {
+        "tasks_evaluated": n_eval,
+        "total_tasks": max(len(ckpt_score), len(base_score)),
+        "checkpoint_success_rate_percent": round(float(ckpt_score.mean() * 100), 2) if len(ckpt_score) else None,
+        "base_model_success_rate_percent": round(float(base_score.mean() * 100), 2) if len(base_score) else None,
+    }
+    with (rd / "summary.json").open("w") as f:
+        json.dump(summary_json, f, indent=2)
 
     # Figure 3: 2-bar comparison (success rate + reward)
     try:

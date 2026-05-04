@@ -11,7 +11,8 @@
 
 set -euo pipefail
 
-REPO_DIR="${REPO_DIR:-$HOME/final-year-project}"
+# Auto-detect repo root from the script's location; override with REPO_DIR=...
+REPO_DIR="${REPO_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 CKPT_DIR="${CKPT_DIR:-checkpoints_feasible}"
 EVAL_CSV="${EVAL_CSV:-data/doable_tasks_eval.csv}"
 N_TASKS="${N_TASKS:-25}"

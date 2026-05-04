@@ -5,7 +5,8 @@
 
 set -euo pipefail
 
-REPO_DIR="${REPO_DIR:-$HOME/final-year-project}"
+# Auto-detect repo root from the script's location; override with REPO_DIR=...
+REPO_DIR="${REPO_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 ENV_NAME="${ENV_NAME:-insta}"
 SESSION="${SESSION:-fyp-train}"
 # Empty by default = train a fresh LoRA adapter on top of the base SFT model.

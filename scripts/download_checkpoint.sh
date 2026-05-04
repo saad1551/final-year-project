@@ -23,14 +23,23 @@ DEST="${DEST:-checkpoints_feasible/final_checkpoint}"
 
 URL="https://github.com/${REPO}/releases/download/${TAG}/${ASSET}"
 
-# Pre-flight: tools we need
-for tool in curl unzip; do
-  if ! command -v "$tool" >/dev/null 2>&1; then
-    echo "ERROR: '$tool' is required but not found on PATH." >&2
-    echo "       Install it (e.g. 'sudo apt-get install -y $tool' or 'brew install $tool')." >&2
-    exit 1
-  fi
-done
+# Pre-flight: curl is required.
+if ! command -v curl >/dev/null 2>&1; then
+  echo "ERROR: 'curl' is required but not found on PATH." >&2
+  echo "       Install it (e.g. 'sudo apt-get install -y curl' or 'brew install curl')." >&2
+  exit 1
+fi
+
+# Need unzip OR python3 for extraction. Both are commonly present, but the
+# pytorch deep-learning VM image ships with python3 but not unzip — fall back.
+have_unzip=0
+if command -v unzip >/dev/null 2>&1; then
+  have_unzip=1
+elif ! command -v python3 >/dev/null 2>&1; then
+  echo "ERROR: need either 'unzip' or 'python3' on PATH to extract the archive." >&2
+  echo "       Install one (e.g. 'sudo apt-get install -y unzip')." >&2
+  exit 1
+fi
 
 # If the checkpoint is already extracted, do nothing.
 if [[ -f "$DEST/adapter_model.safetensors" ]]; then
@@ -48,7 +57,11 @@ curl -fL --progress-bar -o "$TMPZIP" "$URL"
 
 echo "[download_checkpoint] extracting to: $DEST"
 mkdir -p "$DEST"
-unzip -q -o "$TMPZIP" -d "$DEST"
+if (( have_unzip )); then
+  unzip -q -o "$TMPZIP" -d "$DEST"
+else
+  python3 -m zipfile -e "$TMPZIP" "$DEST"
+fi
 
 echo
 echo "[download_checkpoint] done. Checkpoint at: $DEST"
